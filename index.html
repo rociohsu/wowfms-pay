@@ -135,11 +135,7 @@
         </div>
       </sc-if>
       <sc-if value="{{ loggedIn }}" hint-placeholder-val="">
-        <div style="margin:-16px -16px 0;background:#FEF2F2;padding:16px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:18px;font-weight:700;white-space:nowrap;">Hi, {{ memberName }}.</span>
-          <button onClick="{{ onLogout }}" style="border:none;background:none;color:#3E3E3E;font-family:inherit;font-size:16px;cursor:pointer;text-decoration:underline;padding:0;">登出</button>
-        </div>
-        <div style="padding:16px 2px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:0 2px 14px;display:flex;align-items:center;justify-content:space-between;">
           <span style="font-size:16px;">總計</span>
           <span style="font-size:18px;font-weight:700;">{{ memberSubtotalText }}</span>
         </div>
@@ -157,7 +153,6 @@
             </button>
           </sc-for>
         </div>
-        <div style="margin-top: 12px; font-size: 14px; color: #de052e">*電子禮券和折扣碼只能擇一使用</div>
         <div style="margin-top:16px;border-top:1px solid #F6F6F6;padding:16px 2px 0;display:flex;align-items:center;justify-content:space-between;">
           <span style="font-size:16px;">付款金額(NT$)</span>
           <span style="font-size:22px;font-weight:700;">{{ memberPayableText }}</span>
@@ -280,7 +275,7 @@
           <div style="display: flex; align-items: center; gap: 8px; align-self: center">
               
               
-            <span style="font-size: 16px; color: #3E3E3E; flex: 1; display: flex; align-items: center; width: 110px; height: 41px">本次使用</span></div><span style="width: 20px; height: 20px; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: #dd0026">P</span><input type="text" inputmode="numeric" value="{{ pointsInput }}" placeholder="0" onChange="{{ onPointsInput }}" onInput="{{ onPointsInput }}" style="height: 32px; width: 149px; border-radius: 8px; border-width: 1px; border-style: solid; border-color: #c8c9c9; font-size: 18px; text-align: right"></div><button onClick="{{ confirmPoints }}" style="height: 50px; width: 100%; margin-top: 20px; color: #ffffff; background-color: #dd0026; border-radius: 16px; border-width: 1px; border-style: none; border-color: #000000; font-size: 20px; font-weight: 500">確認</button>
+            <span style="font-size: 16px; color: #3E3E3E; flex: 1; display: flex; align-items: center; width: 110px; height: 41px">本次使用</span></div><span style="width: 20px; height: 20px; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: #dd0026">P</span><input type="text" inputmode="numeric" value="{{ pointsInput }}" placeholder="0" onChange="{{ onPointsInput }}" onInput="{{ onPointsInput }}" style="height: 40px; width: 149px; border-radius: 8px; border-width: 1px; border-style: solid; border-color: #c8c9c9; font-size: 18px; text-align: right"></div><button onClick="{{ confirmPoints }}" style="height: 50px; width: 100%; margin-top: 20px; color: #ffffff; background-color: #dd0026; border-radius: 16px; border-width: 1px; border-style: none; border-color: #000000; font-size: 20px; font-weight: 500">確認</button>
         </div>
       </div>
     </div>
@@ -447,8 +442,8 @@ class Component extends DCLogic {
     const memberPayableNum = Math.max(0, MEMBER_SUBTOTAL - pointsAmt - voucherAmt - codeAmt);
 
     const pinkRow = {
-      width: '100%', background: '#FEF2F2', border: 'none', borderRadius: '10px',
-      padding: '14px 16px', display: 'flex', alignItems: 'center',
+      width: '100%', background: 'none', border: 'none', borderRadius: '0',
+      padding: '6px 2px', display: 'flex', alignItems: 'center',
       justifyContent: 'space-between', gap: '12px', cursor: 'pointer',
       fontFamily: 'inherit', textAlign: 'left',
     };
@@ -524,7 +519,8 @@ class Component extends DCLogic {
       { key: 'online', label: '線上支付' },
       { key: 'onsite', label: '現場付款' },
     ].map(m => ({ ...m, ...radio(this.state.pay === m.key),
-      onSelect: () => this.setState({ pay: m.key }) }));
+      onSelect: () => this.setState(s => ({ pay: m.key,
+        invoice: (m.key !== 'onsite' && s.invoice === 'paper') ? '' : s.invoice })) }));
 
     const fv = this.state.fields;
     const inputStyle = (err) => ({
@@ -555,7 +551,7 @@ class Component extends DCLogic {
     };
 
     const invoiceMethods = [
-      { key: 'paper', label: '紙本發票', note: '僅現場付款使用' },
+      ...(this.state.pay === 'onsite' ? [{ key: 'paper', label: '紙本發票', note: '僅現場付款使用' }] : []),
       { key: 'mobile', label: '手機條碼載具', note: '' },
       { key: 'citizen', label: '自然人憑證載具', note: '' },
       { key: 'company', label: '公司用發票', note: '' },
