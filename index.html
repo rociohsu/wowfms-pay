@@ -241,8 +241,8 @@
 
   <!-- 瘋點數折抵 Popup -->
   <sc-if value="{{ showPointsModal }}" hint-placeholder-val="">
-    <div style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:24px;">
-      <div style="width:330px;background:#FFFFFF;border-radius:16px;overflow:hidden;font-family:'Noto Sans TC','Roboto',sans-serif;">
+    <div onClick="{{ closePointsModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div onClick="{{ stopModal }}" style="width:330px;background:#FFFFFF;border-radius:16px;overflow:hidden;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:54px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;">
           <button onClick="{{ closePointsModal }}" style="position: absolute; left: 290px; top: 25px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -283,8 +283,8 @@
 
   <!-- 折扣碼 Popup -->
   <sc-if value="{{ showCodeModal }}" hint-placeholder-val="">
-    <div style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
+    <div onClick="{{ closeCodeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopModal }}" style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
           <button onClick="{{ closeCodeModal }}" style="position: absolute; right: 16px; top: 27px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -335,8 +335,8 @@
 
   <!-- 選擇電子禮券 Popup -->
   <sc-if value="{{ showVoucherModal }}" hint-placeholder-val="">
-    <div style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
+    <div onClick="{{ closeVoucherModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopModal }}" style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
           <button onClick="{{ closeVoucherModal }}" style="position: absolute; right: 16px; top: 28px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -590,6 +590,7 @@ class Component extends DCLogic {
         color: ptsValid ? '#FFFFFF' : '#C8C9C9',
       },
       onPointsInput: (e) => this.setState({ pointsInput: e.target.value.replace(/[^0-9]/g, '') }),
+      stopModal: (e) => e.stopPropagation(),
       closePointsModal: () => this.setState({ showPointsModal: false }),
       confirmPoints: () => {
         if (!ptsValid) return;
