@@ -13,9 +13,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  /* 手機: 撐滿寬度; 較大螢幕才置中限寬 */
+  @media (min-width: 480px) {
+    #checkout-root { max-width: 390px !important; }
+    .sheet-modal { max-width: 390px !important; }
+  }
 </style>
 </helmet>
-<div style="width:100%;max-width:390px;min-height:844px;margin:0 auto;background:#F6F6F6;font-family:'Noto Sans TC','Roboto',sans-serif;color:#3E3E3E;position:relative;display:flex;flex-direction:column;">
+<div id="checkout-root" style="width:100%;min-height:844px;margin:0 auto;background:#F6F6F6;font-family:'Noto Sans TC','Roboto',sans-serif;color:#3E3E3E;position:relative;display:flex;flex-direction:column;">
 
   <!-- Header -->
   <div style="position:sticky;top:0;z-index:10;height:56px;background:#FFFFFF;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #F6F6F6;">
@@ -284,7 +289,7 @@
   <!-- 折扣碼 Popup -->
   <sc-if value="{{ showCodeModal }}" hint-placeholder-val="">
     <div onClick="{{ closeCodeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div onClick="{{ stopModal }}" style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
           <button onClick="{{ closeCodeModal }}" style="position: absolute; right: 16px; top: 27px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -336,7 +341,7 @@
   <!-- 選擇電子禮券 Popup -->
   <sc-if value="{{ showVoucherModal }}" hint-placeholder-val="">
     <div onClick="{{ closeVoucherModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div onClick="{{ stopModal }}" style="width:100%;max-width:390px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
           <button onClick="{{ closeVoucherModal }}" style="position: absolute; right: 16px; top: 28px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
