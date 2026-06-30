@@ -130,7 +130,7 @@
           </button>
         </div>
         <div style="margin-top:16px;border-top:1px solid #F6F6F6;padding:16px 2px 0;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:16px;">付款金額(NT$)</span>
+          <span style="font-size:16px;">付款金額</span>
           <span style="font-size:22px;font-weight:700;">{{ memberPayableText }}</span>
         </div>
       </sc-if>
@@ -154,7 +154,7 @@
           </sc-for>
         </div>
         <div style="margin-top:16px;border-top:1px solid #F6F6F6;padding:16px 2px 0;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:16px;">付款金額(NT$)</span>
+          <span style="font-size:16px;">付款金額</span>
           <span style="font-size:22px;font-weight:700;">{{ memberPayableText }}</span>
         </div>
       </sc-if>
@@ -566,8 +566,8 @@ class Component extends DCLogic {
     return {
       items, subtotal: 'NT$750',
       payable: 'NT$' + memberPayableNum,
-      memberSubtotalText: String(MEMBER_SUBTOTAL),
-      memberPayableText: String(memberPayableNum),
+      memberSubtotalText: 'NT$' + MEMBER_SUBTOTAL,
+      memberPayableText: 'NT$' + memberPayableNum,
       codeOffer: memberOffers.find(o => o.key === 'code'),
       itemsOpen: this.state.itemsOpen, orderOpen: this.state.orderOpen,
       itemsChevronStyle: chevron(this.state.itemsOpen),
