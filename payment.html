@@ -162,14 +162,19 @@
         <span style="font-size:18px;font-weight:700;">付款方式</span>
         <span style="background:#FEF2F2;color:#DE052E;font-size:13px;padding:2px 8px;border-radius:6px;">必選</span>
       </div>
-      <div style="margin-top:14px;display:flex;flex-direction:column;gap:14px;">
-        <sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="2">
-          <button onClick="{{ m.onSelect }}" style="border:none;background:none;padding:0;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;">
-            <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ m.ring }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="width:11px;height:11px;border-radius:50%;background:{{ m.dot }};"></span>
-            </span>
-            <span style="font-size:16px;">{{ m.label }}</span>
-          </button>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:18px;">
+        <sc-for list="{{ payGroups }}" as="g" hint-placeholder-count="2">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <span style="font-size:14px;color:#9B9B9B;">{{ g.title }}</span>
+            <sc-for list="{{ g.methods }}" as="m" hint-placeholder-count="1">
+              <button onClick="{{ m.onSelect }}" style="{{ m.cardStyle }}">
+                <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ m.ring }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="width:11px;height:11px;border-radius:50%;background:{{ m.dot }};"></span>
+                </span>
+                <span style="font-size:16px;">{{ m.label }}</span>
+              </button>
+            </sc-for>
+          </div>
         </sc-for>
       </div>
     </div>
@@ -373,7 +378,7 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: false, orderOpen: false, pay: 'online', invoice: 'mobile',
+    itemsOpen: false, orderOpen: false, pay: 'ddpay', invoice: 'mobile',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: false, usePoints: false, coupon: '',
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
@@ -510,13 +515,23 @@ class Component extends DCLogic {
       borderRadius: '10px', outline: 'none', background: '#FFFFFF',
     };
 
-    const payMethods = [
-      ...(this.state.loggedIn ? [{ key: 'funpay', label: '瘋pay' }] : []),
-      { key: 'online', label: '線上支付' },
-      { key: 'onsite', label: '現場付款' },
-    ].map(m => ({ ...m, ...radio(this.state.pay === m.key),
+    const payCardStyle = (selected) => ({
+      border: '1.5px solid ' + (selected ? '#DE052E' : '#E5E5E5'),
+      borderRadius: '12px', padding: '14px 16px', display: 'flex',
+      alignItems: 'center', gap: '12px', background: '#FFFFFF',
+      cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'inherit',
+    });
+    const mkPay = (m) => ({ ...m, ...radio(this.state.pay === m.key),
+      cardStyle: payCardStyle(this.state.pay === m.key),
       onSelect: () => this.setState(s => ({ pay: m.key,
-        invoice: (m.key !== 'onsite' && s.invoice === 'paper') ? '' : s.invoice })) }));
+        invoice: (m.key !== 'onsite' && s.invoice === 'paper') ? '' : s.invoice })) });
+    const payGroups = [
+      { title: '線上支付', methods: [
+        ...(this.state.loggedIn ? [{ key: 'funpay', label: '瘋pay' }] : []),
+        { key: 'ddpay', label: 'DDPay' },
+      ].map(mkPay) },
+      { title: '其他支付', methods: [{ key: 'onsite', label: '現場付款' }].map(mkPay) },
+    ];
 
     const fv = this.state.fields;
     const inputStyle = (err) => ({
@@ -550,7 +565,6 @@ class Component extends DCLogic {
       ...(this.state.pay === 'onsite' ? [{ key: 'paper', label: '紙本發票', note: '僅現場付款使用' }] : []),
       { key: 'mobile', label: '手機條碼載具', note: '' },
       { key: 'citizen', label: '自然人憑證載具', note: '' },
-      { key: 'company', label: '公司用發票', note: '' },
       { key: 'donate', label: '捐贈發票', note: '' },
     ].map(m => ({ ...m, ...radio(this.state.invoice === m.key),
       showFields: this.state.invoice === m.key && !!fieldsByKey[m.key],
@@ -570,7 +584,7 @@ class Component extends DCLogic {
       orderChevronStyle: chevron(this.state.orderOpen),
       toggleItems: () => this.setState(s => ({ itemsOpen: !s.itemsOpen })),
       toggleOrder: () => this.setState(s => ({ orderOpen: !s.orderOpen })),
-      payMethods, invoiceMethods,
+      payGroups, invoiceMethods,
       loggedIn: this.state.loggedIn, notLoggedIn: !this.state.loggedIn,
       memberOffers, memberName: 'Amy',
       onLogin: () => this.setState({ loggedIn: true }),
