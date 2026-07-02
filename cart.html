@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  #cart-root ::-webkit-scrollbar { display: none; }
+  #cart-root textarea::placeholder { color: #B5B5B5; }
+  @media (min-width: 480px) {
+    #cart-root { max-width: 390px !important; }
+  }
+</style>
+</helmet>
+
+<div id="cart-root" style="width:100%;height:844px;margin:0 auto;background:#FFFFFF;font-family:'Noto Sans TC','Roboto',sans-serif;color:#3E3E3E;position:relative;display:flex;flex-direction:column;overflow:hidden;">
+
+  <!-- Header -->
+  <div style="flex-shrink:0;height:56px;display:flex;align-items:center;padding:0 16px;">
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;padding:8px;margin-left:-8px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </a>
+    <div style="flex:1;text-align:center;font-size:18px;font-weight:700;margin-right:24px;">購物車</div>
+  </div>
+
+  <!-- Scroll body -->
+  <div style="flex:1;overflow-y:auto;padding:4px 16px 16px;">
+
+    <!-- store -->
+    <div style="display:flex;align-items:center;gap:12px;background:#FAFAFA;border:1px solid #F0F0F0;border-radius:12px;padding:14px;">
+      <span style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:#DE052E;color:#FFFFFF;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;">王</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:16px;font-weight:700;line-height:1.3;">石二鍋-中壢家樂福中山東店</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+          <span style="background:#FDECEF;color:#DE052E;font-size:13px;font-weight:500;border-radius:6px;padding:2px 9px;">內用</span>
+          <span style="background:#F0F0F0;color:#5B5B5B;font-size:13px;border-radius:6px;padding:2px 9px;">第 25 桌</span>
+          <span style="background:#F0F0F0;color:#5B5B5B;font-size:13px;border-radius:6px;padding:2px 9px;">4 人</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 已選餐點 header -->
+    <div style="display:flex;align-items:center;gap:10px;margin-top:22px;">
+      <span style="font-size:18px;font-weight:700;">已選餐點</span>
+      <button onClick="{{ clearItems }}" style="display:flex;align-items:center;gap:4px;border:none;background:none;font-family:inherit;font-size:15px;color:#DE052E;cursor:pointer;padding:2px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DE052E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+        清空
+      </button>
+    </div>
+
+    <!-- items -->
+    <sc-for list="{{ items }}" as="item" hint-placeholder-count="2">
+      <div style="border-bottom:1px solid #EFEFEF;padding:16px 0;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+          <div style="font-size:16px;font-weight:700;">{{ item.name }}</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+            <button onClick="{{ item.onMinus }}" style="border:none;background:none;color:#DE052E;font-size:22px;line-height:1;cursor:pointer;padding:0;">−</button>
+            <span style="font-size:16px;min-width:14px;text-align:center;">{{ item.qty }}</span>
+            <button onClick="{{ item.onPlus }}" style="border:none;background:none;color:#DE052E;font-size:22px;line-height:1;cursor:pointer;padding:0;">+</button>
+          </div>
+        </div>
+
+        <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ item.options }}" as="opt" hint-placeholder-count="3">
+            <div style="display:flex;gap:7px;font-size:14px;color:#5B5B5B;line-height:1.5;">
+              <span style="color:#C8C9C9;flex-shrink:0;">•</span>
+              <div>
+                <div style="color:#3E3E3E;">{{ opt.label }}</div>
+                <sc-if value="{{ opt.detail }}" hint-placeholder-val="">
+                  <div>{{ opt.detail }}</div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- note -->
+        <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div style="display:flex;align-items:center;gap:8px;color:#3E3E3E;font-size:14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DE052E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            {{ item.note }}
+          </div>
+          <button onClick="{{ item.onEditNote }}" style="border:none;background:none;cursor:pointer;padding:2px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+        </div>
+
+        <div style="margin-top:10px;font-size:17px;font-weight:700;">{{ item.priceText }}</div>
+      </div>
+    </sc-for>
+
+    <!-- 新增餐點 -->
+    <a href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;margin-top:16px;color:#DE052E;font-size:15px;font-weight:500;border:1.5px solid #DE052E;border-radius:999px;padding:9px 20px;">新增餐點</a>
+
+    <!-- 加購品項 -->
+    <div style="font-size:18px;font-weight:700;margin-top:26px;">加購品項</div>
+    <div style="margin-top:8px;">
+      <sc-for list="{{ addons }}" as="ad" hint-placeholder-count="2">
+        <div onClick="{{ ad.onToggle }}" style="display:flex;align-items:center;gap:12px;padding:11px 0;cursor:pointer;">
+          <span style="{{ ad.boxStyle }}">
+            <sc-if value="{{ ad.checked }}" hint-placeholder-val="">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </sc-if>
+          </span>
+          <span style="flex:1;font-size:15px;">{{ ad.name }}</span>
+          <span style="font-size:14px;color:#9A9A9A;">{{ ad.priceText }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- 整單備註 -->
+    <div style="font-size:18px;font-weight:700;margin-top:24px;">整單備註</div>
+    <textarea value="{{ orderNote }}" onChange="{{ onNote }}" placeholder="訂單備註請勿使用表情符號或全形字符" style="margin-top:10px;width:100%;height:76px;resize:none;font-family:inherit;font-size:15px;color:#3E3E3E;padding:12px 14px;border:1px solid #E0E0E0;border-radius:10px;outline:none;background:#FAFAFA;"></textarea>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div style="flex-shrink:0;padding:10px 12px 14px;background:#FFFFFF;">
+    <a href="payment.html" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; background: #DE052E; border-radius: 16px; padding: 14px 18px; height: 55px">
+      <span style="color:#FFFFFF;font-size:19px;font-weight:700;">共 {{ cartCount }} 件・NT${{ cartTotal }}</span>
+      <span style="color: #FFFFFF; font-size: 18px; font-weight: 500; border: 1.5px solid rgba(255,255,255,0.85); border-radius: 12px; padding: 7px 18px; height: 36px; padding-top: 3px; padding-bottom: 3px; padding-left: 10px; padding-right: 10px">前往結帳</span>
+    </a>
+  </div>
+
+  <!-- Note edit popup -->
+  <sc-if value="{{ noteEditOpen }}" hint-placeholder-val="">
+    <div onClick="{{ cancelNote }}" style="position:absolute;inset:0;z-index:60;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div onClick="{{ stop }}" style="width:100%;background:#FFFFFF;border-radius:16px;overflow:hidden;">
+        <div style="position:relative;height:54px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;">
+          <span style="font-size:18px;font-weight:700;">編輯備註</span>
+          <button onClick="{{ cancelNote }}" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);border:none;background:none;padding:6px;cursor:pointer;display:flex;align-items:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div style="padding:20px;">
+          <div style="font-size:13px;color:#9A9A9A;">{{ noteItemName }}</div>
+          <textarea value="{{ noteInput }}" onChange="{{ onNoteInput }}" placeholder="請輸入備註，例如：不要蕃茄" style="margin-top:10px;width:100%;height:96px;resize:none;font-family:inherit;font-size:15px;color:#3E3E3E;padding:12px 14px;border:1px solid #E0E0E0;border-radius:10px;outline:none;background:#FAFAFA;"></textarea>
+          <div style="display:flex;gap:12px;margin-top:16px;">
+            <button onClick="{{ cancelNote }}" style="flex:1;border:1.5px solid #DE052E;background:#FFFFFF;color:#DE052E;font-family:inherit;font-size:16px;font-weight:500;padding:12px;border-radius:12px;cursor:pointer;">取消</button>
+            <button onClick="{{ saveNote }}" style="flex:1;border:none;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:500;padding:12px;border-radius:12px;cursor:pointer;">儲存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    items: [
+      { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
+        { label: '肉好好 (+NT$ 20)' },
+        { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
+        { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
+      ]},
+      { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
+        { label: '肉好好 (+NT$ 20)' },
+        { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
+        { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
+      ]},
+    ],
+    addons: [
+      { name: '餐具吸管', add: 0, checked: false },
+      { name: '購物袋', add: 0, checked: false },
+    ],
+    orderNote: '',
+    editingNote: null,
+    noteInput: '',
+  };
+
+  renderVals() {
+    const boxStyle = (sel) => ({
+      width: '22px', height: '22px', borderRadius: '6px',
+      border: '1.5px solid ' + (sel ? '#DE052E' : '#C8C9C9'),
+      background: sel ? '#DE052E' : '#FFFFFF', flexShrink: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    });
+
+    const items = this.state.items.map((it, i) => ({
+      name: it.name, qty: it.qty, note: it.note, options: it.options,
+      priceText: 'NT$' + (it.price * it.qty),
+      onMinus: () => this.setState(s => {
+        const arr = s.items.slice();
+        if (arr[i].qty <= 1) { arr.splice(i, 1); }
+        else { arr[i] = { ...arr[i], qty: arr[i].qty - 1 }; }
+        return { items: arr };
+      }),
+      onPlus: () => this.setState(s => {
+        const arr = s.items.slice();
+        arr[i] = { ...arr[i], qty: arr[i].qty + 1 };
+        return { items: arr };
+      }),
+      onEditNote: () => this.setState({ editingNote: i, noteInput: it.note || '' }),
+    }));
+
+    const editing = this.state.editingNote;
+
+    const addons = this.state.addons.map((a, i) => ({
+      name: a.name, checked: a.checked,
+      priceText: '+NT$' + a.add,
+      boxStyle: boxStyle(a.checked),
+      onToggle: () => this.setState(s => {
+        const arr = s.addons.slice();
+        arr[i] = { ...arr[i], checked: !arr[i].checked };
+        return { addons: arr };
+      }),
+    }));
+
+    let cartCount = 0, cartTotal = 0;
+    this.state.items.forEach(it => { cartCount += it.qty; cartTotal += it.qty * it.price; });
+    this.state.addons.forEach(a => { if (a.checked) cartTotal += a.add; });
+
+    return {
+      items, addons, cartCount, cartTotal,
+      orderNote: this.state.orderNote,
+      onNote: (e) => this.setState({ orderNote: e.target.value }),
+      clearItems: () => this.setState({ items: [] }),
+      noteEditOpen: editing !== null,
+      noteItemName: editing !== null ? (this.state.items[editing] || {}).name : '',
+      noteInput: this.state.noteInput,
+      onNoteInput: (e) => this.setState({ noteInput: e.target.value }),
+      stop: (e) => e.stopPropagation(),
+      cancelNote: () => this.setState({ editingNote: null }),
+      saveNote: () => this.setState(s => {
+        if (s.editingNote === null) return { editingNote: null };
+        const arr = s.items.slice();
+        arr[s.editingNote] = { ...arr[s.editingNote], note: s.noteInput };
+        return { items: arr, editingNote: null };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>
