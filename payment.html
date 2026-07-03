@@ -168,10 +168,23 @@
             <span style="font-size:14px;color:#9B9B9B;">{{ g.title }}</span>
             <sc-for list="{{ g.methods }}" as="m" hint-placeholder-count="1">
               <button onClick="{{ m.onSelect }}" style="{{ m.cardStyle }}">
-                <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ m.ring }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ m.ring }};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
                   <span style="width:11px;height:11px;border-radius:50%;background:{{ m.dot }};"></span>
                 </span>
-                <span style="font-size:16px;">{{ m.label }}</span>
+                <span style="display:flex;flex-direction:column;gap:10px;flex:1;">
+                  <span style="font-size:16px;">{{ m.label }}</span>
+                  <sc-if value="{{ m.note }}" hint-placeholder-val="">
+                    <span style="font-size:14px;color:#9B9B9B;">{{ m.note }}</span>
+                  </sc-if>
+                  <sc-if value="{{ m.hasIcons }}" hint-placeholder-val="">
+                    <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <img src="assets/icons/creditcard.svg" alt="信用卡" style="height:20px;display:block;">
+                      <img src="assets/icons/applepay.svg" alt="Apple Pay" style="height:20px;display:block;">
+                      <img src="assets/icons/googlepay.svg" alt="Google Pay" style="height:20px;display:block;">
+                      <img src="assets/icons/linepay.svg" alt="LINE Pay" style="height:20px;display:block;">
+                    </span>
+                  </sc-if>
+                </span>
               </button>
             </sc-for>
           </div>
@@ -378,7 +391,7 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: false, orderOpen: false, pay: 'ddpay', invoice: 'mobile',
+    itemsOpen: false, orderOpen: false, pay: 'onsite', invoice: 'paper',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: false, usePoints: false, coupon: '',
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
@@ -518,19 +531,20 @@ class Component extends DCLogic {
     const payCardStyle = (selected) => ({
       border: '1.5px solid ' + (selected ? '#DE052E' : '#E5E5E5'),
       borderRadius: '12px', padding: '14px 16px', display: 'flex',
-      alignItems: 'center', gap: '12px', background: '#FFFFFF',
+      alignItems: 'flex-start', gap: '12px', background: '#FFFFFF',
       cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'inherit',
     });
-    const mkPay = (m) => ({ ...m, ...radio(this.state.pay === m.key),
+    const mkPay = (m) => ({ ...m, note: m.note || '', hasIcons: !!m.hasIcons,
+      ...radio(this.state.pay === m.key),
       cardStyle: payCardStyle(this.state.pay === m.key),
       onSelect: () => this.setState(s => ({ pay: m.key,
         invoice: (m.key !== 'onsite' && s.invoice === 'paper') ? '' : s.invoice })) });
     const payGroups = [
       { title: '線上支付', methods: [
         ...(this.state.loggedIn ? [{ key: 'funpay', label: '瘋pay' }] : []),
-        { key: 'ddpay', label: 'DDPay' },
+        { key: 'online', label: '線上支付', hasIcons: true },
       ].map(mkPay) },
-      { title: '其他支付', methods: [{ key: 'onsite', label: '現場付款' }].map(mkPay) },
+      { title: '其他支付', methods: [{ key: 'onsite', label: '現場付款', note: '公司用請現場付款，選擇紙本發票並輸入統一編號' }].map(mkPay) },
     ];
 
     const fv = this.state.fields;
@@ -559,10 +573,11 @@ class Component extends DCLogic {
         mkField('companyTitle', '請輸入發票抬頭'),
       ],
       donate: [mkField('donate', '請輸入捐贈碼,3–7 碼數字')],
+      paper: [mkField('companyId', '公司用請輸入統一編號')],
     };
 
     const invoiceMethods = [
-      ...(this.state.pay === 'onsite' ? [{ key: 'paper', label: '紙本發票', note: '僅現場付款使用' }] : []),
+      ...(this.state.pay === 'onsite' ? [{ key: 'paper', label: '紙本發票', note: '僅限現場付款使用' }] : []),
       { key: 'mobile', label: '手機條碼載具', note: '' },
       { key: 'citizen', label: '自然人憑證載具', note: '' },
       { key: 'donate', label: '捐贈發票', note: '' },
