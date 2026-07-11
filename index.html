@@ -274,7 +274,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeCat: 0, lines: [], detail: null, qty: 1, sel: {}, expanded: {}, loggedIn: false, bound: false };
+  state = { activeCat: 0, lines: [], detail: null, qty: 1, sel: {}, expanded: {}, loggedIn: false, bound: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })() };
 
   get menu() {
     return [
@@ -451,7 +451,7 @@ class Component extends DCLogic {
       loggedIn: this.state.loggedIn, loggedOut: !this.state.loggedIn, memberName: 'Username',
       onLogin: () => this.setState({ loggedIn: true }),
       onLogout: () => this.setState({ loggedIn: false }),
-      onOrders: () => {}, onBind: () => this.setState({ bound: true }),
+      onOrders: () => {}, onBind: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ bound: true }); },
       bound: this.state.bound, notBound: !this.state.bound,
       qtyMinus: () => this.setState(s => ({ qty: Math.max(1, s.qty - 1) })),
       qtyPlus: () => this.setState(s => ({ qty: s.qty + 1 })),

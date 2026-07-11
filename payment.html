@@ -442,9 +442,9 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: false, orderOpen: false, pay: 'onsite', invoice: 'paper',
+    itemsOpen: false, orderOpen: false, pay: 'online', invoice: 'mobile',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
-    loggedIn: false, usePoints: false, coupon: '',
+    loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), usePoints: false, coupon: '',
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
     showCodeModal: false, codeInput: '', codeQty: { pork: 0, bacon: 0, tofu: 0 },
     showVoucherModal: false, selectedVoucher: null,
@@ -529,13 +529,13 @@ class Component extends DCLogic {
       { key: 'voucher', label: '使用優惠券', showP: false, note: '',
         amtText: (this.state.coupon === 'voucher' && this.state.selectedVoucher) ? '' : '0', amtStyle: amtStyle(0),
         subLines: (this.state.coupon === 'voucher' && this.state.selectedVoucher)
-          ? (() => { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); return v ? [{ label: '(' + v.brand + '開幕慶折100)', amtText: '-' + this.voucherValue, amtStyle: { fontSize: '14px', color: '#DE052E', flexShrink: 0 } }] : []; })()
+          ? (() => { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); return v ? [{ label: '(' + v.brand + '開幕慶折100)', amtText: '-' + this.voucherValue, amtStyle: { fontSize: '18px', fontWeight: '700', color: '#DE052E', flexShrink: 0 } }] : []; })()
           : [],
         rowStyle: pinkRow,
         onToggle: () => this.setState({ showVoucherModal: true }) },
       { key: 'gift', label: '使用電子禮券', showP: false, note: '',
         amtText: giftVouchers.length > 0 ? '' : '0', amtStyle: amtStyle(0),
-        subLines: giftVouchers.map(g => ({ label: g.label, amtText: '-' + g.amt, amtStyle: { fontSize: '14px', color: '#DE052E', flexShrink: 0 } })),
+        subLines: giftVouchers.map(g => ({ label: g.label, amtText: '-' + g.amt, amtStyle: { fontSize: '18px', fontWeight: '700', color: '#DE052E', flexShrink: 0 } })),
         rowStyle: pinkRow,
         onToggle: () => this.setState({ showGiftModal: true }) },
       { key: 'points', label: '使用瘋點數折抵', showP: true, note: '(點數折抵僅限線上支付)', subLines: [],
@@ -664,8 +664,8 @@ class Component extends DCLogic {
       payMethods, invoiceMethods,
       loggedIn: this.state.loggedIn, notLoggedIn: !this.state.loggedIn,
       memberOffers, memberName: 'Amy',
-      onLogin: () => this.setState({ loggedIn: true }),
-      onLogout: () => this.setState({ loggedIn: false, usePoints: false, coupon: '', pointsApplied: 0 }),
+      onLogin: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ loggedIn: true }); },
+      onLogout: () => { try { localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, usePoints: false, coupon: '', pointsApplied: 0 }); },
       showPointsModal: this.state.showPointsModal,
       pointsBalanceText: this.pointsBalance.toLocaleString(),
       pointsInput: this.state.pointsInput,
