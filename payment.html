@@ -543,7 +543,7 @@ class Component extends DCLogic {
       fontSize: '18px', fontWeight: '700',
       color: amt > 0 ? '#DE052E' : '#3E3E3E', flexShrink: 0,
     });
-    const discountLabel = onsiteEnabled ? '使用折扣碼' : '使用折扣碼或優惠券';
+    const discountLabel = (onsiteEnabled || !this.state.loggedIn) ? '使用折扣碼' : '使用折扣碼或優惠券';
     const discountRowAmt = onsiteEnabled ? codeAmt : (codeAmt + voucherAmt);
     const discountSubLines = [];
     if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } });
