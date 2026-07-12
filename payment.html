@@ -114,7 +114,7 @@
             <path fill="#ffffff" d="M198.17,136.18c2.02-15.54,7.88-61.28,7.88-61.28l-86.51,7.6-23.66,2.08-1.52,18.51s-4.41,71.46-24.6,100.06c0,0,8.38-3.43,18.21-15.25,4.38-5.33,8.19-11.11,11.36-17.23,8.19-15.56,15.57-38.11,18.26-70.43l.77-6.98,65.13-5.73s-4.84,37.54-6.54,50.72c-1.6,12.39,1.77,21.74,7.65,28.14,1.51,1.65,3.21,3.12,5.04,4.4,6.88,4.63,15.15,6.74,23.41,6,1.51-.13,6.05-.6,6.05-.6,0,0-24.52-12.23-20.91-39.99"></path>
             <path fill="#ffffff" d="M175.26,168.38l-18.53,1.63c.87,2.88,2.04,5.67,3.48,8.32l-15.02,1.3,2.72-18.86,18.26-1.6,1.41-10.95h0l2.72-21.03h0l1.41-10.96-17.63,1.54,1.16-8.05,17.51-1.53,1.43-10.96-49.09,4.31-1.41,10.95,17.68-1.55-1.13,8.05-17.58,1.54-.2,1.54h0l-5.36,41.37h0v.04l17.11-1.5-2.64,18.85-22.48,1.95-1.41,10.95,60.56-5.25c6.79,5.85,15.32,9.31,24.27,9.82-12.26-8.12-16.26-24.74-17.23-29.92M152.51,128.75l6.02-.53-2.64,21.03-6.42.56,3.04-21.06ZM130.17,151.49l2.8-21.04,5.7-.5-2.95,21.05-5.55.49Z"></path>
           </svg>
-          登入瘋美食會員
+          登入瘋美食會員查優惠
         </button>
         <div style="margin-top:14px;">
           <button onClick="{{ codeOffer.onToggle }}" style="{{ codeOffer.rowStyle }}">
@@ -124,6 +124,9 @@
             </span>
             <span style="{{ codeOffer.amtStyle }}">{{ codeOffer.amtText }}</span>
           </button>
+          <sc-for list="{{ codeOffer.subLines }}" as="sl" hint-placeholder-count="0">
+            <div style="font-size:13px;color:#9A9A9A;padding:0 2px;margin-top:2px;">{{ sl.label }}</div>
+          </sc-for>
         </div>
         <div style="margin-top:16px;border-top:1px solid #F6F6F6;padding:16px 2px 0;display:flex;align-items:center;justify-content:space-between;">
           <span style="font-size:16px;">付款金額</span>
@@ -311,7 +314,7 @@
   <!-- 折扣碼 Popup -->
   <sc-if value="{{ showCodeModal }}" hint-placeholder-val="">
     <div onClick="{{ closeCodeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;height:600px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
         <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
           <button onClick="{{ closeCodeModal }}" style="position: absolute; right: 16px; top: 27px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -320,6 +323,14 @@
         </div>
 
         <div style="flex:1;overflow-y:auto;padding:18px 16px;">
+          <sc-if value="{{ loggedIn }}" hint-placeholder-val="">
+            <div style="display:flex;border-bottom:1px solid #F6F6F6;margin-bottom:18px;">
+              <button onClick="{{ selectVoucherTab }}" style="{{ voucherTabStyle }}">優惠券</button>
+              <button onClick="{{ selectCodeTab }}" style="{{ codeTabStyle }}">折扣碼</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showCodeTab }}" hint-placeholder-val="{{ true }}">
           <input type="text" value="{{ codeInput }}" placeholder="請輸入折扣碼" onChange="{{ onCodeInput }}" onInput="{{ onCodeInput }}" style="{{ codeInputStyle }}">
 
           <sc-if value="{{ codeValid }}" hint-placeholder-val="">
@@ -347,6 +358,36 @@
               </div>
             </div>
           </sc-if>
+          </sc-if>
+
+          <sc-if value="{{ showVoucherTab }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:2px;display:flex;flex-direction:column;gap:14px;">
+              <sc-for list="{{ voucherRows }}" as="v" hint-placeholder-count="3">
+                <button onClick="{{ v.onSelect }}" style="{{ v.cardStyle }}">
+                  <span style="{{ v.valueBlockStyle }}">
+                    <sc-if value="{{ v.denomTop }}" hint-placeholder-val=""><span style="{{ v.denomTopStyle }}">{{ v.denomTop }}</span></sc-if>
+                    <span style="{{ v.denomBigStyle }}">{{ v.denomBig }}</span>
+                    <sc-if value="{{ v.denomBottom }}" hint-placeholder-val=""><span style="{{ v.denomBottomStyle }}">{{ v.denomBottom }}</span></sc-if>
+                  </span>
+                  <span style="flex:1;min-width:0;padding:12px 12px 12px 0;">
+                    <span style="{{ v.titleStyle }}">{{ v.couponTitle }}</span>
+                    <span style="{{ v.metaStyle }}">使用期限: {{ v.couponPeriod }}</span>
+                    <span style="{{ v.metaStyle }}">使用次數: {{ v.couponTimes }}</span>
+                    <span style="display:flex;gap:14px;margin-top:8px;">
+                      <sc-for list="{{ v.couponTags }}" as="t" hint-placeholder-count="2">
+                        <span style="{{ v.tagStyle }}">{{ t }}</span>
+                      </sc-for>
+                    </span>
+                  </span>
+                  <sc-if value="{{ v.showCheck }}" hint-placeholder-val="">
+                    <span style="position:absolute;right:0;bottom:0;width:34px;height:34px;background:#DE052E;border-top-left-radius:10px;border-bottom-right-radius:12px;display:flex;align-items:center;justify-content:center;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                  </sc-if>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
         </div>
 
         <div style="flex-shrink:0;border-top:1px solid #F6F6F6;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
@@ -355,45 +396,6 @@
             <div style="font-size:22px;font-weight:700;color:#DE052E;margin-top:2px;">{{ codeDiscountText }}</div>
           </div>
           <button onClick="{{ confirmCode }}" style="{{ codeConfirmStyle }}">確認</button>
-        </div>
-      </div>
-    </div>
-  </sc-if>
-
-  <!-- 選擇優惠券 Popup -->
-  <sc-if value="{{ showVoucherModal }}" hint-placeholder-val="">
-    <div onClick="{{ closeVoucherModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;font-family:'Noto Sans TC','Roboto',sans-serif;">
-        <div style="position:relative;height:56px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F6F6F6;flex-shrink:0;">
-          <button onClick="{{ closeVoucherModal }}" style="position: absolute; right: 16px; top: 28px; transform: translateY(-50%); border: none; background: none; padding: 6px; cursor: pointer; display: flex">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
-          <span style="font-size:18px;font-weight:700;">選擇優惠券</span>
-        </div>
-
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;">
-          <sc-for list="{{ voucherRows }}" as="v" hint-placeholder-count="3">
-            <button onClick="{{ v.onSelect }}" style="{{ v.cardStyle }}">
-              <span style="width:108px;height:74px;border-radius:8px;background:#3A2A22;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;overflow:hidden;">
-                <span style="font-size:13px;font-weight:700;color:#FCAE42;">{{ v.brand }}</span>
-                <span style="font-size:14px;font-weight:700;color:#FFFFFF;">開幕慶</span>
-              </span>
-              <span style="flex:1;min-width:0;">
-                <span style="display:block;font-size:15px;line-height:1.4;color:#3E3E3E;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">{{ v.name }}</span>
-                <span style="display:block;font-size:13px;color:#5B5B5B;margin-top:6px;">期限:{{ v.period }}</span>
-                <span style="display:block;font-size:13px;color:#5B5B5B;margin-top:2px;">使用次數:{{ v.times }}</span>
-                <span style="display:flex;gap:14px;margin-top:8px;">
-                  <sc-for list="{{ v.tags }}" as="t" hint-placeholder-count="2">
-                    <span style="font-size:13px;color:#FCAE42;">{{ t }}</span>
-                  </sc-for>
-                </span>
-              </span>
-            </button>
-          </sc-for>
-        </div>
-
-        <div style="flex-shrink:0;border-top:1px solid #F6F6F6;padding:12px 16px;">
-          <button onClick="{{ confirmVoucher }}" style="{{ voucherConfirmStyle }}">確認</button>
         </div>
       </div>
     </div>
@@ -433,6 +435,11 @@
                   </sc-for>
                 </span>
               </span>
+              <sc-if value="{{ v.selected }}" hint-placeholder-val="">
+                <span style="position:absolute;right:0;bottom:0;width:34px;height:34px;background:#DE052E;border-top-left-radius:10px;border-bottom-right-radius:10px;display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </sc-if>
             </button>
           </sc-for>
         </div>
@@ -451,17 +458,17 @@ class Component extends DCLogic {
   state = {
     itemsOpen: false, orderOpen: false, pay: 'online', invoice: 'mobile',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
-    loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), usePoints: false, coupon: '',
+    loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
     showCodeModal: false, codeInput: '', codeQty: { pork: 0, bacon: 0, tofu: 0 },
-    showVoucherModal: false, selectedVoucher: null,
+    discountTab: 'voucher', selectedVoucher: null,
     showGiftModal: false, selectedGifts: {},
   };
 
   vouchers = [
-    { id: 'v1', brand: '青花驕', name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
-    { id: 'v2', brand: '青花驕', name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
-    { id: 'v3', brand: '青花驕', name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
+    { id: 'v1', brand: '青花驕', short: '肉品', value: 100, denomTop: 'NT$', denomBig: '100', denomBottom: '', couponTitle: '瘋會員生日優惠券折100', couponPeriod: '2006/07/01 - 2026/07/31', couponTimes: '1次', couponTags: ['限會員', '限門市'], expired: false, name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
+    { id: 'v2', brand: '青花驕', short: '海鮮', value: 100, denomTop: 'NT$', denomBig: '100', denomBottom: '', couponTitle: '瘋會員生日優惠券折100', couponPeriod: '2006/07/01 - 2026/07/31', couponTimes: '1次', couponTags: ['限會員', '限門市'], expired: false, name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
+    { id: 'v3', brand: '青花驕', short: '鍋物', value: 100, denomTop: '', denomBig: '9', denomBottom: '折', couponTitle: '週年慶9折優惠券', couponPeriod: '2024/03/01 - 2024/03/31', couponTimes: '1次', couponTags: ['限會員', '限門市'], expired: true, name: '商品名稱壹貳參肆伍陸漆捌玖拾壹貳參肆伍陸漆捌玖拾壹貳參…', period: '2024/02/01 - 2024/02/29', times: '1次', tags: ['限門市', '限時段'] },
   ];
 
   codeDiscount = 50;
@@ -511,10 +518,12 @@ class Component extends DCLogic {
     const codeSub = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
     const pointsUsable = this.state.pay === 'online' || this.state.pay === 'funpay';
     const pointsAmt = (pointsUsable && this.state.usePoints) ? this.state.pointsApplied : 0;
-    const voucherAmt = this.state.coupon === 'voucher' ? this.voucherValue : 0;
-    const codeAmt = this.state.coupon === 'code' ? Math.min(codeSub, 100) : 0;
+    const codeApplied = this.state.codeApplied && codeValid0;
+    const codeAmt = codeApplied ? Math.min(codeSub, 100) : 0;
+    const voucherApplied = this.state.voucherApplied && !!this.state.selectedVoucher;
+    const voucherAmt = voucherApplied ? this.voucherValue : 0;
     const giftSel = this.state.selectedGifts || {};
-    const giftVouchers = this.vouchers.filter(v => giftSel[v.id]).map(v => ({ label: '(' + v.brand + '開幕慶折100)', amt: 100 }));
+    const giftVouchers = this.vouchers.filter(v => giftSel[v.id]).map(v => ({ label: '(' + v.brand + '開幕慶' + v.short + '折100)', amt: 100 }));
     const giftAmt = this.state.loggedIn ? giftVouchers.reduce((s, g) => s + g.amt, 0) : 0;
     const maxPts = Math.min(this.pointsBalance, Math.max(0, MEMBER_SUBTOTAL - voucherAmt - codeAmt - giftAmt));
     const memberPayableNum = Math.max(0, MEMBER_SUBTOTAL - pointsAmt - voucherAmt - codeAmt - giftAmt);
@@ -530,21 +539,18 @@ class Component extends DCLogic {
       fontSize: '18px', fontWeight: '700',
       color: amt > 0 ? '#DE052E' : '#3E3E3E', flexShrink: 0,
     });
+    const discountSubLines = [];
+    if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } });
+    if (voucherApplied) { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); if (v) discountSubLines.push({ label: '(' + v.couponTitle + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } }); }
+    const discountAmt = codeAmt + voucherAmt;
     const memberOffers = [
-      { key: 'code', label: this.state.coupon === 'code' && codeValid0 ? '使用折扣碼:' + this.state.codeInput.trim().toUpperCase() : '使用折扣碼', showP: false, note: '', subLines: [],
-        amtText: codeAmt > 0 ? '-' + codeAmt : '0', amtStyle: amtStyle(codeAmt),
+      { key: 'discount', label: this.state.loggedIn ? '使用折扣碼或優惠券' : '使用折扣碼', showP: false, note: '', subLines: discountSubLines,
+        amtText: discountAmt > 0 ? '-' + discountAmt : '0', amtStyle: amtStyle(discountAmt),
         rowStyle: pinkRow,
-        onToggle: () => this.setState({ showCodeModal: true }) },
-      { key: 'voucher', label: '使用優惠券', showP: false, note: '',
-        amtText: (this.state.coupon === 'voucher' && this.state.selectedVoucher) ? '' : '0', amtStyle: amtStyle(0),
-        subLines: (this.state.coupon === 'voucher' && this.state.selectedVoucher)
-          ? (() => { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); return v ? [{ label: '(' + v.brand + '開幕慶折100)', amtText: '-' + this.voucherValue, amtStyle: { fontSize: '18px', fontWeight: '700', color: '#DE052E', flexShrink: 0 } }] : []; })()
-          : [],
-        rowStyle: pinkRow,
-        onToggle: () => this.setState({ showVoucherModal: true }) },
+        onToggle: () => this.setState({ showCodeModal: true, discountTab: 'voucher' }) },
       { key: 'gift', label: '使用電子禮券', showP: false, note: '',
-        amtText: giftVouchers.length > 0 ? '' : '0', amtStyle: amtStyle(0),
-        subLines: giftVouchers.map(g => ({ label: g.label, amtText: '-' + g.amt, amtStyle: { fontSize: '18px', fontWeight: '700', color: '#DE052E', flexShrink: 0 } })),
+        amtText: giftAmt > 0 ? '-' + giftAmt : '0', amtStyle: amtStyle(giftAmt),
+        subLines: giftVouchers.map(g => ({ label: g.label, amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } })),
         rowStyle: pinkRow,
         onToggle: () => this.setState({ showGiftModal: true }) },
       { key: 'points', label: '使用瘋點數折抵', showP: true, note: '(點數折抵僅限線上支付)', subLines: [],
@@ -555,7 +561,7 @@ class Component extends DCLogic {
 
     // 折扣碼 popup
     const codeValid = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
-    const codeTitle = codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼';
+    const codeTitle = this.state.loggedIn ? '折扣碼或優惠券' : (codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼');
     const totalQty = Object.values(this.state.codeQty).reduce((a, b) => a + b, 0);
     const pad2 = (n) => String(n).padStart(2, '0');
     const setQty = (key, delta) => {
@@ -567,7 +573,6 @@ class Component extends DCLogic {
     };
     const codeSubtotal = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
     const codeDiscountAmt = Math.min(codeSubtotal, 100);
-    const codeDiscountText = '-$ ' + codeDiscountAmt;
     const capReached = codeSubtotal >= 100;
     const codeItemRows = this.codeItems.map(it => {
       const qty = this.state.codeQty[it.key];
@@ -587,6 +592,20 @@ class Component extends DCLogic {
       };
     });
     const codeConfirmValid = codeValid && totalQty >= 1;
+    const activeTab = this.state.loggedIn ? this.state.discountTab : 'code';
+    const showCodeTab = activeTab === 'code';
+    const showVoucherTab = this.state.loggedIn && activeTab === 'voucher';
+    const tabDiscount = showVoucherTab
+      ? (this.state.selectedVoucher ? this.voucherValue : 0)
+      : (codeConfirmValid ? codeDiscountAmt : 0);
+    const codeDiscountText = '-$ ' + tabDiscount;
+    const discountConfirmValid = showVoucherTab ? !!this.state.selectedVoucher : codeConfirmValid;
+    const tabBtn = (active) => ({
+      flex: 1, padding: '10px 0', border: 'none', background: 'none',
+      fontFamily: 'inherit', fontSize: '16px', fontWeight: active ? '700' : '400',
+      color: active ? '#DE052E' : '#9A9A9A', cursor: 'pointer',
+      borderBottom: '2px solid ' + (active ? '#DE052E' : 'transparent'),
+    });
 
     // 瘋點數折抵 popup
     const rawPts = this.state.pointsInput.replace(/[^0-9]/g, '');
@@ -664,7 +683,7 @@ class Component extends DCLogic {
       payable: 'NT$' + memberPayableNum,
       memberSubtotalText: 'NT$' + MEMBER_SUBTOTAL,
       memberPayableText: 'NT$' + memberPayableNum,
-      codeOffer: memberOffers.find(o => o.key === 'code'),
+      codeOffer: memberOffers.find(o => o.key === 'discount'),
       itemsOpen: this.state.itemsOpen, orderOpen: this.state.orderOpen,
       itemsChevronStyle: chevron(this.state.itemsOpen),
       orderChevronStyle: chevron(this.state.orderOpen),
@@ -677,7 +696,7 @@ class Component extends DCLogic {
       loggedIn: this.state.loggedIn, notLoggedIn: !this.state.loggedIn,
       memberOffers, memberName: 'Amy',
       onLogin: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ loggedIn: true }); },
-      onLogout: () => { try { localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, usePoints: false, coupon: '', pointsApplied: 0 }); },
+      onLogout: () => { try { localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, usePoints: false, codeApplied: false, voucherApplied: false, pointsApplied: 0 }); },
       showPointsModal: this.state.showPointsModal,
       pointsBalanceText: this.pointsBalance.toLocaleString(),
       pointsInput: this.state.pointsInput,
@@ -699,6 +718,11 @@ class Component extends DCLogic {
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
       codeItemRows, codeDiscountText,
+      showCodeTab, showVoucherTab,
+      voucherTabStyle: tabBtn(showVoucherTab),
+      codeTabStyle: tabBtn(showCodeTab),
+      selectVoucherTab: () => this.setState({ discountTab: 'voucher' }),
+      selectCodeTab: () => this.setState({ discountTab: 'code' }),
       onCodeInput: (e) => this.setState({ codeInput: e.target.value }),
       closeCodeModal: () => this.setState({ showCodeModal: false }),
       codeInputStyle: {
@@ -709,47 +733,54 @@ class Component extends DCLogic {
       codeConfirmStyle: {
         border: 'none', fontFamily: 'inherit', fontSize: '20px', fontWeight: '500',
         padding: '12px 36px', borderRadius: '12px',
-        cursor: codeConfirmValid ? 'pointer' : 'not-allowed',
-        background: codeConfirmValid ? '#DE052E' : '#F6F6F6',
-        color: codeConfirmValid ? '#FFFFFF' : '#C8C9C9',
+        cursor: discountConfirmValid ? 'pointer' : 'not-allowed',
+        background: discountConfirmValid ? '#DE052E' : '#F6F6F6',
+        color: discountConfirmValid ? '#FFFFFF' : '#C8C9C9',
       },
       confirmCode: () => {
-        if (!codeConfirmValid) return;
-        this.setState({ coupon: 'code', showCodeModal: false });
+        if (!discountConfirmValid) return;
+        if (showVoucherTab) this.setState({ voucherApplied: true, codeApplied: false, showCodeModal: false });
+        else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false });
       },
-      showVoucherModal: this.state.showVoucherModal,
       voucherRows: this.vouchers.map(v => {
-        const sel = this.state.selectedVoucher === v.id;
+        const expired = !!v.expired;
+        const sel = this.state.selectedVoucher === v.id && !expired;
+        const valueBg = expired ? '#DADADA' : '#FFEED8';
+        const valueColor = expired ? '#FFFFFF' : '#DE052E';
+        const titleColor = expired ? '#C2C2C2' : '#3E3E3E';
+        const metaColor = expired ? '#CFCFCF' : '#8A8A8A';
+        const tagColor = expired ? '#CFCFCF' : '#F0A73E';
         return {
-          ...v, selected: sel,
+          id: v.id, denomTop: v.denomTop, denomBig: v.denomBig, denomBottom: v.denomBottom, couponTitle: v.couponTitle,
+          couponPeriod: v.couponPeriod, couponTimes: v.couponTimes, couponTags: v.couponTags,
+          showCheck: sel,
           cardStyle: {
-            display: 'flex', gap: '12px', padding: '12px', borderRadius: '12px',
-            border: '2px solid ' + (sel ? '#DE052E' : '#F6F6F6'),
-            background: '#FFFFFF', cursor: 'pointer', textAlign: 'left', width: '100%',
-            fontFamily: 'inherit',
+            position: 'relative', display: 'flex', gap: '14px', padding: '0',
+            borderRadius: '14px', overflow: 'hidden', boxSizing: 'border-box',
+            border: '2px solid ' + (sel ? '#DE052E' : (expired ? '#DADADA' : '#FFEED8')),
+            background: '#FFFFFF', width: '100%', textAlign: 'left', fontFamily: 'inherit',
+            cursor: expired ? 'not-allowed' : 'pointer', minHeight: '96px',
           },
-          onSelect: () => this.setState({ selectedVoucher: v.id }),
+          valueBlockStyle: {
+            alignSelf: 'stretch', width: '96px', flexShrink: 0, background: valueBg,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1px',
+          },
+          denomTopStyle: { fontSize: '15px', fontWeight: '700', color: valueColor, lineHeight: '1.1' },
+          denomBigStyle: { fontSize: '34px', fontWeight: '800', color: valueColor, lineHeight: '1' },
+          denomBottomStyle: { fontSize: '15px', fontWeight: '700', color: valueColor, lineHeight: '1.1' },
+          titleStyle: { display: 'block', fontSize: '15px', color: titleColor, lineHeight: '1.4' },
+          metaStyle: { display: 'block', fontSize: '13px', color: metaColor, marginTop: '4px' },
+          tagStyle: { fontSize: '13px', fontWeight: '500', color: tagColor },
+          onSelect: expired ? (() => {}) : (() => this.setState(s => ({ selectedVoucher: s.selectedVoucher === v.id ? null : v.id }))),
         };
       }),
-      voucherConfirmValid: !!this.state.selectedVoucher,
-      voucherConfirmStyle: {
-        border: 'none', fontFamily: 'inherit', fontSize: '20px', fontWeight: '500',
-        padding: '14px', borderRadius: '12px', width: '100%',
-        cursor: this.state.selectedVoucher ? 'pointer' : 'not-allowed',
-        background: this.state.selectedVoucher ? '#DE052E' : '#F6F6F6',
-        color: this.state.selectedVoucher ? '#FFFFFF' : '#C8C9C9',
-      },
-      closeVoucherModal: () => this.setState({ showVoucherModal: false }),
-      confirmVoucher: () => {
-        if (!this.state.selectedVoucher) return;
-        this.setState({ coupon: 'voucher', showVoucherModal: false });
-      },
       showGiftModal: this.state.showGiftModal,
       giftRows: this.vouchers.map(v => {
         const sel = !!(this.state.selectedGifts && this.state.selectedGifts[v.id]);
         return {
           ...v, selected: sel,
           cardStyle: {
+            position: 'relative', overflow: 'hidden', flexShrink: 0,
             display: 'flex', gap: '12px', padding: '12px', borderRadius: '12px',
             border: '2px solid ' + (sel ? '#DE052E' : '#F6F6F6'),
             background: '#FFFFFF', cursor: 'pointer', textAlign: 'left', width: '100%',
