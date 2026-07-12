@@ -323,7 +323,7 @@
         </div>
 
         <div style="flex:1;overflow-y:auto;padding:18px 16px;">
-          <sc-if value="{{ loggedIn }}" hint-placeholder-val="">
+          <sc-if value="{{ showDiscountTabs }}" hint-placeholder-val="">
             <div style="display:flex;border-bottom:1px solid #F6F6F6;margin-bottom:18px;">
               <button onClick="{{ selectVoucherTab }}" style="{{ voucherTabStyle }}">優惠券</button>
               <button onClick="{{ selectCodeTab }}" style="{{ codeTabStyle }}">折扣碼</button>
@@ -516,15 +516,19 @@ class Component extends DCLogic {
     const MEMBER_SUBTOTAL = 500;
     const codeValid0 = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
     const codeSub = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
-    const pointsUsable = this.state.pay === 'online' || this.state.pay === 'funpay';
-    const pointsAmt = (pointsUsable && this.state.usePoints) ? this.state.pointsApplied : 0;
+    const onlineEnabled = this.state.pay === 'online' || this.state.pay === 'funpay';
+    const onsiteEnabled = this.state.pay === 'onsite';
+    const pointsUsable = onlineEnabled;
+    const pointsApplied = this.state.usePoints ? this.state.pointsApplied : 0; // 保留顯示用
+    const pointsAmt = (onlineEnabled && this.state.usePoints) ? this.state.pointsApplied : 0; // 實際折抵
     const codeApplied = this.state.codeApplied && codeValid0;
     const codeAmt = codeApplied ? Math.min(codeSub, 100) : 0;
     const voucherApplied = this.state.voucherApplied && !!this.state.selectedVoucher;
-    const voucherAmt = voucherApplied ? this.voucherValue : 0;
+    const voucherAmt = (onlineEnabled && voucherApplied) ? this.voucherValue : 0;
     const giftSel = this.state.selectedGifts || {};
     const giftVouchers = this.vouchers.filter(v => giftSel[v.id]).map(v => ({ label: '(' + v.brand + '開幕慶' + v.short + '折100)', amt: 100 }));
-    const giftAmt = this.state.loggedIn ? giftVouchers.reduce((s, g) => s + g.amt, 0) : 0;
+    const giftSelSum = this.state.loggedIn ? giftVouchers.reduce((s, g) => s + g.amt, 0) : 0; // 保留顯示用
+    const giftAmt = onlineEnabled ? giftSelSum : 0; // 實際折抵
     const maxPts = Math.min(this.pointsBalance, Math.max(0, MEMBER_SUBTOTAL - voucherAmt - codeAmt - giftAmt));
     const memberPayableNum = Math.max(0, MEMBER_SUBTOTAL - pointsAmt - voucherAmt - codeAmt - giftAmt);
     const zeroPayable = this.state.loggedIn && memberPayableNum === 0;
@@ -539,29 +543,31 @@ class Component extends DCLogic {
       fontSize: '18px', fontWeight: '700',
       color: amt > 0 ? '#DE052E' : '#3E3E3E', flexShrink: 0,
     });
+    const discountLabel = onsiteEnabled ? '使用折扣碼' : '使用折扣碼或優惠券';
+    const discountRowAmt = onsiteEnabled ? codeAmt : (codeAmt + voucherAmt);
     const discountSubLines = [];
     if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } });
-    if (voucherApplied) { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); if (v) discountSubLines.push({ label: '(' + v.couponTitle + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } }); }
-    const discountAmt = codeAmt + voucherAmt;
+    if (!onsiteEnabled && voucherApplied) { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); if (v) discountSubLines.push({ label: '(' + v.couponTitle + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } }); }
+    const disabledRow = { ...pinkRow, opacity: 0.4, cursor: 'not-allowed' };
     const memberOffers = [
-      { key: 'discount', label: this.state.loggedIn ? '使用折扣碼或優惠券' : '使用折扣碼', showP: false, note: '', subLines: discountSubLines,
-        amtText: discountAmt > 0 ? '-' + discountAmt : '0', amtStyle: amtStyle(discountAmt),
+      { key: 'discount', label: discountLabel, showP: false, note: '', subLines: discountSubLines,
+        amtText: discountRowAmt > 0 ? '-' + discountRowAmt : '0', amtStyle: amtStyle(discountRowAmt),
         rowStyle: pinkRow,
-        onToggle: () => this.setState({ showCodeModal: true, discountTab: 'voucher' }) },
+        onToggle: () => this.setState({ showCodeModal: true, discountTab: onsiteEnabled ? 'code' : 'voucher' }) },
       { key: 'gift', label: '使用電子禮券', showP: false, note: '',
-        amtText: giftAmt > 0 ? '-' + giftAmt : '0', amtStyle: amtStyle(giftAmt),
+        amtText: giftSelSum > 0 ? '-' + giftSelSum : '0', amtStyle: amtStyle(giftSelSum),
         subLines: giftVouchers.map(g => ({ label: g.label, amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } })),
-        rowStyle: pinkRow,
-        onToggle: () => this.setState({ showGiftModal: true }) },
-      { key: 'points', label: '使用瘋點數折抵', showP: true, note: '(點數折抵僅限線上支付)', subLines: [],
-        amtText: pointsAmt > 0 ? '-' + pointsAmt : '0', amtStyle: amtStyle(pointsAmt),
-        rowStyle: { ...pinkRow, opacity: pointsUsable ? 1 : 0.4, cursor: pointsUsable ? 'pointer' : 'not-allowed' },
-        onToggle: pointsUsable ? (() => this.setState({ showPointsModal: true, pointsInput: this.state.pointsApplied ? String(this.state.pointsApplied) : '' })) : (() => {}) },
+        rowStyle: onlineEnabled ? pinkRow : disabledRow,
+        onToggle: onlineEnabled ? (() => this.setState({ showGiftModal: true })) : (() => {}) },
+      { key: 'points', label: '使用瘋點數折抵', showP: true, note: '(使用優惠券/電子禮券/點數折抵僅限線上支付)', subLines: [],
+        amtText: pointsApplied > 0 ? '-' + pointsApplied : '0', amtStyle: amtStyle(pointsApplied),
+        rowStyle: onlineEnabled ? pinkRow : disabledRow,
+        onToggle: onlineEnabled ? (() => this.setState({ showPointsModal: true, pointsInput: this.state.pointsApplied ? String(this.state.pointsApplied) : '' })) : (() => {}) },
     ];
 
     // 折扣碼 popup
     const codeValid = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
-    const codeTitle = this.state.loggedIn ? '折扣碼或優惠券' : (codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼');
+    const codeTitle = (this.state.loggedIn && onlineEnabled) ? '折扣碼或優惠券' : (codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼');
     const totalQty = Object.values(this.state.codeQty).reduce((a, b) => a + b, 0);
     const pad2 = (n) => String(n).padStart(2, '0');
     const setQty = (key, delta) => {
@@ -592,9 +598,10 @@ class Component extends DCLogic {
       };
     });
     const codeConfirmValid = codeValid && totalQty >= 1;
-    const activeTab = this.state.loggedIn ? this.state.discountTab : 'code';
+    const activeTab = (this.state.loggedIn && onlineEnabled) ? this.state.discountTab : 'code';
     const showCodeTab = activeTab === 'code';
-    const showVoucherTab = this.state.loggedIn && activeTab === 'voucher';
+    const showVoucherTab = this.state.loggedIn && onlineEnabled && activeTab === 'voucher';
+    const showDiscountTabs = this.state.loggedIn && onlineEnabled;
     const tabDiscount = showVoucherTab
       ? (this.state.selectedVoucher ? this.voucherValue : 0)
       : (codeConfirmValid ? codeDiscountAmt : 0);
@@ -718,7 +725,7 @@ class Component extends DCLogic {
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
       codeItemRows, codeDiscountText,
-      showCodeTab, showVoucherTab,
+      showCodeTab, showVoucherTab, showDiscountTabs,
       voucherTabStyle: tabBtn(showVoucherTab),
       codeTabStyle: tabBtn(showCodeTab),
       selectVoucherTab: () => this.setState({ discountTab: 'voucher' }),
