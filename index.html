@@ -69,20 +69,20 @@
           <img src="assets/icons/bullhorn.svg" alt="公告" style="width:30px;height:30px;display:block;cursor:pointer;">
         </div>
       </div>
-      <div style="padding-top:12px;">
+      <div style="padding-top:12px;display:flex;flex-direction:column;gap:14px;">
         <sc-if value="{{ loggedIn }}" hint-placeholder-val="">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <span style="display:flex;align-items:center;gap:7px;color:#3E3E3E;font-size:15px;font-weight:500;">
-              <img src="assets/icons/user.svg" alt="" style="width:18px;height:18px;display:block;">
-              {{ memberName }}
+            <span style="display:flex;align-items:center;gap:8px;color:#3E3E3E;font-size:15px;font-weight:500;min-width:0;">
+              <img src="assets/icons/line.svg" alt="" style="width:22px;height:22px;display:block;flex-shrink:0;">
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ memberName }}</span>
             </span>
             <span style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
-              <button onClick="{{ onLogout }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;">
-                <img src="assets/icons/logout.svg" alt="登出" style="width:24px;height:24px;display:block;">
-              </button>
               <button onClick="{{ onOrders }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;color:#3E3E3E;font-size:15px;">
-                <img src="assets/icons/order.svg" alt="" style="width:24px;height:24px;display:block;">
+                <img src="assets/icons/order.svg" alt="" style="width:22px;height:22px;display:block;">
                 我的訂單
+              </button>
+              <button onClick="{{ onLogout }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;">
+                <img src="assets/icons/logout.svg" alt="登出" style="width:22px;height:22px;display:block;">
               </button>
             </span>
           </div>
@@ -93,28 +93,23 @@
             <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入LINE</span>
           </button>
         </sc-if>
-          <sc-if value="{{ notBound }}" hint-placeholder-val="{{ true }}">
-          <button onClick="{{ onBind }}" style="margin-top:14px;width:100%;background:#DE052E;border:none;border-radius:10px;padding:9px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
-            <svg width="26" height="26" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" style="display: block; flex-shrink: 0; fill: #ffffff">
-              <circle cx="128" cy="128" r="128" fill="#DE052E"></circle><path d="M128,10c31.52,0,61.15,12.27,83.44,34.56,22.29,22.29,34.56,51.92,34.56,83.44s-12.27,61.15-34.56,83.44c-22.29,22.29-51.92,34.56-83.44,34.56s-61.15-12.27-83.44-34.56c-22.29-22.29-34.56-51.92-34.56-83.44s12.27-61.15,34.56-83.44c22.29-22.29,51.92-34.56,83.44-34.56M128,0C57.31,0,0,57.31,0,128s57.31,128,128,128,128-57.31,128-128S198.69,0,128,0h0Z" fill="#ffffff"></path>
-              <path fill="#ffffff" d="M88.28,85.23l1.26-8.76,117.24-10.29.82-10.67-55.74,4.8.98-7.46-25.59,2.24-.98,7.46-58.38,5.18h0l-.48.04-2.43,19.46-15.48,1.35-1.91,14.83,15.52-1.36c-.56,3.85-1.25,8.28-2.1,13.07l-15.1,1.32-1.91,14.83,14.1-1.24c-4.41,20.42-11.22,43.21-21.21,56.36,0,0,41.21-15.19,51.38-101.18Z"></path>
-              <path fill="#ffffff" d="M198.17,136.18c2.02-15.54,7.88-61.28,7.88-61.28l-86.51,7.6-23.66,2.08-1.52,18.51s-4.41,71.46-24.6,100.06c0,0,8.38-3.43,18.21-15.25,4.38-5.33,8.19-11.11,11.36-17.23,8.19-15.56,15.57-38.11,18.26-70.43l.77-6.98,65.13-5.73s-4.84,37.54-6.54,50.72c-1.6,12.39,1.77,21.74,7.65,28.14,1.51,1.65,3.21,3.12,5.04,4.4,6.88,4.63,15.15,6.74,23.41,6,1.51-.13,6.05-.6,6.05-.6,0,0-24.52-12.23-20.91-39.99"></path>
-              <path fill="#ffffff" d="M175.26,168.38l-18.53,1.63c.87,2.88,2.04,5.67,3.48,8.32l-15.02,1.3,2.72-18.86,18.26-1.6,1.41-10.95h0l2.72-21.03h0l1.41-10.96-17.63,1.54,1.16-8.05,17.51-1.53,1.43-10.96-49.09,4.31-1.41,10.95,17.68-1.55-1.13,8.05-17.58,1.54-.2,1.54h0l-5.36,41.37h0v.04l17.11-1.5-2.64,18.85-22.48,1.95-1.41,10.95,60.56-5.25c6.79,5.85,15.32,9.31,24.27,9.82-12.26-8.12-16.26-24.74-17.23-29.92M152.51,128.75l6.02-.53-2.64,21.03-6.42.56,3.04-21.06ZM130.17,151.49l2.8-21.04,5.7-.5-2.95,21.05-5.55.49Z"></path>
-            </svg>
-            <span style="color:#FFFFFF;font-size:15px;font-weight:700;">登入瘋美食會員查優惠</span>
+        <sc-if value="{{ notBound }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ onBind }}" style="width:100%;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:9px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
+            <img src="assets/icons/fun.svg" alt="" style="width:24px;height:24px;display:block;flex-shrink:0;">
+            <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入瘋美食會員查優惠</span>
           </button>
-          </sc-if>
-          <sc-if value="{{ bound }}" hint-placeholder-val="">
-            <div style="margin-top:14px;width:100%;background:#FFEED8;border:none;border-radius:10px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
-              <span style="display:flex;align-items:center;gap:8px;min-width:0;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1FA463" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="8.5 12.5 11 15 16 9"></polyline></svg>
-                <span style="color:#3E3E3E;font-size:14px;font-weight:500;">已登入瘋美食會員，結帳時可折抵</span>
-              </span>
-              <button onClick="{{ onUnbind }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;flex-shrink:0;">
-                <img src="assets/icons/logout.svg" alt="登出" style="width:22px;height:22px;display:block;">
-              </button>
-            </div>
-          </sc-if>
+        </sc-if>
+        <sc-if value="{{ bound }}" hint-placeholder-val="">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span style="display:flex;align-items:center;gap:8px;color:#3E3E3E;font-size:15px;font-weight:500;min-width:0;">
+              <img src="assets/icons/fun.svg" alt="" style="width:22px;height:22px;display:block;flex-shrink:0;">
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ memberName }}</span>
+            </span>
+            <button onClick="{{ onUnbind }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;flex-shrink:0;">
+              <img src="assets/icons/logout.svg" alt="登出" style="width:22px;height:22px;display:block;">
+            </button>
+          </div>
+        </sc-if>
       </div>
     </div>
 
@@ -456,7 +451,7 @@ class Component extends DCLogic {
       loggedIn: this.state.loggedIn, loggedOut: !this.state.loggedIn, memberName: 'Username',
       onLogin: () => this.setState({ loggedIn: true }),
       onLogout: () => this.setState({ loggedIn: false }),
-      onOrders: () => {}, onBind: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ bound: true }); },
+      onOrders: () => { window.location.href = 'order.html'; }, onBind: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ bound: true }); },
       onUnbind: () => { try { localStorage.removeItem('funMember'); } catch (e) {} this.setState({ bound: false }); },
       bound: this.state.bound, notBound: !this.state.bound,
       qtyMinus: () => this.setState(s => ({ qty: Math.max(1, s.qty - 1) })),

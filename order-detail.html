@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  @media (min-width: 480px) {
+    #order-root { max-width: 390px !important; }
+  }
+  a { color: #DE052E; }
+  a:hover { color: #b8041f; }
+</style>
+</helmet>
+<div id="order-root" style="width:100%;min-height:844px;margin:0 auto;background:#F6F6F6;font-family:'Noto Sans TC','Roboto',sans-serif;color:#3E3E3E;position:relative;display:flex;flex-direction:column;">
+
+  <!-- Header -->
+  <div style="position:sticky;top:0;z-index:10;height:56px;background:#FFFFFF;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #F0F0F0;">
+    <a href="order.html" style="text-decoration:none;padding:8px;margin-left:-8px;display:flex;align-items:center;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </a>
+    <div style="flex:1;text-align:center;font-size:18px;font-weight:500;">訂單明細</div>
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:4px;color:#3E3E3E;font-size:14px;font-weight:500;padding:6px 12px;border-radius:999px;background:#F5F5F5;white-space:nowrap;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"></path></svg>
+      首頁
+    </a>
+  </div>
+
+  <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+    <!-- 訂單狀態卡 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:24px 16px;text-align:center;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:18px;">
+        <div style="width:110px;height:96px;border:3px solid #F5A623;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span style="font-size:15px;color:#3E3E3E;">內用震動器</span>
+          <span style="font-size:38px;font-weight:700;color:#3E3E3E;line-height:1.1;">12</span>
+        </div>
+        <div style="width:96px;height:96px;" data-om-raster>{{ qr }}</div>
+      </div>
+      <div style="margin-top:18px;font-size:22px;font-weight:700;color:#F5A623;">訂單已成立</div>
+      <div style="margin-top:14px;font-size:14px;color:#8A8A8A;">訂單編號</div>
+      <div style="margin-top:2px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:18px;font-weight:500;">
+        #26071800123
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.2727 5.47617C18.779 5.47617 20 6.70206 20 8.21427V16.4286C20 17.8935 18.854 19.0898 17.413 19.1631L17.2727 19.1666H9.09091L8.95064 19.1631C7.55606 19.0921 6.43784 17.9695 6.36719 16.5694L6.36364 16.4286V8.21427C6.36364 6.70206 7.58468 5.47617 9.09091 5.47617H17.2727ZM9.09091 7.30157C8.58883 7.30157 8.18182 7.7102 8.18182 8.21427V16.4286C8.18182 16.9326 8.58883 17.3413 9.09091 17.3413H17.2727C17.7748 17.3413 18.1818 16.9326 18.1818 16.4286V8.21427C18.1818 7.7102 17.7748 7.30157 17.2727 7.30157H9.09091Z" fill="#FF9900"></path><path d="M10.9091 0.833313C12.4153 0.833313 13.6364 2.0592 13.6364 3.57141V4.56347H11.8182V3.57141C11.8182 3.06734 11.4112 2.65871 10.9091 2.65871H2.72727C2.2252 2.65871 1.81818 3.06734 1.81818 3.57141V10.9524C1.81818 11.4564 2.2252 11.8651 2.72727 11.8651H5.45455V13.6905H2.72727L2.587 13.6869C1.19242 13.616 0.0742048 12.4933 0.00355114 11.0932L0 10.9524V3.57141C0 2.0592 1.22104 0.833313 2.72727 0.833313H10.9091Z" fill="#FF9900"></path></svg>
+      </div>
+    </div>
+
+    <!-- 訂單資訊 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:14px 16px;">
+      <button onClick="{{ toggleInfo }}" style="width:100%;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span style="font-size:18px;font-weight:700;color:#3E3E3E;">訂單資訊</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{ infoChevron }}"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5C5.85685 2.5 2.5 5.85685 2.5 10C2.5 14.1431 5.85685 17.5 10 17.5C14.1431 17.5 17.5 14.1431 17.5 10C17.5 5.85685 14.1431 2.5 10 2.5ZM12.7971 11.9657L12.1922 12.7218C12.1525 12.7714 12.1035 12.8127 12.0478 12.8434C11.9921 12.874 11.931 12.8934 11.8678 12.9004C11.8047 12.9075 11.7407 12.902 11.6797 12.8843C11.6187 12.8666 11.5617 12.8371 11.5121 12.7974L9.48589 11.2937C9.34431 11.1804 9.23004 11.0367 9.15151 10.8732C9.07299 10.7097 9.03224 10.5307 9.03226 10.3493V5.64516C9.03226 5.51683 9.08324 5.39376 9.17398 5.30301C9.26472 5.21227 9.3878 5.16129 9.51613 5.16129H10.4839C10.6122 5.16129 10.7353 5.21227 10.826 5.30301C10.9168 5.39376 10.9677 5.51683 10.9677 5.64516V10L12.7218 11.2853C12.7714 11.325 12.8128 11.3741 12.8434 11.4298C12.8741 11.4855 12.8934 11.5467 12.9004 11.6099C12.9074 11.6731 12.9019 11.737 12.8842 11.7981C12.8664 11.8592 12.8368 11.9161 12.7971 11.9657Z" fill="#DF0730"></path></svg>
+              下單時間
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">2026-07-18 12:35:42</div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.57903 2.94535C9.60306 3.08305 10.0628 5.7139 10.0628 6.71878C10.0628 8.251 9.22746 9.34377 7.99249 9.78323L8.38011 16.7588C8.40114 17.1602 8.07362 17.5 7.65895 17.5H5.73588C5.32422 17.5 4.99369 17.1631 5.01472 16.7588L5.40234 9.78323C4.16436 9.34377 3.33203 8.24807 3.33203 6.71878C3.33203 5.71097 3.79177 3.08305 3.81581 2.94535C3.91196 2.35063 5.17698 2.34184 5.25511 2.97758V7.11429C5.29417 7.2139 5.70883 7.20804 5.73588 7.11429C5.77794 6.37308 5.97326 3.03617 5.97626 2.96C6.07542 2.35063 7.31941 2.35063 7.41556 2.96C7.42157 3.0391 7.61388 6.37308 7.65595 7.11429C7.68299 7.20804 8.10066 7.2139 8.13672 7.11429V2.97758C8.21484 2.34477 9.48287 2.35063 9.57903 2.94535ZM13.1608 11.3154L12.71 16.7383C12.674 17.1484 13.0075 17.5 13.4282 17.5H15.1109C15.5105 17.5 15.832 17.1865 15.832 16.7969V3.20316C15.832 2.81645 15.5105 2.50004 15.1109 2.50004C12.6319 2.50004 8.45823 7.72952 13.1608 11.3154Z" fill="#DF0730"></path></svg>
+              取餐方式
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">內用</div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.25089 5.83335C6.25089 4.87307 6.79332 4.04299 7.59021 3.59052V10H9.19739V3.22919H10.8046V10H12.4118V3.59052C13.2086 4.04299 13.7511 4.87307 13.7511 5.83335V10H15.3582V5.83335C15.3582 3.53192 13.4397 1.66669 11.0724 1.66669H8.92953C6.56229 1.66669 4.64371 3.53192 4.64371 5.83335V10H6.25089V5.83335ZM17.4442 12.7962L17.086 11.7546C16.9386 11.3281 16.5301 11.0417 16.0681 11.0417H3.93053C3.46846 11.0417 3.05997 11.3281 2.91265 11.7546L2.55438 12.7962C2.3267 13.4701 2.84233 14.1667 3.57226 14.1667V17.8125C3.57226 18.099 3.81334 18.3334 4.10799 18.3334H5.17944C5.47409 18.3334 5.71517 18.099 5.71517 17.8125V14.1667H14.2868V17.8125C14.2868 18.099 14.5279 18.3334 14.8225 18.3334H15.894C16.1886 18.3334 16.4297 18.099 16.4297 17.8125V14.1667C17.1596 14.1667 17.6753 13.4701 17.4442 12.7962Z" fill="#DF0730"></path></svg>
+              桌號
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">25</div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.64453 3.39288H15.3582" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></path><path d="M17.4983 5.53571C17.4983 4.96739 17.2726 4.42234 16.8707 4.02048C16.4688 3.61862 15.9238 3.39285 15.3555 3.39285" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.50168 5.53571C2.50168 4.96739 2.72744 4.42234 3.12931 4.02048C3.53117 3.61862 4.07621 3.39285 4.64453 3.39285" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.50168 13.0357C2.50168 13.3171 2.5571 13.5958 2.66479 13.8557C2.77248 14.1157 2.93032 14.3519 3.12931 14.5509C3.32829 14.7499 3.56451 14.9078 3.8245 15.0154C4.08448 15.1231 4.36313 15.1786 4.64453 15.1786" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.4983 13.0357C17.4983 13.604 17.2726 14.1491 16.8707 14.5509C16.4688 14.9528 15.9238 15.1786 15.3555 15.1786" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.5 5.53571V13.0357" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.5 5.53571V13.0357" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4.64062 15.1785H8.0692L9.99777 17.8571L11.9263 15.1785H15.3549" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><line x1="6.54818" y1="7.49998" x2="13.4529" y2="7.49998" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></line><line x1="6.54818" y1="10.7143" x2="13.4529" y2="10.7143" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></line></svg>
+              訂單備註
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">備註內容</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 餐點內容 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:14px 16px;">
+      <button onClick="{{ toggleItems }}" style="width:100%;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span style="font-size:18px;font-weight:700;color:#3E3E3E;">餐點內容</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{ itemsChevron }}"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <sc-if value="{{ itemsOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:18px;">
+          <sc-for list="{{ items }}" as="item" hint-placeholder-count="3">
+            <div style="display:flex;gap:8px;">
+              <span style="font-size:16px;font-weight:500;width:14px;flex-shrink:0;">{{ item.idx }}</span>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <span style="font-size:16px;font-weight:500;">{{ item.name }}</span>
+                  <span style="font-size:16px;font-weight:500;">{{ item.price }}</span>
+                </div>
+                <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ item.options }}" as="opt" hint-placeholder-count="3">
+                    <div style="display:flex;gap:6px;font-size:13px;color:#8A8A8A;line-height:1.5;">
+                      <span style="flex-shrink:0;">·</span>
+                      <div>
+                        <div>{{ opt.label }}</div>
+                        <sc-if value="{{ opt.detail }}" hint-placeholder-val="">
+                          <div>{{ opt.detail }}</div>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid #EEEEEE;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:15px;color:#8A8A8A;">
+            <span>總計</span>
+            <span>NT$750</span>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:500;">
+              <span>使用折扣碼</span>
+              <span style="color:#DE052E;">-100</span>
+            </div>
+            <div style="font-size:13px;color:#8A8A8A;margin-top:2px;">(折扣碼:XRFREE)</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:500;">
+              <span>使用優惠券</span>
+              <span style="color:#DE052E;">-100</span>
+            </div>
+            <div style="font-size:13px;color:#8A8A8A;margin-top:2px;">(會員生日禮優惠券折100)</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:500;">
+              <span>使用電子禮券</span>
+              <span style="color:#DE052E;">-200</span>
+            </div>
+            <div style="font-size:13px;color:#8A8A8A;margin-top:2px;">(青花驕開幕慶肉品折100)</div>
+            <div style="font-size:13px;color:#8A8A8A;">(青花驕開幕慶肉品折100)</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:500;">
+            <span style="display:flex;align-items:center;gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#DE052E"><circle cx="12" cy="12" r="11"></circle><text x="12" y="16.5" font-size="13" font-weight="700" text-anchor="middle" fill="#FFFFFF" font-family="Roboto,sans-serif">P</text></svg>
+              使用瘋點數折抵
+            </span>
+            <span>0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:700;">
+            <span>付款金額</span>
+            <span style="font-size:20px;">NT$350</span>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 付款資訊 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:14px 16px;">
+      <button onClick="{{ togglePay }}" style="width:100%;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span style="font-size:18px;font-weight:700;color:#3E3E3E;">付款資訊</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{ payChevron }}"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <sc-if value="{{ payOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 6.29646V4.81498C16 3.99794 15.3273 3.3335 14.5 3.3335H4.75C3.5095 3.3335 2.5 4.33053 2.5 5.55572V14.4446C2.5 16.075 3.8455 16.6668 4.75 16.6668H16C16.8273 16.6668 17.5 16.0024 17.5 15.1853V7.77794C17.5 6.9609 16.8273 6.29646 16 6.29646ZM14.5 12.9631H13V10.0002H14.5V12.9631ZM4.75 6.29646C4.55689 6.28793 4.37455 6.20616 4.24096 6.06818C4.10736 5.93019 4.0328 5.74663 4.0328 5.55572C4.0328 5.3648 4.10736 5.18124 4.24096 5.04326C4.37455 4.90528 4.55689 4.82351 4.75 4.81498H14.5V6.29646H4.75Z" fill="#DF0730"></path></svg>
+              付款方式
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">線上支付 - 信用卡</div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.25 3.7085H13.75V1.79183H15.625C16.6605 1.79183 17.5 2.64995 17.5 3.7085V17.2502C17.5 18.3087 16.6605 19.1668 15.625 19.1668H4.375C3.33947 19.1668 2.5 18.3087 2.5 17.2502V3.7085C2.5 2.64995 3.33947 1.79183 4.375 1.79183H6.25V3.7085ZM9.70978 5.75016V6.95276C9.08733 7.06285 8.59045 7.33469 8.21838 7.76697C7.8463 8.19144 7.65992 8.72557 7.65991 9.37012C7.65991 9.99114 7.83184 10.4945 8.17535 10.8797C8.51879 11.2568 8.9802 11.5279 9.55963 11.693C9.86736 11.7794 10.1507 11.8743 10.4083 11.9765C10.6728 12.0787 10.8836 12.2122 11.041 12.3771C11.1984 12.5422 11.2772 12.7627 11.2772 13.0378C11.2771 13.3205 11.1771 13.5482 10.9769 13.721C10.7765 13.8939 10.5008 13.9802 10.1501 13.9802C9.821 13.9802 9.50968 13.8862 9.21631 13.6976C8.923 13.5011 8.67982 13.1907 8.48663 12.7664L7.1875 13.6742C7.48091 14.2401 7.84212 14.6649 8.27148 14.9479C8.70793 15.2308 9.1875 15.3958 9.70978 15.443V16.2918H10.8908V15.3606C11.4991 15.227 11.9717 14.9475 12.308 14.523C12.6443 14.0907 12.8125 13.5642 12.8125 12.9433C12.8125 12.4716 12.7299 12.0819 12.5653 11.7753C12.4008 11.469 12.1901 11.2251 11.9327 11.0444C11.675 10.8557 11.4061 10.7105 11.127 10.6083C10.8551 10.4982 10.6082 10.4042 10.3864 10.3256C10.0572 10.2156 9.77472 10.0933 9.53857 9.95972C9.3096 9.81824 9.19528 9.59428 9.19525 9.28776C9.19525 9.01262 9.29133 8.79212 9.48456 8.62704C9.68494 8.46197 9.93565 8.37996 10.2362 8.37996C10.5153 8.37997 10.7516 8.45429 10.9448 8.60364C11.138 8.753 11.3244 8.98889 11.5033 9.31116L12.7914 8.43892C12.5624 8.03801 12.2935 7.71156 11.9858 7.46C11.6781 7.20848 11.313 7.03922 10.8908 6.95276V5.75016H9.70978Z" fill="#DF0730"></path><path d="M12.8125 2.75016H7.1875V0.833496H12.8125V2.75016Z" fill="#DF0730"></path></svg>
+              付款狀態
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;display:flex;align-items:center;gap:12px;">
+              <span>已付款</span>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#5B5B5B;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5C5.85685 2.5 2.5 5.85685 2.5 10C2.5 14.1431 5.85685 17.5 10 17.5C14.1431 17.5 17.5 14.1431 17.5 10C17.5 5.85685 14.1431 2.5 10 2.5ZM12.7971 11.9657L12.1922 12.7218C12.1525 12.7714 12.1035 12.8127 12.0478 12.8434C11.9921 12.874 11.931 12.8934 11.8678 12.9004C11.8047 12.9075 11.7407 12.902 11.6797 12.8843C11.6187 12.8666 11.5617 12.8371 11.5121 12.7974L9.48589 11.2937C9.34431 11.1804 9.23004 11.0367 9.15151 10.8732C9.07299 10.7097 9.03224 10.5307 9.03226 10.3493V5.64516C9.03226 5.51683 9.08324 5.39376 9.17398 5.30301C9.26472 5.21227 9.3878 5.16129 9.51613 5.16129H10.4839C10.6122 5.16129 10.7353 5.21227 10.826 5.30301C10.9168 5.39376 10.9677 5.51683 10.9677 5.64516V10L12.7218 11.2853C12.7714 11.325 12.8128 11.3741 12.8434 11.4298C12.8741 11.4855 12.8934 11.5467 12.9004 11.6099C12.9074 11.6731 12.9019 11.737 12.8842 11.7981C12.8664 11.8592 12.8368 11.9161 12.7971 11.9657Z" fill="#DF0730"></path></svg>
+              付款時間
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">2026-07-18 12:35:42</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 發票資訊 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:14px 16px;">
+      <button onClick="{{ toggleInvoice }}" style="width:100%;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span style="font-size:18px;font-weight:700;color:#3E3E3E;">發票資訊</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{ invoiceChevron }}"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <sc-if value="{{ invoiceOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:16px;">
+          <div style="font-size:16px;font-weight:500;">手機條碼載具</div>
+          <div style="font-size:15px;color:#8A8A8A;margin-top:4px;">/75KE9UZ</div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 個人資料 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:14px 16px;">
+      <button onClick="{{ togglePerson }}" style="width:100%;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span style="font-size:18px;font-weight:700;color:#3E3E3E;">個人資料</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{ personChevron }}"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <sc-if value="{{ personOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:16px;">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 9.99996C12.3672 9.99996 14.2857 8.13472 14.2857 5.83329C14.2857 3.53186 12.3672 1.66663 10 1.66663C7.63281 1.66663 5.71429 3.53186 5.71429 5.83329C5.71429 8.13472 7.63281 9.99996 10 9.99996ZM13 11.0416H12.4408C11.6975 11.3737 10.8705 11.5625 10 11.5625C9.12946 11.5625 8.3058 11.3737 7.55915 11.0416H7C4.51562 11.0416 2.5 13.0013 2.5 15.4166V16.7708C2.5 17.6334 3.21987 18.3333 4.10714 18.3333H15.8929C16.7801 18.3333 17.5 17.6334 17.5 16.7708V15.4166C17.5 13.0013 15.4844 11.0416 13 11.0416Z" fill="#DF0730"></path></svg>
+            陳小明
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:16px;">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.8593 13.4438L14.2134 11.8812C14.0577 11.8149 13.8846 11.8009 13.7202 11.8414C13.5558 11.8819 13.409 11.9747 13.302 12.1058L11.6873 14.0785C9.15337 12.8838 7.11409 10.8445 5.91934 8.31053L7.89204 6.69592C8.02344 6.58904 8.11645 6.44226 8.15698 6.2778C8.19751 6.11333 8.18335 5.94014 8.11665 5.78445L6.55412 2.13855C6.48092 1.97071 6.35144 1.83367 6.18802 1.75107C6.0246 1.66847 5.83748 1.64548 5.65892 1.68607L2.27345 2.46733C2.1013 2.50708 1.94771 2.60401 1.83774 2.7423C1.72778 2.88058 1.66793 3.05206 1.66797 3.22874C1.66797 11.5785 8.43566 18.3332 16.7724 18.3332C16.9491 18.3333 17.1207 18.2735 17.259 18.1635C17.3974 18.0535 17.4944 17.8999 17.5341 17.7277L18.3154 14.3422C18.3557 14.1628 18.3322 13.9749 18.249 13.8109C18.1658 13.647 18.028 13.5171 17.8593 13.4438Z" fill="#DF0730"></path></svg>
+            0987645287
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 店家資訊 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-size:16px;font-weight:700;">石二鍋-中壢家樂福中山東店</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:16px;">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.8593 13.4438L14.2134 11.8812C14.0577 11.8149 13.8846 11.8009 13.7202 11.8414C13.5558 11.8819 13.409 11.9747 13.302 12.1058L11.6873 14.0785C9.15337 12.8838 7.11409 10.8445 5.91934 8.31053L7.89204 6.69592C8.02344 6.58904 8.11645 6.44226 8.15698 6.2778C8.19751 6.11333 8.18335 5.94014 8.11665 5.78445L6.55412 2.13855C6.48092 1.97071 6.35144 1.83367 6.18802 1.75107C6.0246 1.66847 5.83748 1.64548 5.65892 1.68607L2.27345 2.46733C2.1013 2.50708 1.94771 2.60401 1.83774 2.7423C1.72778 2.88058 1.66793 3.05206 1.66797 3.22874C1.66797 11.5785 8.43566 18.3332 16.7724 18.3332C16.9491 18.3333 17.1207 18.2735 17.259 18.1635C17.3974 18.0535 17.4944 17.8999 17.5341 17.7277L18.3154 14.3422C18.3557 14.1628 18.3322 13.9749 18.249 13.8109C18.1658 13.647 18.028 13.5171 17.8593 13.4438Z" fill="#DF0730"></path></svg>
+        0277515336
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;font-size:16px;">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-top:1px;"><path d="M9.31356 17.9969C4.26849 11.1402 3.33203 10.4365 3.33203 7.9165C3.33203 4.46471 6.31679 1.6665 9.9987 1.6665C13.6806 1.6665 16.6654 4.46471 16.6654 7.9165C16.6654 10.4365 15.7289 11.1402 10.6838 17.9969C10.3528 18.4453 9.6446 18.4452 9.31356 17.9969ZM9.9987 10.5207C11.5328 10.5207 12.7765 9.35475 12.7765 7.9165C12.7765 6.47825 11.5328 5.31234 9.9987 5.31234C8.46457 5.31234 7.22092 6.47825 7.22092 7.9165C7.22092 9.35475 8.46457 10.5207 9.9987 10.5207Z" fill="#DF0730"></path></svg>
+        新北市新莊區新北大道三段5號
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 支付成功 Popup -->
+  <sc-if value="{{ showPaid }}" hint-placeholder-val="">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:28px;">
+      <div style="width:100%;max-width:334px;background:#FFFFFF;border-radius:16px;padding:28px 22px 22px;text-align:center;font-family:'Noto Sans TC','Roboto',sans-serif;">
+        <svg width="44" height="44" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><path d="M36 18C36 27.9411 27.9411 36 18 36C8.05887 36 0 27.9411 0 18C0 8.05887 8.05887 0 18 0C27.9411 0 36 8.05887 36 18Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M18 0C27.9411 0 36 8.05887 36 18C36 27.9411 27.9411 36 18 36C8.05887 36 0 27.9411 0 18C0 8.05887 8.05887 0 18 0ZM18 3C9.71573 3 3 9.71573 3 18C3 26.2843 9.71573 33 18 33C26.2843 33 33 26.2843 33 18C33 9.71573 26.2843 3 18 3Z" fill="#27AE60"></path><path d="M16.9529 23.8922C16.1865 24.6586 14.935 24.6586 14.1686 23.8922L9.66855 19.3922C8.90215 18.6258 8.90215 17.3742 9.66855 16.6078C10.435 15.8414 11.6865 15.8414 12.4529 16.6078L15.5607 19.7156L23.1686 12.1078C23.935 11.3414 25.1865 11.3414 25.9529 12.1078C26.7193 12.8742 26.7193 14.1258 25.9529 14.8922L16.9529 23.8922Z" fill="#27AE60"></path></svg>
+        <div style="margin-top:14px;font-size:22px;font-weight:700;color:#3E3E3E;">支付成功</div>
+        <div style="margin-top:12px;font-size:15px;line-height:1.7;color:#3E3E3E;text-align:left;">已付款完成，可前往訂單明細查看訂單狀態。</div>
+        <button onClick="{{ closePaid }}" style="margin-top:22px;width:100%;height:50px;border:none;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer;">查看訂單</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script type="text/babel">
+class Component extends DCLogic {
+  state = {
+    infoOpen: true, itemsOpen: true, payOpen: true, invoiceOpen: true, personOpen: true,
+    showPaid: (() => { try { return new URLSearchParams(location.search).get('paid') === '1'; } catch (e) { return false; } })(),
+  };
+
+  renderVals() {
+    const chevron = (open) => ({ transition: 'transform .2s', transform: open ? 'rotate(0deg)' : 'rotate(180deg)' });
+
+    const itemOpts = [
+      { label: '肉好好 (+NT$ 20)', detail: '' },
+      { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
+      { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
+    ];
+    const items = [1, 2, 3].map(i => ({
+      idx: i, name: '國王厚牛美式漢堡', price: '$250', options: itemOpts,
+    }));
+
+    // QR placeholder
+    const N = 21;
+    const seed = [0.62,0.14,0.87,0.33,0.51,0.09,0.74,0.42,0.96,0.21,0.68,0.05,0.83,0.37,0.59,0.12,0.78,0.46,0.91,0.27,0.64];
+    const finder = (r, c) => (r < 7 && c < 7) || (r < 7 && c >= N - 7) || (r >= N - 7 && c < 7);
+    const inFinderRing = (r, c) => {
+      const blocks = [[0,0],[0,N-7],[N-7,0]];
+      return blocks.some(([br,bc]) => {
+        const rr = r - br, cc = c - bc;
+        if (rr < 0 || rr > 6 || cc < 0 || cc > 6) return false;
+        const edge = rr === 0 || rr === 6 || cc === 0 || cc === 6;
+        const core = rr >= 2 && rr <= 4 && cc >= 2 && cc <= 4;
+        return edge || core;
+      });
+    };
+    let rects = '';
+    const cell = 96 / N;
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        let on;
+        if (finder(r, c)) on = inFinderRing(r, c);
+        else on = ((seed[r] * (c + 3) * 7.3 + seed[c] * (r + 2) * 5.1) % 1) > 0.5;
+        if (on) rects += `<rect x="${(c*cell).toFixed(2)}" y="${(r*cell).toFixed(2)}" width="${cell.toFixed(2)}" height="${cell.toFixed(2)}" fill="#1A1A1A"/>`;
+      }
+    }
+    const qr = React.createElement('div', {
+      style: { width: '96px', height: '96px' },
+      dangerouslySetInnerHTML: { __html: `<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#FFFFFF"/>${rects}</svg>` },
+    });
+
+    return {
+      items, qr,
+      showPaid: this.state.showPaid,
+      closePaid: () => this.setState({ showPaid: false }),
+      infoOpen: this.state.infoOpen, itemsOpen: this.state.itemsOpen,
+      payOpen: this.state.payOpen, invoiceOpen: this.state.invoiceOpen, personOpen: this.state.personOpen,
+      infoChevron: chevron(this.state.infoOpen), itemsChevron: chevron(this.state.itemsOpen),
+      payChevron: chevron(this.state.payOpen), invoiceChevron: chevron(this.state.invoiceOpen),
+      personChevron: chevron(this.state.personOpen),
+      toggleInfo: () => this.setState(s => ({ infoOpen: !s.infoOpen })),
+      toggleItems: () => this.setState(s => ({ itemsOpen: !s.itemsOpen })),
+      togglePay: () => this.setState(s => ({ payOpen: !s.payOpen })),
+      toggleInvoice: () => this.setState(s => ({ invoiceOpen: !s.invoiceOpen })),
+      togglePerson: () => this.setState(s => ({ personOpen: !s.personOpen })),
+    };
+  }
+}
+</script>
+</body>
+</html>
