@@ -23,15 +23,65 @@
 <div id="checkout-root" style="width:100%;min-height:844px;margin:0 auto;background:#F6F6F6;font-family:'Noto Sans TC','Roboto',sans-serif;color:#3E3E3E;position:relative;display:flex;flex-direction:column;">
 
   <!-- Header -->
-  <div style="position:sticky;top:0;z-index:10;height:56px;background:#FFFFFF;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #F6F6F6;">
-    <a href="cart.html" style="text-decoration:none;border:none;background:none;padding:8px;margin-left:-8px;cursor:pointer;display:flex;align-items:center;">
+  <div style="position:sticky;top:0;z-index:20;height:56px;background:#FFFFFF;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #F6F6F6;">
+    <a href="cart.html" style="text-decoration:none;border:none;background:none;padding:8px;margin-left:-8px;cursor:pointer;display:flex;align-items:center;position:relative;z-index:1;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
     </a>
-    <div style="flex:1;text-align:center;font-size:18px;font-weight:500;">結帳</div>
-    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:3px;color:#3E3E3E;font-size:14px;font-weight:500;padding:6px 12px;border:none;border-radius:999px;background:#F5F5F5;white-space:nowrap;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3E3E3E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-      加點
-    </a>
+    <div style="position:absolute;left:0;right:0;text-align:center;font-size:18px;font-weight:500;pointer-events:none;">結帳</div>
+    <div style="flex:1;"></div>
+    <button onClick="{{ toggleMenu }}" style="border:none;background:none;padding:8px;margin-right:-8px;cursor:pointer;display:flex;align-items:center;position:relative;z-index:1;">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 9.99984C12.3672 9.99984 14.2857 8.1346 14.2857 5.83317C14.2857 3.53174 12.3672 1.6665 10 1.6665C7.63281 1.6665 5.71429 3.53174 5.71429 5.83317C5.71429 8.1346 7.63281 9.99984 10 9.99984ZM13 11.0415H12.4408C11.6975 11.3735 10.8705 11.5623 10 11.5623C9.12946 11.5623 8.3058 11.3735 7.55915 11.0415H7C4.51562 11.0415 2.5 13.0011 2.5 15.4165V16.7707C2.5 17.6333 3.21987 18.3332 4.10714 18.3332H15.8929C16.7801 18.3332 17.5 17.6333 17.5 16.7707V15.4165C17.5 13.0011 15.4844 11.0415 13 11.0415Z" fill="#3E3E3E"></path></svg>
+    </button>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="">
+      <div onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:30;"></div>
+      <div style="position:absolute;top:100%;left:0;right:0;z-index:40;background:#FFFFFF;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,0.14);padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
+        <sc-if value="{{ lineIn }}" hint-placeholder-val="">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span style="display:flex;align-items:center;gap:10px;min-width:0;">
+              <img src="assets/icons/line.svg" alt="" style="width:26px;height:26px;display:block;flex-shrink:0;">
+              <span style="font-size:16px;font-weight:500;color:#3E3E3E;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ memberName }}</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:20px;flex-shrink:0;">
+              <a href="order.html" style="display:flex;align-items:center;gap:6px;text-decoration:none;color:#3E3E3E;font-size:15px;">
+                <img src="assets/icons/order.svg" alt="" style="width:22px;height:22px;display:block;">
+                我的訂單
+              </a>
+              <button onClick="{{ onLineLogout }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;">
+                <img src="assets/icons/logout.svg" alt="登出" style="width:22px;height:22px;display:block;">
+              </button>
+            </span>
+          </div>
+          <div style="height:1px;background:#F0F0F0;"></div>
+        </sc-if>
+        <sc-if value="{{ lineOut }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ onLineLogin }}" style="width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:11px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
+            <img src="assets/icons/line.svg" alt="" style="width:24px;height:24px;display:block;flex-shrink:0;">
+            <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入LINE</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ funIn }}" hint-placeholder-val="">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span style="display:flex;align-items:center;gap:10px;min-width:0;">
+              <img src="assets/icons/fun.svg" alt="" style="width:26px;height:26px;display:block;flex-shrink:0;">
+              <span style="font-size:16px;font-weight:500;color:#3E3E3E;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ memberName }}</span>
+            </span>
+            <button onClick="{{ onFunLogout }}" style="border:none;background:none;padding:0;cursor:pointer;display:flex;flex-shrink:0;">
+              <img src="assets/icons/logout.svg" alt="登出" style="width:22px;height:22px;display:block;">
+            </button>
+          </div>
+          <div style="height:1px;background:#F0F0F0;"></div>
+        </sc-if>
+        <sc-if value="{{ funOut }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ onFunLogin }}" style="width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:11px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
+            <img src="assets/icons/fun.svg" alt="" style="width:24px;height:24px;display:block;flex-shrink:0;">
+            <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入瘋美食會員</span>
+          </button>
+        </sc-if>
+        <a href="index.html" style="width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:11px;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+          <span style="color:#3E3E3E;font-size:15px;font-weight:700;">回首頁加點</span>
+        </a>
+      </div>
+    </sc-if>
   </div>
 
   <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:16px;">
@@ -477,9 +527,9 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: false, orderOpen: false, pay: 'online', invoice: 'mobile',
+    itemsOpen: false, orderOpen: false, menuOpen: false, pay: 'online', invoice: 'mobile',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
-    loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
+    loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
     showCodeModal: false, codeInput: '', codeQty: { pork: 0, bacon: 0, tofu: 0 },
     discountTab: 'voucher', selectedVoucher: null,
@@ -741,6 +791,15 @@ class Component extends DCLogic {
       ctaText: zeroPayable ? '確認結帳' : '前往付款',
       invoiceZeroNote: '消費者購買的商品全額使用會員點數、現金紅利折抵，導致實際支付金額為0元，屬於無金額交易，依法不需開立統一發票。',
       loggedIn: this.state.loggedIn, notLoggedIn: !this.state.loggedIn,
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      lineIn: this.state.lineLoggedIn, lineOut: !this.state.lineLoggedIn,
+      funIn: this.state.loggedIn, funOut: !this.state.loggedIn,
+      onLineLogin: () => { try { localStorage.setItem('lineMember','1'); } catch(e){} this.setState({ lineLoggedIn: true }); },
+      onLineLogout: () => { try { localStorage.removeItem('lineMember'); } catch(e){} this.setState({ lineLoggedIn: false }); },
+      onFunLogin: () => { try { localStorage.setItem('funMember','1'); } catch(e){} this.setState({ loggedIn: true }); },
+      onFunLogout: () => { try { localStorage.removeItem('funMember'); } catch(e){} this.setState({ loggedIn: false, usePoints: false, codeApplied: false, voucherApplied: false, pointsApplied: 0 }); },
       memberOffers, memberName: 'Amy',
       onLogin: () => { try { localStorage.setItem('funMember', '1'); } catch (e) {} this.setState({ loggedIn: true }); },
       onLogout: () => { try { localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, usePoints: false, codeApplied: false, voucherApplied: false, pointsApplied: 0 }); },

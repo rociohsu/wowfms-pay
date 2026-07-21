@@ -86,6 +86,7 @@
               </button>
             </span>
           </div>
+          <div style="height:1px;background:#F0F0F0;"></div>
         </sc-if>
         <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
           <button onClick="{{ onLogin }}" style="width:100%;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:9px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
@@ -96,7 +97,7 @@
         <sc-if value="{{ notBound }}" hint-placeholder-val="{{ true }}">
           <button onClick="{{ onBind }}" style="width:100%;background:#FFFFFF;border:1px solid #E0E0E0;border-radius:10px;padding:9px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-family:inherit;">
             <img src="assets/icons/fun.svg" alt="" style="width:24px;height:24px;display:block;flex-shrink:0;">
-            <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入瘋美食會員查優惠</span>
+            <span style="color:#3E3E3E;font-size:15px;font-weight:700;">登入瘋美食會員</span>
           </button>
         </sc-if>
         <sc-if value="{{ bound }}" hint-placeholder-val="">
