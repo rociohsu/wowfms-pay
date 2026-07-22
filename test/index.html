@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #d7d7db; }
+  .h-scroll::-webkit-scrollbar { display: none; }
+  .h-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+  a { color: #DF0730; }
+  a:hover { color: #b00522; }
+  @keyframes dropIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</helmet>
+<div style="height: 100vh; max-width: 430px; margin: 0 auto; background: #ececee; font-family: 'Noto Sans TC', sans-serif; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.18);">
+
+      <!-- ===== Header ===== -->
+      <div style="background: #DF0730; height: 52px; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; position: relative; z-index: 40;">
+        <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <img src="uploads/icons/Icon_earth.svg" width="22" height="22" alt="">
+          <span style="color: #fff; font-size: 15px; font-weight: 500;">中文</span>
+          <img src="uploads/Icon_dropdown-down.svg" width="18" height="18" alt="" style="display: block;">
+        </div>
+        <div onClick="{{ toggleMenu }}" style="cursor: pointer; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: {{ menuBtnBg }};">
+          <img src="uploads/icons/Icon_user.svg" width="24" height="24" alt="member">
+        </div>
+      </div>
+
+      <!-- ===== Scrollable content ===== -->
+      <div class="h-scroll" style="flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; background: #ececee; position: relative;">
+
+        <!-- store / eta bar -->
+        <div style="background: #fff; display: flex; align-items: center; gap: 12px; padding: 12px 16px;">
+          <img src="uploads/logo.png" alt="王品集團 wowprime" style="flex: 0 0 auto; height: 34px; width: auto; border-radius: 4px; display: block;">
+          <div style="flex: 1 1 auto; font-size: 13px; color: #333; line-height: 1.4;">
+            立即取餐 預計 {{ etaMinutes }} 分鐘<span style="color: #888;">（現在）</span>
+          </div>
+          <span style="flex: 0 0 auto; color: #DF0730; font-size: 14px; font-weight: 500; cursor: pointer;">變更</span>
+        </div>
+
+        <!-- tabs -->
+        <div class="h-scroll" style="background: #fff; display: flex; gap: 26px; padding: 0 16px; overflow-x: auto; border-bottom: 1px solid #eee;">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+            <div onClick="{{ tab.onClick }}" style="flex: 0 0 auto; padding: 12px 0; font-size: 15px; font-weight: {{ tab.weight }}; color: {{ tab.color }}; border-bottom: 3px solid {{ tab.underline }}; cursor: pointer; white-space: nowrap;">{{ tab.label }}</div>
+          </sc-for>
+        </div>
+
+        <!-- content padding wrapper -->
+        <div style="padding: 12px 14px 24px;">
+
+          <!-- hero banner -->
+          <div style="position: relative; width: 100%; height: 168px; border-radius: 14px; overflow: hidden;">
+            <image-slot id="hero_banner_2023" src="uploads/banner.jpg" shape="rounded" radius="14" placeholder="活動主視覺 banner"></image-slot>
+            <div style="position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 7px; pointer-events: none;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #DF0730;"></span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.85);"></span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.85);"></span>
+            </div>
+          </div>
+
+          <!-- store card: name row + 瘋美食 button wrapped together -->
+          <div style="background: #fff; border-radius: 12px; padding: 12px; margin-top: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 4px 2px 12px;">
+              <span style="flex: 1 1 auto; font-size: 16px; font-weight: 700; color: #222;">石二鍋-中壢家樂福中山東中山店</span>
+              <img src="uploads/icons/Icon_info.svg" width="24" height="24" alt="info" style="cursor: pointer;">
+              <img src="uploads/icons/Icon_bullhorn.svg" width="24" height="24" alt="news" style="cursor: pointer;">
+            </div>
+
+            <!-- 瘋美食 button — toggles login state -->
+            <sc-if value="{{ funLoggedIn }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ openFunMenu }}" style="display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: #FBEBD8; border: 1px solid #F2D9BC; border-radius: 12px; cursor: pointer;">
+                <img src="uploads/icons/Icon_瘋icon.svg" width="26" height="26" alt="">
+                <span style="flex: 1 1 auto; font-size: 15px; font-weight: 500; color: #8a5a1e;">查看瘋美食優惠</span>
+                <img src="uploads/Icon_dropdown-right.svg" width="22" height="22" alt="" style="display: block;">
+              </div>
+            </sc-if>
+            <sc-if value="{{ funLoggedOut }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ loginFun }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 20px; background: #fff; border: 1px solid #ccc; border-radius: 12px; cursor: pointer;">
+                <img src="uploads/icons/Icon_瘋icon.svg" width="28" height="28" alt="" style="flex: 0 0 auto;">
+                <span style="font-size: 16px; font-weight: 500; color: #333;">登入瘋美食會員</span>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- search -->
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 11px 16px; background: #fff; border: 1px solid #e4e4e6; border-radius: 26px;">
+            <input placeholder="搜尋餐點" style="flex: 1 1 auto; border: none; outline: none; font-size: 14px; background: transparent; font-family: inherit; color: #333;">
+            <img src="uploads/icons/Icon_search.svg" width="22" height="22" alt="search">
+          </div>
+
+          <!-- section heading -->
+          <div style="font-size: 17px; font-weight: 700; color: #222; margin: 20px 2px 12px;">{{ activeTabLabel }}</div>
+
+          <!-- product cards -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+              <div style="display: flex; gap: 12px; background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <div style="flex: 1 1 auto; min-width: 0;">
+                  <div style="font-size: 15px; font-weight: 700; color: #222; line-height: 1.35;">{{ p.name }}</div>
+                  <div style="font-size: 12px; color: #999; margin-top: 5px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;">{{ p.desc }}</div>
+                  <div style="font-size: 15px; font-weight: 700; color: #333; margin-top: 12px;">${{ p.price }}</div>
+                </div>
+                <div style="flex: 0 0 auto; width: 82px; height: 82px; border-radius: 10px; overflow: hidden; position: relative;">
+                  <image-slot id="{{ p.slotId }}" src="uploads/menu.jpg" shape="rounded" radius="10" placeholder="餐點"></image-slot>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Cart bar ===== -->
+      <div style="flex: 0 0 auto; background: #DF0730; display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 12px 22px; margin: 10px 12px 14px; border-radius: 26px; z-index: 30;">
+        <span style="color: #fff; font-size: 15px; font-weight: 500; white-space: nowrap;">共 {{ cartCount }} 件・NT${{ cartTotal }}</span>
+        <div style="flex: 0 0 auto; background: transparent; border: 1px solid rgba(255,255,255,0.9); border-radius: 999px; padding: 9px 22px; color: #fff; font-size: 15px; font-weight: 500; white-space: nowrap; cursor: pointer;">前往結帳</div>
+      </div>
+
+      <!-- ===== Member dropdown overlay ===== -->
+      <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeMenu }}" style="position: absolute; inset: 52px 0 0 0; background: rgba(0,0,0,0.28); z-index: 45; animation: fadeIn 0.15s ease;"></div>
+
+        <!-- not logged into LINE: prompt -->
+        <sc-if value="{{ showLinePrompt }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 62px; left: 14px; right: 14px; z-index: 50; animation: dropIn 0.2s ease;">
+            <div onClick="{{ loginLine }}" style="background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; cursor: pointer;">
+              <img src="uploads/icons/Icon_line.svg" width="26" height="26" alt="LINE">
+              <span style="font-size: 15px; font-weight: 500; color: #333;">點餐請先登入LINE</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- logged into LINE: member panel -->
+        <sc-if value="{{ panelOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 52px; left: 0; right: 0; z-index: 50; padding: 0 8px; animation: dropIn 0.2s ease;">
+            <div style="background: #fff; border-radius: 0 0 16px 16px; box-shadow: 0 14px 34px rgba(0,0,0,0.2); padding: 18px 20px 20px;">
+              <sc-if value="{{ showLineLoginBtn }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ loginLine }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 13px 16px; margin-bottom: 4px; background: #fff; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
+                  <img src="uploads/icons/Icon_line.svg" width="24" height="24" alt="LINE">
+                  <span style="font-size: 15px; font-weight: 500; color: #333;">點餐請先登入LINE</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ showAmy }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size: 17px; font-weight: 700; color: #222;">Hi, Amy</div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid #eee; cursor: pointer;">
+                  <img src="uploads/icons/Icon_user_red.svg" width="22" height="22" alt="">
+                  <span style="font-size: 15px; color: #333;">編輯會員資料</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ showFun }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 0 12px;">
+                  <span style="font-size: 16px; font-weight: 700; color: #222;">瘋美食會員</span>
+                  <img onClick="{{ logoutFun }}" src="uploads/icons/Icon_logout.svg" width="24" height="24" alt="logout" style="cursor: pointer;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                  <img src="uploads/icons/Icon_point.svg" width="24" height="24" alt="">
+                  <span style="font-size: 15px; color: #333; white-space: nowrap;">瘋點數 <b style="color: #DF0730;">1,000</b> 點</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                  <img src="uploads/icons/Icon_coupon.svg" width="24" height="24" alt="">
+                  <span style="font-size: 15px; color: #333; white-space: nowrap;">優惠券 <b>1</b> 張</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                  <img src="uploads/icons/Icon_gift-voucher.svg" width="24" height="24" alt="">
+                  <span style="font-size: 15px; color: #333; white-space: nowrap;">電子禮券 <b>0</b> 張</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ showLogout }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ logoutAll }}" style="margin-top: 14px; border: 1px solid #ccc; border-radius: 8px; text-align: center; padding: 13px; font-size: 15px; font-weight: 500; color: #444; cursor: pointer;">全部登出</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 414, &quot;height&quot;: 900}, &quot;startLineLoggedIn&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;初始登入狀態&quot;}, &quot;startFunLoggedIn&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;初始登入狀態&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lineLoggedIn: !!props.startLineLoggedIn,
+      funLoggedIn: !!props.startFunLoggedIn,
+      menuOpen: false,
+      promptMode: false,
+      activeTab: 0,
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const tabLabels = ['優惠套餐', '精選主食', '義式開胃菜', '精緻甜點', '飲品'];
+    const tabs = tabLabels.map((label, i) => ({
+      label,
+      onClick: () => this.setState({ activeTab: i }),
+      weight: i === s.activeTab ? 700 : 400,
+      color: i === s.activeTab ? '#DF0730' : '#666',
+      underline: i === s.activeTab ? '#DF0730' : 'transparent',
+    }));
+
+    const products = [
+      { name: '國王厚牛美式漢堡', desc: '香蒜荷蘭醬佐無骨烤雞堡套餐，附薯條與飲料', price: '245' },
+      { name: '經典安格斯牛肉堡', desc: '雙層牛肉搭配煙燻起司與酸黃瓜', price: '265' },
+      { name: '香煎雞腿義大利麵', desc: '白酒奶油醬佐時蔬與帕瑪森起司', price: '228' },
+      { name: '義式松露蘑菇燉飯', desc: '手工燉煮野菇搭配黑松露醬', price: '258' },
+      { name: '酥炸海鮮拼盤', desc: '鮮蝦花枝圈佐塔塔醬，附季節沙拉', price: '210' },
+    ].map((p, i) => ({ ...p, slotId: 'prod_' + i }));
+
+    return {
+      tabs,
+      products,
+      activeTabLabel: tabLabels[s.activeTab],
+      etaMinutes: 75,
+      cartCount: 2,
+      cartTotal: '1000',
+      menuOpen: s.menuOpen,
+      menuBtnBg: s.menuOpen ? 'rgba(255,255,255,0.22)' : 'transparent',
+      funLoggedIn: s.funLoggedIn,
+      funLoggedOut: !s.funLoggedIn,
+      showLinePrompt: s.menuOpen && s.promptMode,
+      panelOpen: s.menuOpen && !s.promptMode,
+      showLineLoginBtn: s.menuOpen && !s.promptMode && !s.lineLoggedIn,
+      showAmy: s.menuOpen && !s.promptMode && s.lineLoggedIn,
+      showFun: s.menuOpen && !s.promptMode && s.funLoggedIn,
+      showLogout: s.menuOpen && !s.promptMode && s.lineLoggedIn,
+      toggleMenu: () => this.setState(st => st.menuOpen
+        ? { menuOpen: false }
+        : ((st.lineLoggedIn || st.funLoggedIn) ? { menuOpen: true, promptMode: false } : { menuOpen: true, promptMode: true })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      loginLine: () => this.setState({ lineLoggedIn: true, promptMode: false }),
+      openFunMenu: () => this.setState({ menuOpen: true, promptMode: false }),
+      loginFun: () => this.setState({ funLoggedIn: true }),
+      logoutFun: () => this.setState(st => ({ funLoggedIn: false, menuOpen: st.lineLoggedIn })),
+      logoutAll: () => this.setState({ lineLoggedIn: false, funLoggedIn: false, menuOpen: false }),
+      noop: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>
