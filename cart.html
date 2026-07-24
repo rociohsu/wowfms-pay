@@ -204,18 +204,25 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    items: [
-      { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
-        { label: '肉好好 (+NT$ 20)' },
-        { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
-        { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
-      ]},
-      { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
-        { label: '肉好好 (+NT$ 20)' },
-        { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
-        { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
-      ]},
-    ],
+    items: (() => {
+      const base = [
+        { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
+          { label: '肉好好 (+NT$ 20)' },
+          { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
+          { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
+        ]},
+        { name: '起司牛奶鍋', qty: 1, price: 250, note: '不要蕃茄', options: [
+          { label: '肉好好 (+NT$ 20)' },
+          { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
+          { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
+        ]},
+      ];
+      try {
+        const raw = localStorage.getItem('codeSpecItem');
+        if (raw) { const it = JSON.parse(raw); if (it && it.qty > 0) base.push({ name: it.name, qty: it.qty, price: it.price || 250, note: it.note || '', options: it.options || [] }); }
+      } catch (e) {}
+      return base;
+    })(),
     addons: [
       { name: '餐具吸管', add: 0, checked: false },
       { name: '購物袋', add: 0, checked: false },

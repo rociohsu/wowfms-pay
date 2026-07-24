@@ -396,7 +396,10 @@
             <div style="margin-top:14px;display:flex;flex-direction:column;gap:18px;">
               <sc-for list="{{ codeItemRows }}" as="it" hint-placeholder-count="3">
                 <div style="display:flex;align-items:center;gap:14px;">
-                  <span style="flex:1;font-size:16px;">{{ it.name }}</span>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
+                    <span style="font-size:16px;">{{ it.name }}</span>
+                    <sc-if value="{{ it.note }}" hint-placeholder-val=""><span style="font-size:13px;color:#DE052E;">{{ it.note }}</span></sc-if>
+                  </div>
                   <span style="font-size:16px;font-weight:700;color:#DE052E;margin-right:6px;">{{ it.priceText }}</span>
                   <div style="display:flex;align-items:center;gap:8px;">
                     <button onClick="{{ it.onMinus }}" style="{{ it.minusStyle }}">−</button>
@@ -408,11 +411,11 @@
             </div>
 
             <div style="margin-top:22px;">
-              <div style="color:#DE052E;font-size:16px;font-weight:700;">注意事項</div>
+              <div style="color:#3E3E3E;font-size:16px;font-weight:700;">注意事項</div>
               <div style="margin-top:8px;font-size:14px;color:#5B5B5B;line-height:1.7;">
                 <div>1.持券人可至本券指定適用品牌門店抵用</div>
                 <div>2.本券可兌換券上所載之指定商品,恕不得自行要求更換其它商品</div>
-                <div>3.XRFREE折扣碼最多可折抵100元</div>
+                <div>3.XRFREE折扣碼最多可折抵500元</div>
               </div>
             </div>
           </sc-if>
@@ -468,6 +471,125 @@
           <button onClick="{{ confirmAddCart }}" style="width:100%;height:50px;border:none;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer;">加入購物車並折抵</button>
           <button onClick="{{ declineAddCart }}" style="width:100%;height:50px;border:1px solid #C8C9C9;border-radius:12px;background:#FFFFFF;color:#3E3E3E;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer;">不折抵</button>
         </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 商品規格選擇 Popup (與 index 首頁商品詳情點餐一致) -->
+  <sc-if value="{{ showSpecModal }}" hint-placeholder-val="">
+    <div style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
+      <div class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;position:relative;font-family:'Noto Sans TC','Roboto',sans-serif;">
+      <button onClick="{{ closeSpecModal }}" style="position:absolute;top:14px;right:14px;z-index:5;width:34px;height:34px;border-radius:8px;border:none;background:rgba(60,60,60,0.55);color:#FFFFFF;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      <div style="flex:1;overflow-y:auto;position:relative;">
+        <div style="position:relative;">
+          <img src="assets/menu.jpg" alt="{{ specName }}" style="width:100%;height:230px;object-fit:cover;display:block;background:#F2C94C;">
+        </div>
+
+        <div style="padding:18px 16px 8px;">
+          <div style="font-size:24px;font-weight:700;">{{ specName }}</div>
+          <div style="font-size:14px;color:#5B5B5B;line-height:1.6;margin-top:8px;">{{ specDesc }}</div>
+          <div style="font-size:22px;font-weight:700;margin-top:12px;">{{ specPriceText }}</div>
+        </div>
+
+        <sc-for list="{{ specGroups }}" as="g" hint-placeholder-count="4">
+          <div style="padding:14px 16px 4px;border-top:8px solid #F6F6F6;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+              <div style="font-size:18px;font-weight:700;">{{ g.title }}</div>
+              <sc-if value="{{ g.required }}" hint-placeholder-val="">
+                <span style="background:#FDECEF;color:#DE052E;font-size:13px;padding:2px 9px;border-radius:6px;flex-shrink:0;">必選</span>
+              </sc-if>
+            </div>
+            <div style="font-size:13px;margin-top:3px;color:{{ g.hintColor }};">{{ g.hint }}</div>
+
+            <div style="margin-top:6px;">
+              <sc-for list="{{ g.items }}" as="opt" hint-placeholder-count="3">
+                <div>
+                  <div onClick="{{ opt.onToggle }}" style="{{ opt.rowStyle }}">
+                    <sc-if value="{{ opt.isCheckbox }}" hint-placeholder-val="">
+                      <span style="{{ opt.boxStyle }}">
+                        <sc-if value="{{ opt.selected }}" hint-placeholder-val="">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </sc-if>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{ opt.isRadio }}" hint-placeholder-val="">
+                      <span style="{{ opt.ringStyle }}"><span style="{{ opt.dotStyle }}"></span></span>
+                    </sc-if>
+
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:16px;color:{{ opt.nameColor }};">{{ opt.name }}</div>
+                      <sc-if value="{{ opt.priceText }}" hint-placeholder-val="">
+                        <div style="font-size:13px;color:#9A9A9A;margin-top:2px;">{{ opt.priceText }}</div>
+                      </sc-if>
+                    </div>
+
+                    <sc-if value="{{ opt.showStepper }}" hint-placeholder-val="">
+                      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+                        <button onClick="{{ opt.onMinus }}" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DE052E;background:#FFFFFF;color:#DE052E;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+                        <span style="font-size:16px;min-width:14px;text-align:center;">{{ opt.qty }}</span>
+                        <button onClick="{{ opt.onPlus }}" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DE052E;background:#FFFFFF;color:#DE052E;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+                      </div>
+                    </sc-if>
+
+                    <sc-if value="{{ opt.soldOut }}" hint-placeholder-val="">
+                      <div style="position:relative;width:52px;height:52px;flex-shrink:0;">
+                        <img src="assets/menu.jpg" alt="" style="width:52px;height:52px;border-radius:8px;object-fit:cover;display:block;">
+                        <div style="position:absolute;inset:0;border-radius:8px;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:15px;font-weight:700;">完售</div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ opt.showImage }}" hint-placeholder-val="">
+                      <img src="assets/menu.jpg" alt="" style="width:52px;height:52px;flex-shrink:0;border-radius:8px;object-fit:cover;display:block;">
+                    </sc-if>
+                  </div>
+
+                  <sc-if value="{{ opt.expanded }}" hint-placeholder-val="">
+                    <div style="padding:2px 0 8px 34px;">
+                      <sc-for list="{{ opt.subGroups }}" as="sg" hint-placeholder-count="2">
+                        <div style="margin-top:10px;">
+                          <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <div style="font-size:15px;font-weight:700;">{{ sg.title }}</div>
+                            <sc-if value="{{ sg.required }}" hint-placeholder-val="">
+                              <span style="background:#FDECEF;color:#DE052E;font-size:12px;padding:2px 8px;border-radius:6px;">必選</span>
+                            </sc-if>
+                          </div>
+                          <div style="font-size:12px;color:#9A9A9A;margin-top:2px;">{{ sg.hint }}</div>
+                          <sc-for list="{{ sg.items }}" as="sopt" hint-placeholder-count="3">
+                            <div onClick="{{ sopt.onToggle }}" style="display:flex;align-items:center;gap:12px;padding:8px 0;cursor:pointer;">
+                              <sc-if value="{{ sopt.isCheckbox }}" hint-placeholder-val="">
+                                <span style="{{ sopt.boxStyle }}">
+                                  <sc-if value="{{ sopt.selected }}" hint-placeholder-val="">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                  </sc-if>
+                                </span>
+                              </sc-if>
+                              <sc-if value="{{ sopt.isRadio }}" hint-placeholder-val="">
+                                <span style="{{ sopt.ringStyle }}"><span style="{{ sopt.dotStyle }}"></span></span>
+                              </sc-if>
+                              <span style="flex:1;font-size:15px;">{{ sopt.name }}</span>
+                              <sc-if value="{{ sopt.priceText }}" hint-placeholder-val="">
+                                <span style="font-size:14px;color:#9A9A9A;">{{ sopt.priceText }}</span>
+                              </sc-if>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="height:16px;"></div>
+      </div>
+
+      <div style="flex-shrink:0;display:flex;align-items:center;gap:14px;padding:12px 16px 16px;border-top:1px solid #F0F0F0;background:#FFFFFF;">
+        <button onClick="{{ specQtyMinus }}" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #C8C9C9;background:#FFFFFF;color:#9A9A9A;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+        <span style="font-size:18px;font-weight:500;min-width:16px;text-align:center;">{{ specQty }}</span>
+        <button onClick="{{ specQtyPlus }}" style="width:34px;height:34px;border-radius:50%;border:none;background:#DE052E;color:#FFFFFF;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+        <span style="flex:1;font-size:17px;font-weight:700;color:#3E3E3E;padding-left:4px;">{{ specTotalText }}</span>
+        <button onClick="{{ confirmSpec }}" style="{{ specAddBtnStyle }}">加入購物車</button>
+      </div>
       </div>
     </div>
   </sc-if>
@@ -531,10 +653,11 @@ class Component extends DCLogic {
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
-    showCodeModal: false, codeInput: '', codeQty: { pork: 0, bacon: 0, tofu: 0 },
+    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 0 },
     discountTab: 'voucher', selectedVoucher: null,
     showGiftModal: false, selectedGifts: {},
     cartAdded: {}, showAddCartModal: false, pendingAddKey: null,
+    showSpecModal: false, specKey: null, specSel: {}, specQty: 1, specOptions: [],
   };
 
   vouchers = [
@@ -548,8 +671,109 @@ class Component extends DCLogic {
   codeItems = [
     { key: 'pork', name: '豬肉', price: 30 },
     { key: 'bacon', name: '培根', price: 40 },
-    { key: 'tofu', name: '豆腐', price: 40 },
+    { key: 'cheesepot', name: '起司牛奶鍋', price: 250, needsSpec: true, note: '需選規格' },
   ];
+
+  // 套餐規格 (與 index 首頁商品詳情點餐 popup 一致)
+  get specOptionGroups() {
+    return [
+      { id: 'base', title: '選料底', required: true, mode: 'single', max: 1, hint: '必須選 1 項', items: [
+        { id: 'b1', name: '肉好好', img: true },
+        { id: 'b2', name: '菜好好', soldOut: true, img: true },
+        { id: 'b3', name: '漿漿好', add: 50, img: true },
+        { id: 'b4', name: '總匯好', add: 80, img: true },
+      ]},
+      { id: 'meat', title: '選肉品', required: true, mode: 'single', max: 1, hint: '必須選 1 項', items: [
+        { id: 'm1', name: '雞肉', img: true },
+        { id: 'm2', name: '豬肉', add: 20, img: true },
+        { id: 'm3', name: '牛肉', add: 60, img: true },
+      ]},
+      { id: 'side', title: '選副餐', required: true, mode: 'multi', max: 2, hint: '最多可選 2 項', items: [
+        { id: 's1', name: '白飯', img: true },
+        { id: 's2', name: '冬粉', add: 10, img: true },
+        { id: 's3', name: '王子麵', add: 15, img: true },
+      ]},
+      { id: 'extra', title: '加購火鍋料', mode: 'multi', max: 2, qty: true, hint: '最多可選 2 項', items: [
+        { id: 'e1', name: '金針菇', add: 15, img: true },
+        { id: 'e2', name: '黑木耳', add: 15, img: true },
+        { id: 'e3', name: '芋香貢丸', add: 30, img: true },
+      ]},
+      { id: 'drink', title: '選飲料', required: true, mode: 'single', max: 1, hint: '最多可選 1 項', items: [
+        { id: 'k1', name: '檸檬冬瓜冰沙', img: true },
+        { id: 'k2', name: '紅茶', img: true, subGroups: [
+          { id: 'ice', title: '冰量', required: true, mode: 'single', hint: '必須選 1 項', items: [
+            { id: 'i1', name: '去冰' }, { id: 'i2', name: '微冰' }, { id: 'i3', name: '正常冰' },
+          ]},
+          { id: 'topping', title: '加料', mode: 'multi', max: 2, hint: '最多可選 2 項', items: [
+            { id: 't1', name: '珍珠', add: 0 }, { id: 't2', name: '綠茶凍', add: 0 }, { id: 't3', name: '杏仁凍', add: 0 },
+          ]},
+        ]},
+        { id: 'k3', name: '黑豆茶', img: true },
+      ]},
+    ];
+  }
+
+  pickSpec(gid, oid) { this.setState(s => ({ specSel: { ...s.specSel, [gid]: oid } })); }
+  toggleSpecMulti(gid, oid, max, qtyMode) {
+    this.setState(s => {
+      const cur = { ...(s.specSel[gid] || {}) };
+      if (cur[oid]) delete cur[oid];
+      else { if (Object.keys(cur).length >= max) return {}; cur[oid] = qtyMode ? 1 : true; }
+      return { specSel: { ...s.specSel, [gid]: cur } };
+    });
+  }
+  bumpSpecQty(gid, oid, d) {
+    this.setState(s => {
+      const cur = { ...(s.specSel[gid] || {}) };
+      const n = (cur[oid] || 1) + d;
+      if (n <= 0) delete cur[oid]; else cur[oid] = n;
+      return { specSel: { ...s.specSel, [gid]: cur } };
+    });
+  }
+  specRadioRing(sel) { return { width: '22px', height: '22px', borderRadius: '50%', border: '1.5px solid #DE052E', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }; }
+  specRadioDot(sel) { return { width: '12px', height: '12px', borderRadius: '50%', background: sel ? '#DE052E' : 'transparent' }; }
+  specBoxStyle(sel) { return { width: '22px', height: '22px', borderRadius: '6px', border: '1.5px solid ' + (sel ? '#DE052E' : '#C8C9C9'), background: sel ? '#DE052E' : '#FFFFFF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }; }
+  specPriceLabel(add) { if (add === undefined || add === null) return ''; return '+NT$' + add; }
+
+  // 清除因使用折扣碼而加入購物車的品項
+  clearCodeCartItems() {
+    try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
+    this.setState({ codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, cartAdded: {}, specOptions: [] });
+  }
+
+  // 將所選規格轉為餐點內容顯示用的 options
+  specSelToOptions(sel) {
+    const opts = [];
+    this.specOptionGroups.forEach(g => {
+      if (g.mode === 'single') {
+        const o = g.items.find(x => x.id === sel[g.id]);
+        if (!o) return;
+        const label = o.name + (o.add ? ' (+NT$ ' + o.add + ')' : '');
+        let detail = '';
+        if (o.subGroups) {
+          const parts = [];
+          o.subGroups.forEach(sg => {
+            if (sg.mode === 'single') {
+              const so = sg.items.find(x => x.id === sel[sg.id]);
+              if (so) parts.push(so.name + (so.add ? ' (+NT$ ' + so.add + ')' : ''));
+            } else {
+              const m = sel[sg.id] || {};
+              Object.keys(m).forEach(k => { const so = sg.items.find(x => x.id === k); if (so) parts.push(so.name + (so.add ? ' (+NT$ ' + so.add + ')' : '')); });
+            }
+          });
+          detail = parts.join(' / ');
+        }
+        opts.push({ label, detail });
+      } else {
+        const m = sel[g.id] || {};
+        Object.keys(m).forEach(k => {
+          const o = g.items.find(x => x.id === k);
+          if (o) opts.push({ label: o.name + (g.qty ? ' x' + m[k] : '') + (o.add ? ' (+NT$ ' + o.add + ')' : ''), detail: '' });
+        });
+      }
+    });
+    return opts;
+  }
 
   pointsBalance = 9999;
   pointsMax = 245;
@@ -578,7 +802,9 @@ class Component extends DCLogic {
         idx: baseItems.length + i + 1,
         name: it.name,
         price: '$' + (it.price * it.qty),
-        options: [{ label: '數量 x' + it.qty, detail: '' }],
+        options: (it.needsSpec && this.state.specOptions && this.state.specOptions.length)
+          ? (it.qty > 1 ? [{ label: '數量 x' + it.qty, detail: '' }, ...this.state.specOptions] : this.state.specOptions)
+          : [{ label: '數量 x' + it.qty, detail: '' }],
       })),
     ];
 
@@ -608,7 +834,7 @@ class Component extends DCLogic {
     const pointsApplied = this.state.usePoints ? this.state.pointsApplied : 0; // 保留顯示用
     const pointsAmt = (onlineEnabled && this.state.usePoints) ? this.state.pointsApplied : 0; // 實際折抵
     const codeApplied = this.state.codeApplied && codeValid0;
-    const codeAmt = codeApplied ? Math.min(codeSub, 100) : 0;
+    const codeAmt = codeApplied ? Math.min(codeSub, 500) : 0;
     const voucherApplied = this.state.voucherApplied && !!this.state.selectedVoucher;
     const voucherAmt = (onlineEnabled && voucherApplied) ? this.voucherValue : 0;
     const giftSel = this.state.selectedGifts || {};
@@ -632,7 +858,7 @@ class Component extends DCLogic {
     const discountLabel = (onsiteEnabled || !this.state.loggedIn) ? '使用折扣碼' : '使用折扣碼或優惠券';
     const discountRowAmt = onsiteEnabled ? codeAmt : (codeAmt + voucherAmt);
     const discountSubLines = [];
-    if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' }, cancel: true, onCancel: () => this.setState({ codeApplied: false }) });
+    if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' }, cancel: true, onCancel: () => { this.clearCodeCartItems(); this.setState({ codeApplied: false }); } });
     if (!onsiteEnabled && voucherApplied) { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); if (v) discountSubLines.push({ label: '(' + v.couponTitle + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } }); }
     const disabledRow = { ...pinkRow, opacity: 0.4, cursor: 'not-allowed' };
     const memberOffers = [
@@ -664,8 +890,11 @@ class Component extends DCLogic {
       });
     };
     const codeSubtotal = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
-    const codeDiscountAmt = Math.min(codeSubtotal, 100);
-    const capReached = codeSubtotal >= 100;
+    const specItem = this.codeItems.find(it => it.needsSpec);
+    const otherCodeSubtotal = this.codeItems.reduce((sum, it) => sum + (it.needsSpec ? 0 : it.price * (this.state.codeQty[it.key] || 0)), 0);
+    const maxSpecQty = specItem ? Math.max(1, Math.ceil(Math.max(0, 500 - otherCodeSubtotal) / specItem.price)) : 1;
+    const codeDiscountAmt = Math.min(codeSubtotal, 500);
+    const capReached = codeSubtotal >= 500;
     const codeItemRows = this.codeItems.map(it => {
       const qty = this.state.codeQty[it.key];
       const sqStyle = (disabled) => ({
@@ -682,8 +911,10 @@ class Component extends DCLogic {
         onMinus: () => setQty(it.key, -1),
         onPlus: () => {
           if (capReached) return;
-          if (!this.state.cartAdded[it.key]) this.setState({ showAddCartModal: true, pendingAddKey: it.key });
-          else setQty(it.key, 1);
+          if (!this.state.cartAdded[it.key]) {
+            if (it.needsSpec) this.setState({ showSpecModal: true, specKey: it.key, specSel: {}, specQty: 1 });
+            else this.setState({ showAddCartModal: true, pendingAddKey: it.key });
+          } else setQty(it.key, 1);
         },
       };
     });
@@ -821,6 +1052,101 @@ class Component extends DCLogic {
         if (!ptsValid) return;
         this.setState({ usePoints: true, pointsApplied: ptsNum, showPointsModal: false });
       },
+      showSpecModal: this.state.showSpecModal,
+      closeSpecModal: () => this.setState({ showSpecModal: false, specKey: null }),
+      specName: '起司牛奶鍋',
+      specDesc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。',
+      specPriceText: '$250',
+      specQty: this.state.specQty,
+      specQtyMinus: () => this.setState(s => ({ specQty: Math.max(1, s.specQty - 1) })),
+      specQtyPlus: () => this.setState(s => ({ specQty: Math.min(maxSpecQty, s.specQty + 1) })),
+      ...(() => {
+        const buildRow = (g, o, nested) => {
+          const isMulti = g.mode === 'multi';
+          const selected = isMulti ? !!(this.state.specSel[g.id] && this.state.specSel[g.id][o.id]) : this.state.specSel[g.id] === o.id;
+          const row = {
+            name: o.name, priceText: this.specPriceLabel(o.add),
+            isCheckbox: isMulti, isRadio: !isMulti, selected,
+            soldOut: !!o.soldOut, showImage: !o.soldOut && !!o.img,
+            nameColor: o.soldOut ? '#C8C9C9' : '#3E3E3E',
+            boxStyle: this.specBoxStyle(selected),
+            ringStyle: this.specRadioRing(selected),
+            dotStyle: this.specRadioDot(selected),
+            rowStyle: { display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', cursor: o.soldOut ? 'default' : 'pointer' },
+          };
+          if (o.soldOut) row.onToggle = () => {};
+          else if (isMulti) row.onToggle = () => this.toggleSpecMulti(g.id, o.id, g.max, !!g.qty);
+          else row.onToggle = () => this.pickSpec(g.id, o.id);
+          if (g.qty && selected) {
+            row.showStepper = true;
+            row.qty = (this.state.specSel[g.id] && this.state.specSel[g.id][o.id]) || 1;
+            row.onMinus = (e) => { e.stopPropagation(); this.bumpSpecQty(g.id, o.id, -1); };
+            row.onPlus = (e) => { e.stopPropagation(); this.bumpSpecQty(g.id, o.id, 1); };
+          }
+          if (!nested && o.subGroups && selected) {
+            row.expanded = true;
+            row.subGroups = o.subGroups.map(sg => ({
+              title: sg.title, required: sg.required, hint: sg.hint,
+              items: sg.items.map(so => buildRow(sg, so, true)),
+            }));
+          }
+          return row;
+        };
+        const specGroups = this.specOptionGroups.map(g => {
+          const selCount = g.mode === 'multi' ? Object.keys(this.state.specSel[g.id] || {}).length : (this.state.specSel[g.id] ? 1 : 0);
+          const limitHit = g.mode === 'multi' && selCount >= g.max;
+          return { title: g.title, required: !!g.required, hint: g.hint,
+            hintColor: limitHit ? '#DE052E' : '#9A9A9A',
+            items: g.items.map(o => buildRow(g, o, false)) };
+        });
+        let unit = 250;
+        const okGroups = [];
+        this.specOptionGroups.forEach(g => {
+          if (g.mode === 'single') {
+            const opt = g.items.find(x => x.id === this.state.specSel[g.id]);
+            if (opt && opt.add) unit += opt.add;
+            okGroups.push(!g.required || !!opt);
+            if (opt && opt.subGroups) opt.subGroups.forEach(sg => {
+              if (sg.mode === 'single') {
+                const sopt = sg.items.find(x => x.id === this.state.specSel[sg.id]);
+                if (sopt && sopt.add) unit += sopt.add;
+                okGroups.push(!sg.required || !!sopt);
+              } else {
+                const sm = this.state.specSel[sg.id] || {};
+                Object.keys(sm).forEach(k => { const so = sg.items.find(x => x.id === k); if (so && so.add) unit += so.add; });
+              }
+            });
+          } else {
+            const m = this.state.specSel[g.id] || {};
+            Object.keys(m).forEach(k => { const o = g.items.find(x => x.id === k); if (o && o.add) unit += o.add * (g.qty ? m[k] : 1); });
+            okGroups.push(!g.required || Object.keys(m).length > 0);
+          }
+        });
+        const canAdd = okGroups.every(Boolean);
+        const total = unit * this.state.specQty;
+        return {
+          specGroups,
+          specTotalText: 'NT$' + total,
+          specAddBtnStyle: {
+            border: 'none', fontFamily: 'inherit', fontSize: '17px', fontWeight: '500',
+            padding: '12px 24px', borderRadius: '12px', flexShrink: 0, cursor: canAdd ? 'pointer' : 'not-allowed',
+            background: canAdd ? '#DE052E' : '#F0F0F0', color: canAdd ? '#FFFFFF' : '#C8C9C9',
+          },
+          confirmSpec: () => {
+            if (!canAdd) return;
+            const k = this.state.specKey;
+            if (!k) return;
+            const options = this.specSelToOptions(this.state.specSel);
+            try { localStorage.setItem('codeSpecItem', JSON.stringify({ name: '起司牛奶鍋', qty: this.state.specQty, price: 250, note: '', options })); } catch (e) {}
+            this.setState(s => ({
+              cartAdded: { ...s.cartAdded, [k]: true },
+              codeQty: { ...s.codeQty, [k]: (s.codeQty[k] || 0) + s.specQty },
+              specOptions: options,
+              showSpecModal: false, specKey: null,
+            }));
+          },
+        };
+      })(),
       showAddCartModal: this.state.showAddCartModal,
       closeAddCartModal: () => this.setState({ showAddCartModal: false, pendingAddKey: null }),
       declineAddCart: () => this.setState({ showAddCartModal: false, pendingAddKey: null }),
@@ -857,7 +1183,7 @@ class Component extends DCLogic {
       },
       confirmCode: () => {
         if (!discountConfirmValid) return;
-        if (showVoucherTab) this.setState({ voucherApplied: !!this.state.selectedVoucher, codeApplied: false, showCodeModal: false });
+        if (showVoucherTab) { this.clearCodeCartItems(); this.setState({ voucherApplied: !!this.state.selectedVoucher, codeApplied: false, showCodeModal: false }); }
         else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false });
       },
       voucherRows: this.vouchers.map(v => {
