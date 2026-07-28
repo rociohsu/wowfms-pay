@@ -462,23 +462,10 @@
     </div>
   </sc-if>
 
-  <!-- 加入購物車確認 Popup -->
-  <sc-if value="{{ showAddCartModal }}" hint-placeholder-val="">
-    <div onClick="{{ closeAddCartModal }}" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:32px;">
-      <div onClick="{{ stopModal }}" style="width:320px;background:#FFFFFF;border-radius:16px;padding:26px 22px 20px;font-family:'Noto Sans TC','Roboto',sans-serif;">
-        <div style="font-size:16px;line-height:1.75;color:#3E3E3E;text-align:center;">因目前購物車無該品項，若需折抵將自動為您加入購物車。</div>
-        <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
-          <button onClick="{{ confirmAddCart }}" style="width:100%;height:50px;border:none;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer;">加入購物車並折抵</button>
-          <button onClick="{{ declineAddCart }}" style="width:100%;height:50px;border:1px solid #C8C9C9;border-radius:12px;background:#FFFFFF;color:#3E3E3E;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer;">不折抵</button>
-        </div>
-      </div>
-    </div>
-  </sc-if>
-
-  <!-- 商品規格選擇 Popup (與 index 首頁商品詳情點餐一致) -->
+  <!-- 商品詳情 Popup (與 index 首頁商品詳情點餐一致) -->
   <sc-if value="{{ showSpecModal }}" hint-placeholder-val="">
     <div style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
-      <div class="sheet-modal" style="width:100%;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;position:relative;font-family:'Noto Sans TC','Roboto',sans-serif;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;height:600px;max-height:90%;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;position:relative;font-family:'Noto Sans TC','Roboto',sans-serif;">
       <button onClick="{{ closeSpecModal }}" style="position:absolute;top:14px;right:14px;z-index:5;width:34px;height:34px;border-radius:8px;border:none;background:rgba(60,60,60,0.55);color:#FFFFFF;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
       <div style="flex:1;overflow-y:auto;position:relative;">
         <div style="position:relative;">
@@ -656,8 +643,8 @@ class Component extends DCLogic {
     showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 0 },
     discountTab: 'voucher', selectedVoucher: null,
     showGiftModal: false, selectedGifts: {},
-    cartAdded: {}, showAddCartModal: false, pendingAddKey: null,
-    showSpecModal: false, specKey: null, specSel: {}, specQty: 1, specOptions: [],
+    cartAdded: {},
+    showSpecModal: false, specKey: null, specSel: {}, specQty: 1, codeItemOptions: {},
   };
 
   vouchers = [
@@ -669,9 +656,9 @@ class Component extends DCLogic {
   codeDiscount = 50;
   voucherValue = 100;
   codeItems = [
-    { key: 'pork', name: '豬肉', price: 30 },
-    { key: 'bacon', name: '培根', price: 40 },
-    { key: 'cheesepot', name: '起司牛奶鍋', price: 250, needsSpec: true, note: '需選規格' },
+    { key: 'pork', name: '豬肉', price: 30, desc: '精選豬肉片，適合搭配各式湯底。' },
+    { key: 'bacon', name: '培根', price: 40, desc: '煙燻培根，香氣十足。' },
+    { key: 'cheesepot', name: '起司牛奶鍋', price: 250, note: '需選規格', desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。' },
   ];
 
   // 套餐規格 (與 index 首頁商品詳情點餐 popup 一致)
@@ -713,6 +700,14 @@ class Component extends DCLogic {
     ];
   }
 
+  getItemOptionGroups(key) {
+    return key === 'cheesepot' ? this.specOptionGroups : [];
+  }
+
+  openSpecModal(key) {
+    this.setState({ showSpecModal: true, specKey: key, specSel: {}, specQty: 1 });
+  }
+
   pickSpec(gid, oid) { this.setState(s => ({ specSel: { ...s.specSel, [gid]: oid } })); }
   toggleSpecMulti(gid, oid, max, qtyMode) {
     this.setState(s => {
@@ -738,13 +733,13 @@ class Component extends DCLogic {
   // 清除因使用折扣碼而加入購物車的品項
   clearCodeCartItems() {
     try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
-    this.setState({ codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, cartAdded: {}, specOptions: [] });
+    this.setState({ codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, cartAdded: {}, codeItemOptions: {} });
   }
 
   // 將所選規格轉為餐點內容顯示用的 options
-  specSelToOptions(sel) {
+  specSelToOptions(sel, groups) {
     const opts = [];
-    this.specOptionGroups.forEach(g => {
+    (groups || []).forEach(g => {
       if (g.mode === 'single') {
         const o = g.items.find(x => x.id === sel[g.id]);
         if (!o) return;
@@ -802,9 +797,13 @@ class Component extends DCLogic {
         idx: baseItems.length + i + 1,
         name: it.name,
         price: '$' + (it.price * it.qty),
-        options: (it.needsSpec && this.state.specOptions && this.state.specOptions.length)
-          ? (it.qty > 1 ? [{ label: '數量 x' + it.qty, detail: '' }, ...this.state.specOptions] : this.state.specOptions)
-          : [{ label: '數量 x' + it.qty, detail: '' }],
+        options: (() => {
+          const opts = this.state.codeItemOptions[it.key];
+          if (opts && opts.length) {
+            return it.qty > 1 ? [{ label: '數量 x' + it.qty, detail: '' }, ...opts] : opts;
+          }
+          return [{ label: '數量 x' + it.qty, detail: '' }];
+        })(),
       })),
     ];
 
@@ -890,9 +889,14 @@ class Component extends DCLogic {
       });
     };
     const codeSubtotal = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
-    const specItem = this.codeItems.find(it => it.needsSpec);
-    const otherCodeSubtotal = this.codeItems.reduce((sum, it) => sum + (it.needsSpec ? 0 : it.price * (this.state.codeQty[it.key] || 0)), 0);
-    const maxSpecQty = specItem ? Math.max(1, Math.ceil(Math.max(0, 500 - otherCodeSubtotal) / specItem.price)) : 1;
+    const calcMaxQty = (key) => {
+      const item = this.codeItems.find(it => it.key === key);
+      if (!item) return 1;
+      const otherSub = this.codeItems.reduce((sum, it) =>
+        it.key === key ? sum : sum + it.price * (this.state.codeQty[it.key] || 0), 0);
+      return Math.max(1, Math.ceil(Math.max(0, 500 - otherSub) / item.price));
+    };
+    const maxSpecQty = this.state.specKey ? calcMaxQty(this.state.specKey) : 1;
     const codeDiscountAmt = Math.min(codeSubtotal, 500);
     const capReached = codeSubtotal >= 500;
     const codeItemRows = this.codeItems.map(it => {
@@ -908,13 +912,21 @@ class Component extends DCLogic {
         minusStyle: sqStyle(qty === 0),
         plusStyle: sqStyle(capReached),
         priceText: '$ ' + it.price,
-        onMinus: () => setQty(it.key, -1),
+        onMinus: () => {
+          if (qty === 0) return;
+          if (qty === 1) {
+            this.setState(s => {
+              const q = { ...s.codeQty }; q[it.key] = 0;
+              const ca = { ...s.cartAdded }; delete ca[it.key];
+              const co = { ...s.codeItemOptions }; delete co[it.key];
+              return { codeQty: q, cartAdded: ca, codeItemOptions: co };
+            });
+          } else setQty(it.key, -1);
+        },
         onPlus: () => {
           if (capReached) return;
-          if (!this.state.cartAdded[it.key]) {
-            if (it.needsSpec) this.setState({ showSpecModal: true, specKey: it.key, specSel: {}, specQty: 1 });
-            else this.setState({ showAddCartModal: true, pendingAddKey: it.key });
-          } else setQty(it.key, 1);
+          if (!this.state.cartAdded[it.key]) this.openSpecModal(it.key);
+          else setQty(it.key, 1);
         },
       };
     });
@@ -1053,14 +1065,11 @@ class Component extends DCLogic {
         this.setState({ usePoints: true, pointsApplied: ptsNum, showPointsModal: false });
       },
       showSpecModal: this.state.showSpecModal,
-      closeSpecModal: () => this.setState({ showSpecModal: false, specKey: null }),
-      specName: '起司牛奶鍋',
-      specDesc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。',
-      specPriceText: '$250',
-      specQty: this.state.specQty,
-      specQtyMinus: () => this.setState(s => ({ specQty: Math.max(1, s.specQty - 1) })),
-      specQtyPlus: () => this.setState(s => ({ specQty: Math.min(maxSpecQty, s.specQty + 1) })),
+      closeSpecModal: () => this.setState({ showSpecModal: false, specKey: null, specSel: {} }),
       ...(() => {
+        const specItem = this.state.specKey ? this.codeItems.find(it => it.key === this.state.specKey) : null;
+        const itemGroups = specItem ? this.getItemOptionGroups(specItem.key) : [];
+        const basePrice = specItem ? specItem.price : 0;
         const buildRow = (g, o, nested) => {
           const isMulti = g.mode === 'multi';
           const selected = isMulti ? !!(this.state.specSel[g.id] && this.state.specSel[g.id][o.id]) : this.state.specSel[g.id] === o.id;
@@ -1092,16 +1101,16 @@ class Component extends DCLogic {
           }
           return row;
         };
-        const specGroups = this.specOptionGroups.map(g => {
+        const specGroups = itemGroups.map(g => {
           const selCount = g.mode === 'multi' ? Object.keys(this.state.specSel[g.id] || {}).length : (this.state.specSel[g.id] ? 1 : 0);
           const limitHit = g.mode === 'multi' && selCount >= g.max;
           return { title: g.title, required: !!g.required, hint: g.hint,
             hintColor: limitHit ? '#DE052E' : '#9A9A9A',
             items: g.items.map(o => buildRow(g, o, false)) };
         });
-        let unit = 250;
+        let unit = basePrice;
         const okGroups = [];
-        this.specOptionGroups.forEach(g => {
+        itemGroups.forEach(g => {
           if (g.mode === 'single') {
             const opt = g.items.find(x => x.id === this.state.specSel[g.id]);
             if (opt && opt.add) unit += opt.add;
@@ -1125,6 +1134,12 @@ class Component extends DCLogic {
         const canAdd = okGroups.every(Boolean);
         const total = unit * this.state.specQty;
         return {
+          specName: specItem ? specItem.name : '',
+          specDesc: specItem ? (specItem.desc || '') : '',
+          specPriceText: specItem ? '$' + specItem.price : '',
+          specQty: this.state.specQty,
+          specQtyMinus: () => this.setState(s => ({ specQty: Math.max(1, s.specQty - 1) })),
+          specQtyPlus: () => this.setState(s => ({ specQty: Math.min(maxSpecQty, s.specQty + 1) })),
           specGroups,
           specTotalText: 'NT$' + total,
           specAddBtnStyle: {
@@ -1133,32 +1148,22 @@ class Component extends DCLogic {
             background: canAdd ? '#DE052E' : '#F0F0F0', color: canAdd ? '#FFFFFF' : '#C8C9C9',
           },
           confirmSpec: () => {
-            if (!canAdd) return;
+            if (!canAdd || !specItem) return;
             const k = this.state.specKey;
             if (!k) return;
-            const options = this.specSelToOptions(this.state.specSel);
-            try { localStorage.setItem('codeSpecItem', JSON.stringify({ name: '起司牛奶鍋', qty: this.state.specQty, price: 250, note: '', options })); } catch (e) {}
+            const options = this.specSelToOptions(this.state.specSel, itemGroups);
+            if (itemGroups.length) {
+              try { localStorage.setItem('codeSpecItem', JSON.stringify({ name: specItem.name, qty: this.state.specQty, price: specItem.price, note: '', options })); } catch (e) {}
+            }
             this.setState(s => ({
               cartAdded: { ...s.cartAdded, [k]: true },
               codeQty: { ...s.codeQty, [k]: (s.codeQty[k] || 0) + s.specQty },
-              specOptions: options,
-              showSpecModal: false, specKey: null,
+              codeItemOptions: { ...s.codeItemOptions, [k]: options },
+              showSpecModal: false, specKey: null, specSel: {},
             }));
           },
         };
       })(),
-      showAddCartModal: this.state.showAddCartModal,
-      closeAddCartModal: () => this.setState({ showAddCartModal: false, pendingAddKey: null }),
-      declineAddCart: () => this.setState({ showAddCartModal: false, pendingAddKey: null }),
-      confirmAddCart: () => {
-        const k = this.state.pendingAddKey;
-        if (!k) return;
-        this.setState(s => ({
-          cartAdded: { ...s.cartAdded, [k]: true },
-          codeQty: { ...s.codeQty, [k]: (s.codeQty[k] || 0) + 1 },
-          showAddCartModal: false, pendingAddKey: null,
-        }));
-      },
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
       codeItemRows, codeDiscountText,
