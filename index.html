@@ -81,13 +81,13 @@
     <div style="margin:12px 16px 0;">
       <sc-if value="{{ notBound }}" hint-placeholder-val="{{ true }}">
         <button onClick="{{ onBind }}" style="width:100%;background:#FFFFFF;border:1px solid #CCCCCC;border-radius:12px;padding:11px 20px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;font-family:inherit;">
-          <img src="assets/icons/fun.svg" alt="" style="width:28px;height:28px;display:block;flex-shrink:0;">
+          <img src="assets/icons/Icon_fun.svg" alt="" style="width:28px;height:28px;display:block;flex-shrink:0;">
           <span style="color:#333333;font-size:16px;font-weight:500;">登入瘋美食會員</span>
         </button>
       </sc-if>
       <sc-if value="{{ bound }}" hint-placeholder-val="">
         <button onClick="{{ openFunMenu }}" style="width:100%;background:#FFEED8;border:1px solid #F0D1AA;border-radius:12px;padding:9px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;">
-          <img src="assets/icons/fun.svg" alt="" style="width:28px;height:28px;display:block;flex-shrink:0;">
+          <img src="assets/icons/Icon_fun.svg" alt="" style="width:28px;height:28px;display:block;flex-shrink:0;">
           <span style="flex:1;text-align:left;color:#8A5A1E;font-size:17px;font-weight:500;">查看瘋美食優惠</span>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
         </button>
@@ -135,19 +135,19 @@
       <div class="h-scroll" style="flex:1;overflow-y:auto;padding:24px;">
         <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
           <button onClick="{{ onLogin }}" style="width:100%;height:54px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px;background:#FFFFFF;border:1px solid #D9D9D9;border-radius:999px;cursor:pointer;font-family:inherit;">
-            <img src="assets/icons/line.svg" width="26" height="26" alt="LINE">
+            <img src="assets/icons/Icon_line.svg" width="26" height="26" alt="LINE">
             <span style="font-size:17px;font-weight:500;color:#111111;">點餐請先登入LINE</span>
           </button>
         </sc-if>
         <sc-if value="{{ loggedIn }}" hint-placeholder-val="">
           <div style="font-size:22px;font-weight:700;color:#111111;margin:4px 0 12px;">Hi, Amy</div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;">
-            <img src="test/uploads/icons/Icon_user_red.svg" width="28" height="28" alt="">
+            <img src="assets/icons/Icon_user_red.svg" width="28" height="28" alt="">
             <span style="flex:1;font-size:18px;color:#222222;">編輯會員資料</span>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
           </div>
           <div onClick="{{ onOrders }}" style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;">
-            <img src="test/uploads/Icon_list.svg" width="28" height="28" alt="">
+            <img src="assets/icons/Icon_list.svg" width="28" height="28" alt="">
             <span style="flex:1;font-size:18px;color:#222222;">我的訂單</span>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
           </div>
@@ -157,36 +157,36 @@
           <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;">
             <span style="font-size:20px;font-weight:700;color:#111111;">瘋美食會員</span>
             <button onClick="{{ onUnbind }}" aria-label="登出瘋美食會員" style="border:none;background:none;padding:2px;cursor:pointer;display:flex;">
-              <img src="test/uploads/icons/Icon_logout.svg" width="30" height="30" alt="">
+              <img src="assets/icons/Icon_logout.svg" width="30" height="30" alt="">
             </button>
           </div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;">
-            <img src="test/uploads/icons/Icon_point.svg" width="30" height="30" alt="">
+            <img src="assets/icons/Icon_point.svg" width="30" height="30" alt="">
             <span style="font-size:18px;color:#222222;">瘋點數 <b style="color:#DE052E;">1,000</b> 點</span>
           </div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;">
-            <img src="test/uploads/icons/Icon_coupon.svg" width="30" height="30" alt="">
-            <span style="font-size:18px;color:#222222;">優惠券 <b>1</b> 張</span>
+            <img src="assets/icons/Icon_coupon.svg" width="30" height="30" alt="">
+            <span style="font-size:18px;color:#222222;">優惠券 <b style="color:#DE052E;">1</b> 張</span>
           </div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;">
-            <img src="test/uploads/icons/Icon_gift-voucher.svg" width="30" height="30" alt="">
+            <img src="assets/icons/Icon_gift-voucher.svg" width="30" height="30" alt="">
             <span style="font-size:18px;color:#222222;">電子禮券 <b>0</b> 張</span>
           </div>
           <div style="height:1px;background:#EEEEEE;margin:14px 0 24px;"></div>
         </sc-if>
         <div style="font-size:20px;font-weight:700;color:#111111;margin-bottom:8px;">其他選單</div>
         <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;">
-          <img src="test/uploads/icons/Icon_earth_red.svg" width="30" height="30" alt="">
+          <img src="assets/icons/Icon_earth_red.svg" width="30" height="30" alt="">
           <span style="flex:1;font-size:18px;color:#222222;">語言選擇: 繁體中文</span>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
         </div>
         <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;">
-          <img src="test/uploads/icons/Icon_info.svg" width="30" height="30" alt="">
+          <img src="assets/icons/Icon_info.svg" width="30" height="30" alt="">
           <span style="flex:1;font-size:18px;color:#222222;">店家資訊</span>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
         </div>
         <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;">
-          <img src="test/uploads/icons/Icon_bullhorn.svg" width="30" height="30" alt="">
+          <img src="assets/icons/Icon_bullhorn.svg" width="30" height="30" alt="">
           <span style="flex:1;font-size:18px;color:#222222;">店家公告</span>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
         </div>
