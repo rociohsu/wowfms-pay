@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // Vercel serves this page at /portal without a trailing slash. In that case,
+  // make relative resources resolve from /portal/ instead of the site root.
+  if (location.protocol !== 'file:' && /\/portal$/.test(location.pathname)) {
+    var portalBase = document.createElement('base');
+    portalBase.href = location.pathname + '/';
+    document.head.appendChild(portalBase);
+  }
+</script>
 <script src="support.js"></script>
 </head>
 <body>
