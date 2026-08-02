@@ -31,9 +31,9 @@
     <div style="position:absolute;left:0;right:0;text-align:center;font-size:18px;font-weight:700;pointer-events:none;">購物車</div>
     <div style="flex:1;"></div>
     <button onClick="{{ toggleMenu }}" style="border:none;background:none;padding:8px;margin-right:-8px;cursor:pointer;display:flex;align-items:center;position:relative;z-index:1;">
-      <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 9.99984C12.3672 9.99984 14.2857 8.1346 14.2857 5.83317C14.2857 3.53174 12.3672 1.6665 10 1.6665C7.63281 1.6665 5.71429 3.53174 5.71429 5.83317C5.71429 8.1346 7.63281 9.99984 10 9.99984ZM13 11.0415H12.4408C11.6975 11.3735 10.8705 11.5623 10 11.5623C9.12946 11.5623 8.3058 11.3735 7.55915 11.0415H7C4.51562 11.0415 2.5 13.0011 2.5 15.4165V16.7707C2.5 17.6333 3.21987 18.3332 4.10714 18.3332H15.8929C16.7801 18.3332 17.5 17.6333 17.5 16.7707V15.4165C17.5 13.0011 15.4844 11.0415 13 11.0415Z" fill="#3E3E3E"></path></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#767678" aria-hidden="true"><rect x="1" y="5" width="22" height="3" rx="1.5"></rect><rect x="1" y="11" width="22" height="3" rx="1.5"></rect><rect x="1" y="17" width="22" height="3" rx="1.5"></rect></svg>
     </button>
-    <sc-if value="{{ menuOpen }}" hint-placeholder-val="">
+    <sc-if value="{{ legacyMenuOpen }}" hint-placeholder-val="">
       <div onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:30;"></div>
       <div style="position:absolute;top:100%;left:0;right:0;z-index:40;background:#FFFFFF;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,0.14);padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
         <sc-if value="{{ lineIn }}" hint-placeholder-val="">
@@ -84,6 +84,39 @@
       </div>
     </sc-if>
   </div>
+
+  <!-- Full-screen member center -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="">
+    <div style="position:fixed;inset:0;z-index:100;width:100%;max-width:390px;margin:0 auto;background:#FFFFFF;display:flex;flex-direction:column;">
+      <div style="height:64px;display:flex;align-items:center;justify-content:center;padding:0 24px;border-bottom:1px solid #EEEEEE;position:relative;flex-shrink:0;">
+        <span style="font-size:20px;font-weight:700;color:#111111;">會員中心</span>
+        <button onClick="{{ closeMenu }}" aria-label="關閉會員中心" style="position:absolute;right:18px;border:none;background:none;padding:6px;cursor:pointer;display:flex;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:24px;">
+        <sc-if value="{{ lineOut }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ onLineLogin }}" style="width:100%;height:54px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px;background:#FFFFFF;border:1px solid #D9D9D9;border-radius:999px;cursor:pointer;font-family:inherit;"><img src="assets/icons/line.svg" width="26" height="26" alt="LINE"><span style="font-size:17px;font-weight:500;color:#111111;">點餐請先登入LINE</span></button>
+        </sc-if>
+        <sc-if value="{{ lineIn }}" hint-placeholder-val="">
+          <div style="font-size:22px;font-weight:700;color:#111111;margin:4px 0 12px;">Hi, Amy</div>
+          <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;"><img src="test/uploads/icons/Icon_user_red.svg" width="28" height="28" alt=""><span style="flex:1;font-size:18px;color:#222222;">編輯會員資料</span><span style="color:#666666;font-size:24px;">›</span></div>
+          <a href="order.html" style="height:52px;display:flex;align-items:center;gap:16px;text-decoration:none;"><img src="test/uploads/Icon_list.svg" width="28" height="28" alt=""><span style="flex:1;font-size:18px;color:#222222;">我的訂單</span><span style="color:#666666;font-size:24px;">›</span></a>
+          <div style="height:1px;background:#EEEEEE;margin:10px 0 24px;"></div>
+        </sc-if>
+        <sc-if value="{{ funIn }}" hint-placeholder-val="">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;"><span style="font-size:20px;font-weight:700;color:#111111;">瘋美食會員</span><button onClick="{{ onFunLogout }}" aria-label="登出瘋美食會員" style="border:none;background:none;padding:2px;cursor:pointer;display:flex;"><img src="test/uploads/icons/Icon_logout.svg" width="30" height="30" alt=""></button></div>
+          <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="test/uploads/icons/Icon_point.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">瘋點數 <b style="color:#DE052E;">1,000</b> 點</span></div>
+          <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="test/uploads/icons/Icon_coupon.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">優惠券 <b>1</b> 張</span></div>
+          <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="test/uploads/icons/Icon_gift-voucher.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">電子禮券 <b>0</b> 張</span></div>
+          <div style="height:1px;background:#EEEEEE;margin:14px 0 24px;"></div>
+        </sc-if>
+        <div style="font-size:20px;font-weight:700;color:#111111;margin-bottom:8px;">其他選單</div>
+        <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;"><img src="test/uploads/icons/Icon_earth_red.svg" width="30" height="30" alt=""><span style="flex:1;font-size:18px;color:#222222;">語言選擇: 繁體中文</span><span style="color:#666666;font-size:24px;">›</span></div>
+        <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;"><img src="test/uploads/icons/Icon_info.svg" width="30" height="30" alt=""><span style="flex:1;font-size:18px;color:#222222;">店家資訊</span><span style="color:#666666;font-size:24px;">›</span></div>
+        <div style="height:52px;display:flex;align-items:center;gap:16px;cursor:pointer;"><img src="test/uploads/icons/Icon_bullhorn.svg" width="30" height="30" alt=""><span style="flex:1;font-size:18px;color:#222222;">店家公告</span><span style="color:#666666;font-size:24px;">›</span></div>
+        <sc-if value="{{ showLogout }}" hint-placeholder-val=""><button onClick="{{ logoutAll }}" style="width:100%;height:50px;margin-top:22px;border:1px solid #CCCCCC;border-radius:999px;background:#FFFFFF;font-family:inherit;font-size:17px;font-weight:500;color:#333333;cursor:pointer;">全部登出</button></sc-if>
+      </div>
+    </div>
+  </sc-if>
 
   <!-- Scroll body -->
   <div style="flex:1;overflow-y:auto;padding:4px 16px 16px;">
@@ -279,6 +312,7 @@ class Component extends DCLogic {
 
     return {
       menuOpen: this.state.menuOpen,
+      legacyMenuOpen: false,
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       closeMenu: () => this.setState({ menuOpen: false }),
       memberName: 'Amy',
@@ -288,6 +322,8 @@ class Component extends DCLogic {
       onLineLogout: () => { try { localStorage.removeItem('lineMember'); } catch(e){} this.setState({ lineLoggedIn: false }); },
       onFunLogin: () => { try { localStorage.setItem('funMember','1'); } catch(e){} this.setState({ bound: true }); },
       onFunLogout: () => { try { localStorage.removeItem('funMember'); } catch(e){} this.setState({ bound: false }); },
+      showLogout: this.state.lineLoggedIn || this.state.bound,
+      logoutAll: () => { try { localStorage.removeItem('lineMember'); localStorage.removeItem('funMember'); } catch(e){} this.setState({ lineLoggedIn: false, bound: false, menuOpen: false }); },
       items, addons, cartCount, cartTotal,
       orderNote: this.state.orderNote,
       onNote: (e) => this.setState({ orderNote: e.target.value }),
