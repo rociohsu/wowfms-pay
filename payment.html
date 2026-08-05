@@ -496,6 +496,20 @@
     </div>
   </sc-if>
 
+  <!-- 移除折扣品項確認 Popup -->
+  <sc-if value="{{ showRemoveDiscountModal }}" hint-placeholder-val="">
+    <div style="position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-width:342px;background:#FFFFFF;border-radius:16px;padding:24px 20px 18px;font-family:'Noto Sans TC','Roboto',sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.18);">
+        <div style="font-size:20px;font-weight:700;color:#222222;text-align:center;">確認移除折扣品項?</div>
+        <div style="margin-top:12px;font-size:15px;line-height:1.6;color:#5B5B5B;text-align:center;"><b style="color:#3E3E3E;">{{ removeDiscountName }}</b>將從購物車中移除，且不再使用此優惠折抵。</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;">
+          <button onClick="{{ cancelRemoveDiscount }}" style="height:46px;border:1px solid #C8C9C9;border-radius:12px;background:#FFFFFF;color:#3E3E3E;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">取消</button>
+          <button onClick="{{ confirmRemoveDiscount }}" style="height:46px;border:1px solid #DE052E;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">確認</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <!-- 商品詳情 Popup (與 index 首頁商品詳情點餐一致) -->
   <sc-if value="{{ showSpecModal }}" hint-placeholder-val="">
     <div style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
@@ -674,11 +688,12 @@ class Component extends DCLogic {
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
-    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 0 },
+    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, codeInitialized: false,
     discountTab: 'voucher', selectedVoucher: null,
     showGiftModal: false, selectedGifts: {},
     cartAdded: {},
     showSpecModal: false, specKey: null, specSel: {}, specQty: 1, codeItemOptions: {},
+    showRemoveDiscountModal: false, removeDiscountKey: null,
   };
 
   vouchers = [
@@ -692,7 +707,7 @@ class Component extends DCLogic {
   codeItems = [
     { key: 'pork', name: '豬肉', price: 30, desc: '精選豬肉片，適合搭配各式湯底。' },
     { key: 'bacon', name: '培根', price: 40, desc: '煙燻培根，香氣十足。' },
-    { key: 'cheesepot', name: '起司牛奶鍋', price: 250, note: '需選規格', desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。' },
+    { key: 'cheesepot', name: '起司牛奶鍋', price: 250, desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。' },
   ];
 
   // 套餐規格 (與 index 首頁商品詳情點餐 popup 一致)
@@ -898,7 +913,16 @@ class Component extends DCLogic {
       { key: 'discount', label: discountLabel, showP: false, note: '', subLines: discountSubLines,
         amtText: discountRowAmt > 0 ? '-' + discountRowAmt : '0', amtStyle: amtStyle(discountRowAmt),
         rowStyle: pinkRow,
-        onToggle: () => this.setState({ showCodeModal: true, discountTab: onsiteEnabled ? 'code' : 'voucher' }) },
+        onToggle: () => this.setState(s => {
+          if (s.codeInitialized) return { showCodeModal: true, discountTab: onsiteEnabled ? 'code' : 'voucher' };
+          return {
+            showCodeModal: true,
+            discountTab: onsiteEnabled ? 'code' : 'voucher',
+            codeQty: { ...s.codeQty, pork: Math.max(1, s.codeQty.pork || 0), cheesepot: Math.max(1, s.codeQty.cheesepot || 0) },
+            cartAdded: { ...s.cartAdded, pork: true, cheesepot: true },
+            codeInitialized: true,
+          };
+        }) },
       { key: 'gift', label: '使用電子禮券', showP: false, note: '',
         amtText: giftSelSum > 0 ? '-' + giftSelSum : '0', amtStyle: amtStyle(giftSelSum),
         subLines: giftVouchers.map(g => ({ label: g.label, amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } })),
@@ -943,19 +967,13 @@ class Component extends DCLogic {
       });
       return {
         ...it, qtyText: String(qty),
+        note: qty > 0 ? '已加入購物車並折抵' : '',
         minusStyle: sqStyle(qty === 0),
         plusStyle: sqStyle(capReached),
         priceText: '$ ' + it.price,
         onMinus: () => {
           if (qty === 0) return;
-          if (qty === 1) {
-            this.setState(s => {
-              const q = { ...s.codeQty }; q[it.key] = 0;
-              const ca = { ...s.cartAdded }; delete ca[it.key];
-              const co = { ...s.codeItemOptions }; delete co[it.key];
-              return { codeQty: q, cartAdded: ca, codeItemOptions: co };
-            });
-          } else setQty(it.key, -1);
+          this.setState({ showRemoveDiscountModal: true, removeDiscountKey: it.key });
         },
         onPlus: () => {
           if (capReached) return;
@@ -1196,11 +1214,42 @@ class Component extends DCLogic {
               cartAdded: { ...s.cartAdded, [k]: true },
               codeQty: { ...s.codeQty, [k]: (s.codeQty[k] || 0) + s.specQty },
               codeItemOptions: { ...s.codeItemOptions, [k]: options },
+              codeInitialized: true,
               showSpecModal: false, specKey: null, specSel: {},
             }));
           },
         };
       })(),
+      showRemoveDiscountModal: this.state.showRemoveDiscountModal,
+      removeDiscountName: (() => {
+        const item = this.codeItems.find(it => it.key === this.state.removeDiscountKey);
+        return item ? item.name : '此品項';
+      })(),
+      cancelRemoveDiscount: () => this.setState({ showRemoveDiscountModal: false, removeDiscountKey: null }),
+      confirmRemoveDiscount: () => {
+        const key = this.state.removeDiscountKey;
+        if (!key) return;
+        this.setState(s => {
+          const q = { ...s.codeQty };
+          q[key] = Math.max(0, (q[key] || 0) - 1);
+          const ca = { ...s.cartAdded };
+          const co = { ...s.codeItemOptions };
+          if (q[key] === 0) {
+            delete ca[key];
+            delete co[key];
+            if (key === 'cheesepot') {
+              try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
+            }
+          }
+          return {
+            codeQty: q,
+            cartAdded: ca,
+            codeItemOptions: co,
+            showRemoveDiscountModal: false,
+            removeDiscountKey: null,
+          };
+        });
+      },
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
       codeItemRows, codeDiscountText,
