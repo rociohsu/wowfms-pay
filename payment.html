@@ -426,30 +426,54 @@
           <input type="text" value="{{ codeInput }}" placeholder="請輸入折扣碼" onChange="{{ onCodeInput }}" onInput="{{ onCodeInput }}" style="{{ codeInputStyle }}">
 
           <sc-if value="{{ codeValid }}" hint-placeholder-val="">
-            <div style="margin-top:20px;font-size:18px;font-weight:700;">請選擇折抵品項</div>
-            <div style="margin-top:14px;display:flex;flex-direction:column;gap:18px;">
-              <sc-for list="{{ codeItemRows }}" as="it" hint-placeholder-count="3">
-                <div style="display:flex;align-items:center;gap:14px;">
-                  <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
-                    <span style="font-size:16px;">{{ it.name }}</span>
-                    <sc-if value="{{ it.note }}" hint-placeholder-val=""><span style="font-size:13px;color:#DE052E;">{{ it.note }}</span></sc-if>
+            <div style="margin-top:18px;text-align:center;color:#DE052E;font-size:16px;font-weight:500;">XRFREE折扣碼最多可折抵500元</div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;">
+              <span style="font-size:17px;font-weight:700;color:#222222;">已在購物車</span>
+              <span style="font-size:14px;color:#8A8A8A;">是否折抵</span>
+            </div>
+            <div style="margin-top:8px;display:flex;flex-direction:column;">
+              <sc-for list="{{ codeCartRows }}" as="it" hint-placeholder-count="2">
+                <div style="padding:12px 0;border-bottom:1px solid #EEEEEE;">
+                  <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:16px;font-weight:500;color:#333333;">{{ it.name }}</div>
+                      <sc-for list="{{ it.options }}" as="opt" hint-placeholder-count="3">
+                        <div style="margin-top:5px;padding-left:8px;font-size:13px;line-height:1.45;color:#8A8A8A;">・{{ opt.label }}<sc-if value="{{ opt.detail }}" hint-placeholder-val=""><br><span style="padding-left:11px;">{{ opt.detail }}</span></sc-if></div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ it.onToggle }}" aria-label="選擇是否折抵" style="{{ it.checkStyle }}">
+                      <sc-if value="{{ it.selected }}" hint-placeholder-val=""><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></sc-if>
+                    </button>
                   </div>
-                  <span style="font-size:16px;font-weight:700;color:#DE052E;margin-right:6px;">{{ it.priceText }}</span>
-                  <div style="display:flex;align-items:center;gap:8px;">
-                    <button onClick="{{ it.onMinus }}" style="{{ it.minusStyle }}">−</button>
-                    <span style="min-width:24px;text-align:center;font-size:16px;">{{ it.qtyText }}</span>
-                    <button onClick="{{ it.onPlus }}" style="{{ it.plusStyle }}">+</button>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+                    <span style="font-size:16px;font-weight:500;color:#222222;">NT${{ it.price }}</span>
+                    <button onClick="{{ it.onRemove }}" style="height:28px;padding:0 8px;border:1px solid #999999;border-radius:5px;background:#FFFFFF;color:#777777;font-family:inherit;font-size:13px;cursor:pointer;">移除</button>
                   </div>
                 </div>
               </sc-for>
             </div>
+
+            <sc-if value="{{ hasAvailableCodeItems }}" hint-placeholder-val="">
+              <div style="margin-top:22px;font-size:17px;font-weight:700;color:#222222;">可加入折抵</div>
+              <div style="margin-top:8px;display:flex;flex-direction:column;">
+                <sc-for list="{{ availableCodeItemRows }}" as="it" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #EEEEEE;">
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:16px;color:#333333;">{{ it.name }}</div>
+                      <div style="margin-top:5px;font-size:16px;font-weight:500;color:#222222;">NT${{ it.price }}</div>
+                    </div>
+                    <button onClick="{{ it.onPlus }}" aria-label="加入商品並折抵" style="{{ it.plusStyle }}">＋</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
 
             <div style="margin-top:22px;">
               <div style="color:#3E3E3E;font-size:16px;font-weight:700;">注意事項</div>
               <div style="margin-top:8px;font-size:14px;color:#5B5B5B;line-height:1.7;">
                 <div>1.持券人可至本券指定適用品牌門店抵用</div>
                 <div>2.本券可兌換券上所載之指定商品,恕不得自行要求更換其它商品</div>
-                <div>3.XRFREE折扣碼最多可折抵500元</div>
               </div>
             </div>
           </sc-if>
@@ -501,7 +525,7 @@
     <div style="position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:24px;">
       <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-width:342px;background:#FFFFFF;border-radius:16px;padding:24px 20px 18px;font-family:'Noto Sans TC','Roboto',sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.18);">
         <div style="font-size:20px;font-weight:700;color:#222222;text-align:center;">確認移除折扣品項?</div>
-        <div style="margin-top:12px;font-size:15px;line-height:1.6;color:#5B5B5B;text-align:center;"><b style="color:#3E3E3E;">{{ removeDiscountName }}</b>將從購物車中移除，且不再使用此優惠折抵。</div>
+        <div style="margin-top:12px;font-size:15px;line-height:1.6;color:#5B5B5B;text-align:center;"><b style="color:#3E3E3E;">{{ removeDiscountName }}</b> 將從購物車中移除，且不再使用此優惠折抵。</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;">
           <button onClick="{{ cancelRemoveDiscount }}" style="height:46px;border:1px solid #C8C9C9;border-radius:12px;background:#FFFFFF;color:#3E3E3E;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">取消</button>
           <button onClick="{{ confirmRemoveDiscount }}" style="height:46px;border:1px solid #DE052E;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">確認</button>
@@ -688,12 +712,24 @@ class Component extends DCLogic {
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
-    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, codeInitialized: false,
+    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 1 }, codeInitialized: true,
+    discountCartItems: [
+      { id: 'discount-cart-1', key: 'cheesepot', name: '起司牛奶鍋', price: 250, selected: true, options: [
+        { label: '肉好好 (+NT$ 20)', detail: '' },
+        { label: '豬肉', detail: '伊比利豬 / 200g (+NT$ 20)' },
+        { label: '古早味紅茶', detail: '無糖 / 微冰 / 茶凍 (+NT$ 10)' },
+      ]},
+      { id: 'discount-cart-2', key: 'cheesepot', name: '起司牛奶鍋', price: 250, selected: false, options: [
+        { label: '肉好好 (+NT$ 20)', detail: '' },
+        { label: '豬肉', detail: '伊比利豬 / 200g (+NT$ 20)' },
+        { label: '古早味紅茶', detail: '無糖 / 微冰 / 茶凍 (+NT$ 10)' },
+      ]},
+    ], nextDiscountCartId: 3,
     discountTab: 'voucher', selectedVoucher: null,
     showGiftModal: false, selectedGifts: {},
     cartAdded: {},
     showSpecModal: false, specKey: null, specSel: {}, specQty: 1, codeItemOptions: {},
-    showRemoveDiscountModal: false, removeDiscountKey: null,
+    showRemoveDiscountModal: false, removeDiscountId: null,
   };
 
   vouchers = [
@@ -706,7 +742,7 @@ class Component extends DCLogic {
   voucherValue = 100;
   codeItems = [
     { key: 'pork', name: '豬肉', price: 30, desc: '精選豬肉片，適合搭配各式湯底。' },
-    { key: 'bacon', name: '培根', price: 40, desc: '煙燻培根，香氣十足。' },
+    { key: 'bacon', name: '大腸臭臭鍋', price: 200, desc: '經典大腸臭臭鍋套餐，可依喜好選擇主餐、肉品、副餐、加購品與飲料。' },
     { key: 'cheesepot', name: '起司牛奶鍋', price: 250, desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。' },
   ];
 
@@ -750,7 +786,7 @@ class Component extends DCLogic {
   }
 
   getItemOptionGroups(key) {
-    return key === 'cheesepot' ? this.specOptionGroups : [];
+    return (key === 'cheesepot' || key === 'bacon') ? this.specOptionGroups : [];
   }
 
   openSpecModal(key) {
@@ -781,8 +817,10 @@ class Component extends DCLogic {
 
   // 清除因使用折扣碼而加入購物車的品項
   clearCodeCartItems() {
-    try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
-    this.setState({ codeQty: { pork: 0, bacon: 0, cheesepot: 0 }, cartAdded: {}, codeItemOptions: {} });
+    this.setState(s => ({
+      codeQty: { pork: 0, bacon: 0, cheesepot: 0 },
+      discountCartItems: s.discountCartItems.map(item => ({ ...item, selected: false })),
+    }));
   }
 
   // 將所選規格轉為餐點內容顯示用的 options
@@ -832,29 +870,12 @@ class Component extends DCLogic {
       { label: '豬肉', detail: '伊比利豬 (+NT$ 0) / 200g (+NT$ 20)' },
       { label: '古早味紅茶', detail: '無糖 (+NT$ 0) / 微冰 (+NT$ 0) / 茶凍 (+NT$ 10)' },
     ];
-    const baseItems = [1, 2].map(i => ({
-      idx: i, name: '起司牛奶鍋', price: '$250', options: itemOpts,
+    const items = this.state.discountCartItems.map((it, i) => ({
+      idx: i + 1,
+      name: it.name,
+      price: '$' + it.price,
+      options: it.options && it.options.length ? it.options : [{ label: '單品', detail: '' }],
     }));
-    // 透過折扣碼流程加入購物車的品項
-    const cartExtraItems = this.codeItems
-      .filter(it => this.state.cartAdded[it.key] && (this.state.codeQty[it.key] || 0) > 0)
-      .map(it => ({ ...it, qty: this.state.codeQty[it.key] }));
-    const cartExtraTotal = cartExtraItems.reduce((s, it) => s + it.price * it.qty, 0);
-    const items = [
-      ...baseItems,
-      ...cartExtraItems.map((it, i) => ({
-        idx: baseItems.length + i + 1,
-        name: it.name,
-        price: '$' + (it.price * it.qty),
-        options: (() => {
-          const opts = this.state.codeItemOptions[it.key];
-          if (opts && opts.length) {
-            return it.qty > 1 ? [{ label: '數量 x' + it.qty, detail: '' }, ...opts] : opts;
-          }
-          return [{ label: '數量 x' + it.qty, detail: '' }];
-        })(),
-      })),
-    ];
 
     const radio = (selected) => ({
       ring: selected ? '#DE052E' : '#C8C9C9',
@@ -873,9 +894,9 @@ class Component extends DCLogic {
       transition: 'left .2s', boxShadow: '0 1px 2px rgba(0,0,0,.2)',
     });
     // 折抵金額計算
-    const MEMBER_SUBTOTAL = 500 + cartExtraTotal;
+    const MEMBER_SUBTOTAL = this.state.discountCartItems.reduce((sum, it) => sum + it.price, 0);
     const codeValid0 = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
-    const codeSub = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
+    const codeSub = this.state.discountCartItems.filter(it => it.selected).reduce((sum, it) => sum + it.price, 0);
     const onlineEnabled = this.state.pay === 'online' || this.state.pay === 'funpay';
     const onsiteEnabled = this.state.pay === 'onsite';
     const pointsUsable = onlineEnabled;
@@ -913,16 +934,7 @@ class Component extends DCLogic {
       { key: 'discount', label: discountLabel, showP: false, note: '', subLines: discountSubLines,
         amtText: discountRowAmt > 0 ? '-' + discountRowAmt : '0', amtStyle: amtStyle(discountRowAmt),
         rowStyle: pinkRow,
-        onToggle: () => this.setState(s => {
-          if (s.codeInitialized) return { showCodeModal: true, discountTab: onsiteEnabled ? 'code' : 'voucher' };
-          return {
-            showCodeModal: true,
-            discountTab: onsiteEnabled ? 'code' : 'voucher',
-            codeQty: { ...s.codeQty, pork: Math.max(1, s.codeQty.pork || 0), cheesepot: Math.max(1, s.codeQty.cheesepot || 0) },
-            cartAdded: { ...s.cartAdded, pork: true, cheesepot: true },
-            codeInitialized: true,
-          };
-        }) },
+        onToggle: () => this.setState({ showCodeModal: true, discountTab: onsiteEnabled ? 'code' : 'voucher' }) },
       { key: 'gift', label: '使用電子禮券', showP: false, note: '',
         amtText: giftSelSum > 0 ? '-' + giftSelSum : '0', amtStyle: amtStyle(giftSelSum),
         subLines: giftVouchers.map(g => ({ label: g.label, amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } })),
@@ -937,51 +949,46 @@ class Component extends DCLogic {
     // 折扣碼 popup
     const codeValid = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
     const codeTitle = (this.state.loggedIn && onlineEnabled) ? '折扣碼或優惠券' : (codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼');
-    const totalQty = Object.values(this.state.codeQty).reduce((a, b) => a + b, 0);
+    const selectedCodeCartItems = this.state.discountCartItems.filter(it => it.selected);
+    const totalQty = selectedCodeCartItems.length;
     const pad2 = (n) => String(n).padStart(2, '0');
-    const setQty = (key, delta) => {
-      this.setState(s => {
-        const q = { ...s.codeQty };
-        q[key] = Math.max(0, (q[key] || 0) + delta);
-        return { codeQty: q };
-      });
-    };
-    const codeSubtotal = this.codeItems.reduce((sum, it) => sum + it.price * (this.state.codeQty[it.key] || 0), 0);
-    const calcMaxQty = (key) => {
-      const item = this.codeItems.find(it => it.key === key);
-      if (!item) return 1;
-      const otherSub = this.codeItems.reduce((sum, it) =>
-        it.key === key ? sum : sum + it.price * (this.state.codeQty[it.key] || 0), 0);
-      return Math.max(1, Math.ceil(Math.max(0, 500 - otherSub) / item.price));
-    };
-    const maxSpecQty = this.state.specKey ? calcMaxQty(this.state.specKey) : 1;
+    const codeSubtotal = selectedCodeCartItems.reduce((sum, it) => sum + it.price, 0);
+    const maxSpecQty = 1;
     const codeDiscountAmt = Math.min(codeSubtotal, 500);
-    const capReached = codeSubtotal >= 500;
-    const codeItemRows = this.codeItems.map(it => {
-      const qty = this.state.codeQty[it.key];
-      const sqStyle = (disabled) => ({
-        width: '34px', height: '34px', borderRadius: '8px', background: '#FFFFFF',
-        border: '1px solid #C8C9C9', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', cursor: disabled ? 'not-allowed' : 'pointer',
-        color: disabled ? '#C8C9C9' : '#3E3E3E', fontSize: '20px', flexShrink: 0,
+    const syncCodeQty = (rows) => rows.reduce((q, row) => {
+      if (row.selected) q[row.key] = (q[row.key] || 0) + 1;
+      return q;
+    }, { pork: 0, bacon: 0, cheesepot: 0 });
+    const codeCartRows = this.state.discountCartItems.map(it => ({
+      ...it,
+      options: it.options || [],
+      checkStyle: {
+        width: '22px', height: '22px', borderRadius: '6px', flexShrink: 0,
+        border: '1.5px solid ' + (it.selected ? '#DE052E' : '#DE052E'),
+        background: it.selected ? '#DE052E' : '#FFFFFF', padding: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+      },
+      onToggle: () => this.setState(s => {
+        const rows = s.discountCartItems.map(row => row.id === it.id ? { ...row, selected: !row.selected } : row);
+        return { discountCartItems: rows, codeQty: syncCodeQty(rows) };
+      }),
+      onRemove: () => this.setState({ showRemoveDiscountModal: true, removeDiscountId: it.id }),
+    }));
+    const availableCodeItemRows = this.codeItems
+      .filter(it => !this.state.discountCartItems.some(row => row.key === it.key))
+      .map(it => {
+        const disabled = codeSubtotal >= 500 || codeSubtotal + it.price > 500;
+        return {
+          ...it,
+          plusStyle: {
+            width: '22px', height: '22px', border: 'none', borderRadius: '6px',
+            background: disabled ? '#9A9A9A' : '#DE052E', color: '#FFFFFF',
+            fontSize: '20px', lineHeight: '1', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.9 : 1,
+          },
+          onPlus: disabled ? (() => {}) : (() => this.openSpecModal(it.key)),
+        };
       });
-      return {
-        ...it, qtyText: String(qty),
-        note: qty > 0 ? '已加入購物車並折抵' : '',
-        minusStyle: sqStyle(qty === 0),
-        plusStyle: sqStyle(capReached),
-        priceText: '$ ' + it.price,
-        onMinus: () => {
-          if (qty === 0) return;
-          this.setState({ showRemoveDiscountModal: true, removeDiscountKey: it.key });
-        },
-        onPlus: () => {
-          if (capReached) return;
-          if (!this.state.cartAdded[it.key]) this.openSpecModal(it.key);
-          else setQty(it.key, 1);
-        },
-      };
-    });
     const codeConfirmValid = codeValid && totalQty >= 1;
     const activeTab = (this.state.loggedIn && onlineEnabled) ? this.state.discountTab : 'code';
     const showCodeTab = activeTab === 'code';
@@ -1214,6 +1221,18 @@ class Component extends DCLogic {
               cartAdded: { ...s.cartAdded, [k]: true },
               codeQty: { ...s.codeQty, [k]: (s.codeQty[k] || 0) + s.specQty },
               codeItemOptions: { ...s.codeItemOptions, [k]: options },
+              discountCartItems: [
+                ...s.discountCartItems,
+                ...Array.from({ length: s.specQty }, (_, index) => ({
+                  id: 'discount-cart-' + (s.nextDiscountCartId + index),
+                  key: k,
+                  name: specItem.name,
+                  price: specItem.price,
+                  selected: true,
+                  options,
+                })),
+              ],
+              nextDiscountCartId: s.nextDiscountCartId + s.specQty,
               codeInitialized: true,
               showSpecModal: false, specKey: null, specSel: {},
             }));
@@ -1222,37 +1241,30 @@ class Component extends DCLogic {
       })(),
       showRemoveDiscountModal: this.state.showRemoveDiscountModal,
       removeDiscountName: (() => {
-        const item = this.codeItems.find(it => it.key === this.state.removeDiscountKey);
+        const item = this.state.discountCartItems.find(it => it.id === this.state.removeDiscountId);
         return item ? item.name : '此品項';
       })(),
-      cancelRemoveDiscount: () => this.setState({ showRemoveDiscountModal: false, removeDiscountKey: null }),
+      cancelRemoveDiscount: () => this.setState({ showRemoveDiscountModal: false, removeDiscountId: null }),
       confirmRemoveDiscount: () => {
-        const key = this.state.removeDiscountKey;
-        if (!key) return;
+        const id = this.state.removeDiscountId;
+        if (!id) return;
         this.setState(s => {
-          const q = { ...s.codeQty };
-          q[key] = Math.max(0, (q[key] || 0) - 1);
-          const ca = { ...s.cartAdded };
-          const co = { ...s.codeItemOptions };
-          if (q[key] === 0) {
-            delete ca[key];
-            delete co[key];
-            if (key === 'cheesepot') {
-              try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
-            }
-          }
+          const rows = s.discountCartItems.filter(item => item.id !== id);
+          const q = rows.reduce((qty, row) => {
+            if (row.selected) qty[row.key] = (qty[row.key] || 0) + 1;
+            return qty;
+          }, { pork: 0, bacon: 0, cheesepot: 0 });
           return {
             codeQty: q,
-            cartAdded: ca,
-            codeItemOptions: co,
+            discountCartItems: rows,
             showRemoveDiscountModal: false,
-            removeDiscountKey: null,
+            removeDiscountId: null,
           };
         });
       },
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
-      codeItemRows, codeDiscountText,
+      codeCartRows, availableCodeItemRows, hasAvailableCodeItems: availableCodeItemRows.length > 0, codeDiscountText,
       showCodeTab, showVoucherTab, showDiscountTabs,
       voucherTabStyle: tabBtn(showVoucherTab),
       codeTabStyle: tabBtn(showCodeTab),
