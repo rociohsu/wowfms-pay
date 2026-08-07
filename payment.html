@@ -338,7 +338,7 @@
     </div>
 
     <!-- 門市資訊 -->
-    <div style="background: #FFFFFF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; padding-top: 12px; padding-bottom: 12px">
+    <div style="order:-1;background: #FFFFFF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; padding-top: 12px; padding-bottom: 12px">
       <div style="font-size:16px;font-weight:500;">石二鍋-中壢家樂福中山東店</div>
       <div style="display:flex;align-items:center;gap:8px;font-size:16px;">
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.8581 13.4439L14.2122 11.8814C14.0565 11.815 13.8834 11.801 13.719 11.8415C13.5546 11.882 13.4078 11.9748 13.3007 12.106L11.6861 14.0787C9.15215 12.8839 7.11287 10.8446 5.91812 8.31065L7.89081 6.69604C8.02222 6.58916 8.11523 6.44238 8.15576 6.27792C8.19629 6.11346 8.18213 5.94027 8.11543 5.78457L6.5529 2.13867C6.47969 1.97083 6.35022 1.8338 6.1868 1.7512C6.02338 1.66859 5.83626 1.6456 5.6577 1.68619L2.27223 2.46745C2.10008 2.5072 1.94649 2.60413 1.83652 2.74242C1.72656 2.8807 1.66671 3.05218 1.66675 3.22886C1.66675 11.5786 8.43444 18.3333 16.7712 18.3333C16.9479 18.3334 17.1195 18.2736 17.2578 18.1636C17.3962 18.0536 17.4931 17.9 17.5329 17.7278L18.3142 14.3423C18.3545 14.1629 18.331 13.975 18.2478 13.8111C18.1645 13.6471 18.0267 13.5172 17.8581 13.4439Z" fill="#DF0730"></path></svg>
@@ -708,7 +708,7 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: false, orderOpen: false, menuOpen: false, pay: 'online', invoice: 'mobile',
+    itemsOpen: true, orderOpen: true, menuOpen: false, pay: 'online', invoice: 'mobile',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
