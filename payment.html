@@ -875,12 +875,34 @@ class Component extends DCLogic {
 
   // 清除因使用優惠碼而加入購物車的品項
   clearCodeCartItems() {
+    try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
     this.setState(s => ({
       codeQty: { pork: 0, bacon: 0, cheesepot: 1 },
       discountCartItems: s.discountCartItems.filter(item => item.id === 'discount-cart-1' || item.id === 'discount-cart-2'),
       cartAdded: {},
       codeItemOptions: {},
       codeApplied: false,
+      nextDiscountCartId: 3,
+    }));
+  }
+
+  leaveIncompleteCodeCampaign() {
+    try { localStorage.removeItem('codeSpecItem'); } catch (e) {}
+    this.setState(s => ({
+      showCodeModal: false,
+      showCodeLeaveModal: false,
+      codeInteracted: false,
+      codeToast: '',
+      codeApplied: false,
+      codeQty: { pork: 0, bacon: 0, cheesepot: 1 },
+      discountCartItems: s.discountCartItems.filter(item => item.id === 'discount-cart-1' || item.id === 'discount-cart-2'),
+      cartAdded: {},
+      codeItemOptions: {},
+      nextDiscountCartId: 3,
+      showSpecModal: false,
+      specKey: null,
+      specSel: {},
+      specQty: 1,
     }));
   }
 
@@ -937,7 +959,7 @@ class Component extends DCLogic {
       price: '$' + it.price,
       options: it.options && it.options.length ? it.options : [{ label: '單品', detail: '' }],
     }));
-    const campaignCartItems = this.state.discountCartItems.filter(row => row.id !== 'discount-cart-1' && row.id !== 'discount-cart-2' && (row.key === 'pork' || row.key === 'bacon'));
+    const campaignCartItems = this.state.discountCartItems.filter(row => row.addedByCampaign);
     const campaignQualified = 125 + campaignCartItems.reduce((sum, row) => sum + row.price, 0) >= 500 && campaignCartItems.length >= 1;
     if (this.state.codeApplied && this.state.codeInput.trim().toLowerCase() === 'tofu' && campaignQualified) {
       items.push({ idx: items.length + 1, name: '鴨血豆腐', price: '$39', options: [] });
@@ -1043,7 +1065,7 @@ class Component extends DCLogic {
       }),
       onRemove: () => this.setState({ showRemoveDiscountModal: true, removeDiscountId: it.id }),
     }));
-    const campaignItems = this.state.discountCartItems.filter(row => row.id !== 'discount-cart-1' && row.id !== 'discount-cart-2' && (row.key === 'pork' || row.key === 'bacon'));
+    const campaignItems = this.state.discountCartItems.filter(row => row.addedByCampaign);
     const campaignSpend = 125 + campaignItems.reduce((sum, row) => sum + row.price, 0);
     const campaignProductCount = campaignItems.length;
     const campaignComplete = campaignSpend >= 500 && campaignProductCount >= 1;
@@ -1312,6 +1334,7 @@ class Component extends DCLogic {
                   name: specItem.name,
                   price: specItem.price,
                   selected: true,
+                  addedByCampaign: true,
                   options,
                 })),
               ],
@@ -1376,7 +1399,7 @@ class Component extends DCLogic {
         this.setState({ showCodeModal: false, showCodeLeaveModal: false });
       },
       showCodeLeaveModal: this.state.showCodeLeaveModal,
-      confirmLeaveCode: () => this.setState({ showCodeModal: false, showCodeLeaveModal: false, codeInteracted: false, codeToast: '' }),
+      confirmLeaveCode: () => this.leaveIncompleteCodeCampaign(),
       continueCodeOrder: () => this.setState({ showCodeLeaveModal: false }),
       codeInputStyle: {
         width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', fontSize: '16px',
