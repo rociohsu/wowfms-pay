@@ -103,7 +103,7 @@
           <div style="height:1px;background:#EEEEEE;margin:10px 0 24px;"></div>
         </sc-if>
         <sc-if value="{{ funIn }}" hint-placeholder-val="">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;"><span style="font-size:20px;font-weight:700;color:#111111;">瘋美食會員</span><button onClick="{{ onFunLogout }}" aria-label="登出瘋美食會員" style="border:none;background:none;padding:2px;cursor:pointer;display:flex;"><img src="assets/icons/Icon_logout.svg" width="30" height="30" alt=""></button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;"><span style="font-size:20px;font-weight:700;color:#111111;">瘋美食會員(呃四)</span><button onClick="{{ onFunLogout }}" aria-label="登出瘋美食會員" style="border:none;background:none;padding:2px;cursor:pointer;display:flex;"><img src="assets/icons/Icon_logout.svg" width="30" height="30" alt=""></button></div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="assets/icons/Icon_point.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">瘋點數 <b style="color:#DE052E;">1,000</b> 點</span></div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="assets/icons/Icon_coupon.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">優惠券 <b style="color:#DE052E;">1</b> 張</span></div>
           <div style="height:52px;display:flex;align-items:center;gap:16px;"><img src="assets/icons/Icon_gift-voucher.svg" width="30" height="30" alt=""><span style="font-size:18px;color:#222222;">電子禮券 <b>0</b> 張</span></div>
@@ -129,25 +129,40 @@
       <sc-if value="{{ orderOpen }}" hint-placeholder-val="{{ true }}">
         <div style="margin-top:16px;display:flex;flex-direction:column;gap:16px;">
           <div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:16px;font-weight:500;color:#222222;">
+              <img src="assets/icons/Icon_home.svg" width="20" height="20" alt="店家">
+              <span>石二鍋-中壢家樂福中山東店</span>
+            </div>
+            <div style="margin-top:5px;padding-left:27px;font-size:14px;color:#8A8A8A;">新北市新莊區新北大道三段5號</div>
+            <div style="display:flex;align-items:center;gap:18px;margin-top:7px;padding-left:27px;">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=新北市新莊區新北大道三段5號" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:5px;color:#666666;font-size:14px;text-decoration:underline;">
+                <img src="assets/icons/Icon_map.svg" width="20" height="20" alt="地圖"><span>地圖</span>
+              </a>
+              <a href="tel:0277515336" style="display:flex;align-items:center;gap:5px;color:#666666;font-size:14px;text-decoration:underline;">
+                <img src="assets/icons/Icon_phone.svg" width="20" height="20" alt="電話"><span>電話</span>
+              </a>
+            </div>
+          </div>
+          <div>
             <div style="display:flex;align-items:center;gap:6px;font-size:14px;">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.58025 2.94535C9.60429 3.08305 10.064 5.7139 10.064 6.71878C10.064 8.251 9.22868 9.34377 7.99371 9.78323L8.38133 16.7588C8.40236 17.1602 8.07484 17.5 7.66017 17.5H5.7371C5.32544 17.5 4.99491 17.1631 5.01594 16.7588L5.40356 9.78323C4.16558 9.34377 3.33325 8.24807 3.33325 6.71878C3.33325 5.71097 3.79299 3.08305 3.81703 2.94535C3.91318 2.35063 5.1782 2.34184 5.25633 2.97758V7.11429C5.29539 7.2139 5.71005 7.20804 5.7371 7.11429C5.77917 6.37308 5.97448 3.03617 5.97748 2.96C6.07664 2.35063 7.32063 2.35063 7.41679 2.96C7.42279 3.0391 7.6151 6.37308 7.65717 7.11429C7.68421 7.20804 8.10188 7.2139 8.13794 7.11429V2.97758C8.21606 2.34477 9.48409 2.35063 9.58025 2.94535ZM13.162 11.3154L12.7113 16.7383C12.6752 17.1484 13.0087 17.5 13.4294 17.5H15.1121C15.5117 17.5 15.8333 17.1865 15.8333 16.7969V3.20316C15.8333 2.81645 15.5117 2.50004 15.1121 2.50004C12.6331 2.50004 8.45945 7.72952 13.162 11.3154Z" fill="#DF0730"></path></svg>
+              <img src="assets/icons/Icon_locate.svg" width="20" height="20" alt="取餐時間">
+              <span style="color:#5B5B5B;">預計取餐時間</span>
+            </div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">YYYY/MM/DD HH:MM</div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;">
+              <img src="assets/icons/Icon_food.svg" width="20" height="20" alt="取餐方式">
               <span style="color:#5B5B5B;">取餐方式</span>
             </div>
-            <div style="font-size:16px;margin-top:4px;padding-left:23px;">內用</div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">預約自取</div>
           </div>
           <div>
             <div style="display:flex;align-items:center;gap:6px;font-size:14px;">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.25089 5.83335C6.25089 4.87307 6.79332 4.04299 7.59021 3.59052V10H9.19739V3.22919H10.8046V10H12.4118V3.59052C13.2086 4.04299 13.7511 4.87307 13.7511 5.83335V10H15.3582V5.83335C15.3582 3.53192 13.4397 1.66669 11.0724 1.66669H8.92953C6.56229 1.66669 4.64371 3.53192 4.64371 5.83335V10H6.25089V5.83335ZM17.4442 12.7962L17.086 11.7546C16.9386 11.3281 16.5301 11.0417 16.0681 11.0417H3.93053C3.46846 11.0417 3.05997 11.3281 2.91265 11.7546L2.55438 12.7962C2.3267 13.4701 2.84233 14.1667 3.57226 14.1667V17.8125C3.57226 18.099 3.81334 18.3334 4.10799 18.3334H5.17944C5.47409 18.3334 5.71517 18.099 5.71517 17.8125V14.1667H14.2868V17.8125C14.2868 18.099 14.5279 18.3334 14.8225 18.3334H15.894C16.1886 18.3334 16.4297 18.099 16.4297 17.8125V14.1667C17.1596 14.1667 17.6753 13.4701 17.4442 12.7962Z" fill="#DF0730"></path></svg>
-              <span style="color:#5B5B5B;">桌號</span>
-            </div>
-            <div style="font-size:16px;margin-top:4px;padding-left:23px;">25</div>
-          </div>
-          <div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:14px;">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.64282 3.39288H15.3565" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></path><path d="M17.5 5.53571C17.5 4.96739 17.2743 4.42234 16.8724 4.02048C16.4705 3.61862 15.9255 3.39285 15.3572 3.39285" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.49997 5.53571C2.49997 4.96739 2.72573 4.42234 3.1276 4.02048C3.52946 3.61862 4.0745 3.39285 4.64282 3.39285" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.49997 13.0357C2.49997 13.3171 2.5554 13.5958 2.66308 13.8557C2.77077 14.1157 2.92861 14.3519 3.1276 14.5509C3.32658 14.7499 3.56281 14.9078 3.82279 15.0154C4.08277 15.1231 4.36142 15.1786 4.64282 15.1786" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.5 13.0357C17.5 13.604 17.2743 14.1491 16.8724 14.5509C16.4705 14.9528 15.9255 15.1786 15.3572 15.1786" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.5 5.53571V13.0357" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.5 5.53571V13.0357" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4.64233 15.1785H8.07091L9.99948 17.8571L11.928 15.1785H15.3566" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path><line x1="6.54696" y1="7.49998" x2="13.4517" y2="7.49998" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></line><line x1="6.54696" y1="10.7143" x2="13.4517" y2="10.7143" stroke="#DF0730" stroke-width="1.66667" stroke-linecap="round"></line></svg>
+              <img src="assets/icons/Icon_memo.svg" width="20" height="20" alt="訂單備註">
               <span style="color:#5B5B5B;">訂單備註</span>
             </div>
-            <div style="font-size:16px;margin-top:4px;padding-left:23px;">備註內容</div>
+            <div style="font-size:16px;margin-top:4px;padding-left:24px;">備註內容</div>
           </div>
         </div>
       </sc-if>
@@ -264,7 +279,7 @@
 
     <!-- 付款方式 -->
     <div style="background: #FFFFFF; border-radius: 12px; padding: 16px; padding-top: 12px; padding-bottom: 12px">
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <span style="font-size:18px;font-weight:700;">付款方式</span>
         <span style="background:#FEF2F2;color:#DE052E;font-size:13px;padding:2px 8px;border-radius:6px;">必選</span>
       </div>
@@ -291,11 +306,15 @@
               </button>
         </sc-for>
       </div>
+      <div style="margin-top:18px;font-size:14px;line-height:1.55;color:#8A8A8A;">
+        <div style="font-weight:700;color:#222222;">確認付款後，我們將立即為您現做美味餐點。</div>
+        <div>進入備餐程序後恕無法取消或更改訂單，敬請見諒。</div>
+      </div>
     </div>
 
     <!-- 發票資訊 -->
     <div style="background: #FFFFFF; border-radius: 12px; padding: 16px; padding-top: 12px; padding-bottom: 12px">
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <span style="font-size:18px;font-weight:700;">發票資訊</span>
         <sc-if value="{{ showPayment }}" hint-placeholder-val="{{ true }}">
           <span style="background:#FEF2F2;color:#DE052E;font-size:13px;padding:2px 8px;border-radius:6px;">必選</span>
@@ -337,16 +356,31 @@
       </sc-if>
     </div>
 
-    <!-- 門市資訊 -->
-    <div style="order:-1;background: #FFFFFF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; padding-top: 12px; padding-bottom: 12px">
-      <div style="font-size:16px;font-weight:500;">石二鍋-中壢家樂福中山東店</div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:16px;">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.8581 13.4439L14.2122 11.8814C14.0565 11.815 13.8834 11.801 13.719 11.8415C13.5546 11.882 13.4078 11.9748 13.3007 12.106L11.6861 14.0787C9.15215 12.8839 7.11287 10.8446 5.91812 8.31065L7.89081 6.69604C8.02222 6.58916 8.11523 6.44238 8.15576 6.27792C8.19629 6.11346 8.18213 5.94027 8.11543 5.78457L6.5529 2.13867C6.47969 1.97083 6.35022 1.8338 6.1868 1.7512C6.02338 1.66859 5.83626 1.6456 5.6577 1.68619L2.27223 2.46745C2.10008 2.5072 1.94649 2.60413 1.83652 2.74242C1.72656 2.8807 1.66671 3.05218 1.66675 3.22886C1.66675 11.5786 8.43444 18.3333 16.7712 18.3333C16.9479 18.3334 17.1195 18.2736 17.2578 18.1636C17.3962 18.0536 17.4931 17.9 17.5329 17.7278L18.3142 14.3423C18.3545 14.1629 18.331 13.975 18.2478 13.8111C18.1645 13.6471 18.0267 13.5172 17.8581 13.4439Z" fill="#DF0730"></path></svg>
-        <span>0277515336</span>
+    <!-- 會員資訊 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <span style="font-size:18px;font-weight:700;color:#222222;">會員資訊</span>
+        <span style="background:#FEF2F2;color:#DE052E;font-size:13px;padding:3px 9px;border-radius:6px;">必選</span>
       </div>
-      <div style="display:flex;align-items:flex-start;gap:8px;font-size:16px;">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-top:2px;"><path d="M9.31478 17.997C4.26971 11.1403 3.33325 10.4366 3.33325 7.91662C3.33325 4.46483 6.31801 1.66663 9.99992 1.66663C13.6818 1.66663 16.6666 4.46483 16.6666 7.91662C16.6666 10.4366 15.7301 11.1403 10.6851 17.997C10.354 18.4454 9.64582 18.4454 9.31478 17.997ZM9.99992 10.5208C11.534 10.5208 12.7777 9.35487 12.7777 7.91662C12.7777 6.47838 11.534 5.31246 9.99992 5.31246C8.46579 5.31246 7.22214 6.47838 7.22214 7.91662C7.22214 9.35487 8.46579 10.5208 9.99992 10.5208Z" fill="#DF0730"></path></svg>
-        <span>新北市新莊區新北大道三段5號</span>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+        <div style="height:52px;border:1px solid #C8C9C9;border-radius:12px;padding:0 16px;display:flex;align-items:center;gap:10px;background:#FFFFFF;">
+          <img src="assets/icons/Icon_user_red.svg" width="21" height="21" alt="會員姓名">
+          <span style="font-size:16px;color:#3E3E3E;">阿薰(Carol)</span>
+        </div>
+        <label style="height:52px;border:1px solid #C8C9C9;border-radius:12px;padding:0 16px;display:flex;align-items:center;gap:10px;background:#FFFFFF;">
+          <img src="assets/icons/Icon_phone.svg" width="21" height="21" alt="手機號碼">
+          <input type="tel" inputmode="tel" value="{{ memberPhone }}" onChange="{{ onMemberPhoneChange }}" onInput="{{ onMemberPhoneChange }}" aria-label="手機號碼" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:16px;color:#3E3E3E;padding:0;">
+        </label>
+      </div>
+    </div>
+
+    <!-- 付款方式說明 -->
+    <div style="background:#FFFFFF;border-radius:12px;padding:16px;">
+      <div style="font-size:18px;font-weight:700;color:#222222;">付款方式說明</div>
+      <div style="margin-top:12px;font-size:14px;line-height:1.55;color:#3E3E3E;">
+        <div>※線上付款不支援核銷紙本禮券、商品卡、LINE優惠券核銷。</div>
+        <div>※優惠碼僅適用於該筆訂單消費單鍋，不適用多鍋訂單。</div>
+        <div>※如單筆訂單欲使用多鍋優惠，請選擇現場結帳。</div>
       </div>
     </div>
 
@@ -360,6 +394,28 @@
       <span style="color: #FFFFFF; font-size: 20px; font-weight: 500; border: 1.5px solid rgba(255,255,255,0.85); border-radius: 12px; padding: 8px 20px; padding-top: 1px; padding-bottom: 1px; height: 36px; padding-left: 15px; padding-right: 15px">{{ ctaText }}</span>
     </div>
   </div>
+
+  <!-- 付款方式說明 Popup -->
+  <sc-if value="{{ showPaymentInfoModal }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;padding:16px;">
+      <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;max-width:350px;background:#FFFFFF;border-radius:12px;overflow:hidden;font-family:'Noto Sans TC','Roboto',sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.22);">
+        <div style="height:52px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #EEEEEE;font-size:19px;font-weight:700;color:#111111;">付款方式說明</div>
+        <div style="padding:8px 12px 12px;">
+          <div style="padding:12px;font-size:15px;line-height:1.45;color:#222222;">
+            <div>※線上付款不支援核銷紙本禮券、商品卡、LINE優惠券核銷。</div>
+            <div>※優惠碼僅適用於該筆訂單消費單鍋；不適用多鍋訂單。</div>
+            <div>※如單筆訂單欲使用多鍋優惠，請選擇現場結帳。</div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button onClick="{{ selectInfoOnsite }}" style="height:42px;flex:1;border:1.5px solid #DE052E;border-radius:9px;background:#FFFFFF;color:#DE052E;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;">現場付款</button>
+            <sc-if value="{{ onlinePaymentAvailable }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ selectInfoOnline }}" style="height:42px;flex:1;border:1.5px solid #DE052E;border-radius:9px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;">線上支付</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
 
   <!-- 瘋點數折抵 Popup -->
   <sc-if value="{{ showPointsModal }}" hint-placeholder-val="">
@@ -403,7 +459,7 @@
     </div>
   </sc-if>
 
-  <!-- 折扣碼 Popup -->
+  <!-- 優惠碼 Popup -->
   <sc-if value="{{ showCodeModal }}" hint-placeholder-val="">
     <div onClick="{{ closeCodeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;">
       <div onClick="{{ stopModal }}" class="sheet-modal" style="width:100%;height:92dvh;max-height:92dvh;background:#FFFFFF;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;position:relative;font-family:'Noto Sans TC','Roboto',sans-serif;">
@@ -417,64 +473,48 @@
         <div style="flex:1;overflow-y:auto;padding:18px 16px;">
           <sc-if value="{{ showDiscountTabs }}" hint-placeholder-val="">
             <div style="display:flex;border-bottom:1px solid #F6F6F6;margin-bottom:18px;">
-              <button onClick="{{ selectCodeTab }}" style="{{ codeTabStyle }}">折扣碼</button>
+              <button onClick="{{ selectCodeTab }}" style="{{ codeTabStyle }}">優惠碼</button>
               <button onClick="{{ selectVoucherTab }}" style="{{ voucherTabStyle }}">優惠券</button>
             </div>
           </sc-if>
 
           <sc-if value="{{ showCodeTab }}" hint-placeholder-val="{{ true }}">
-          <input type="text" value="{{ codeInput }}" placeholder="請輸入折扣碼" onChange="{{ onCodeInput }}" onInput="{{ onCodeInput }}" style="{{ codeInputStyle }}">
+          <input type="text" value="{{ codeInput }}" placeholder="請輸入優惠碼" onChange="{{ onCodeInput }}" onInput="{{ onCodeInput }}" style="{{ codeInputStyle }}">
 
           <sc-if value="{{ codeValid }}" hint-placeholder-val="">
-            <div style="margin-top:18px;text-align:center;color:#DE052E;font-size:16px;font-weight:500;">XRFREE折扣碼最多可折抵500元</div>
-
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;">
-              <span style="font-size:17px;font-weight:700;color:#222222;">已在購物車</span>
-              <span style="font-size:14px;color:#8A8A8A;">是否折抵</span>
+            <div style="margin-top:18px;color:#DE052E;font-size:17px;font-weight:700;">指定商品_買鍋送鴨血豆腐</div>
+            <div style="margin-top:14px;font-size:16px;font-weight:700;color:#222222;">需滿足條件</div>
+            <div style="margin-top:10px;padding:14px;border:1px solid #E5E5E5;border-radius:12px;">
+              <div style="display:flex;justify-content:space-between;gap:12px;font-size:15px;font-weight:500;"><span>購物車滿 NT$500</span><span><b style="color:#DE052E;">{{ campaignSpend }}</b> / 500</span></div>
+              <div style="margin-top:8px;color:#5B5B5B;font-size:14px;">目前 <b style="color:#DE052E;">NT${{ campaignSpend }}</b>，還差 <b style="color:#DE052E;">NT${{ campaignRemaining }}</b></div>
+              <div style="height:4px;margin-top:14px;border-radius:99px;background:#E5E5E5;overflow:hidden;"><div style="{{ campaignProgressStyle }}"></div></div>
+              <div style="display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid #EEEEEE;font-size:15px;font-weight:500;"><span>購買指定商品 1 件</span><span><b style="color:#DE052E;">{{ campaignProductCount }}</b> / 1 件</span></div>
             </div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;">
-              <sc-for list="{{ codeCartRows }}" as="it" hint-placeholder-count="2">
-                <div style="padding:12px 0;border-bottom:1px solid #EEEEEE;">
-                  <div style="display:flex;align-items:flex-start;gap:12px;">
-                    <div style="flex:1;min-width:0;">
-                      <div style="font-size:16px;font-weight:500;color:#333333;">{{ it.name }}</div>
-                      <sc-for list="{{ it.options }}" as="opt" hint-placeholder-count="3">
-                        <div style="margin-top:5px;padding-left:8px;font-size:13px;line-height:1.45;color:#8A8A8A;">・{{ opt.label }}<sc-if value="{{ opt.detail }}" hint-placeholder-val=""><br><span style="padding-left:11px;">{{ opt.detail }}</span></sc-if></div>
-                      </sc-for>
+
+            <div style="margin-top:20px;">
+              <button onClick="{{ toggleCampaignProducts }}" style="width:100%;padding:0;border:none;background:none;display:flex;justify-content:space-between;align-items:center;font-family:inherit;font-size:17px;font-weight:700;color:#222222;cursor:pointer;"><span>需加入指定商品</span><img src="{{ campaignProductsArrowIcon }}" width="20" height="20" alt="展開或收合"></button>
+              <sc-if value="{{ campaignProductsOpen }}" hint-placeholder-val="">
+                <div style="margin-top:8px;padding:0 14px;border:1px solid #E5E5E5;border-radius:12px;">
+                  <sc-for list="{{ availableCodeItemRows }}" as="it" hint-placeholder-count="2">
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #EEEEEE;">
+                      <div style="flex:1;min-width:0;"><div style="font-size:16px;color:#333333;">{{ it.name }}</div><div style="margin-top:4px;font-size:15px;color:#333333;">NT${{ it.price }}</div></div>
+                      <button onClick="{{ it.onPlus }}" aria-label="加入購物車" style="{{ it.plusStyle }}">＋ 加入購物車</button>
                     </div>
-                    <button onClick="{{ it.onToggle }}" aria-label="選擇是否折抵" style="{{ it.checkStyle }}">
-                      <sc-if value="{{ it.selected }}" hint-placeholder-val=""><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></sc-if>
-                    </button>
-                  </div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                    <span style="font-size:16px;font-weight:500;color:#222222;">NT${{ it.price }}</span>
-                    <button onClick="{{ it.onRemove }}" style="height:28px;padding:0 7px;border:1px solid #999999;border-radius:5px;background:#FFFFFF;color:#777777;font-family:inherit;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;"><img src="assets/icons/Icon_delete.svg" width="15" height="15" alt=""><span>移除</span></button>
-                  </div>
+                  </sc-for>
                 </div>
-              </sc-for>
+              </sc-if>
             </div>
 
-            <sc-if value="{{ hasAvailableCodeItems }}" hint-placeholder-val="">
-              <div style="margin-top:22px;font-size:17px;font-weight:700;color:#222222;">可加入折抵</div>
-              <div style="margin-top:8px;display:flex;flex-direction:column;">
-                <sc-for list="{{ availableCodeItemRows }}" as="it" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #EEEEEE;">
-                    <div style="flex:1;min-width:0;">
-                      <div style="font-size:16px;color:#333333;">{{ it.name }}</div>
-                      <div style="margin-top:5px;font-size:16px;font-weight:500;color:#222222;">NT${{ it.price }}</div>
-                    </div>
-                    <button onClick="{{ it.onPlus }}" aria-label="加入商品並折抵" style="{{ it.plusStyle }}">＋</button>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
+            <div style="margin-top:20px;">
+              <button onClick="{{ toggleCampaignReward }}" style="width:100%;padding:0;border:none;background:none;display:flex;justify-content:space-between;align-items:center;font-family:inherit;font-size:17px;font-weight:700;color:#222222;cursor:pointer;"><span>可享優惠</span><img src="{{ campaignRewardArrowIcon }}" width="20" height="20" alt="展開或收合"></button>
+              <sc-if value="{{ campaignRewardOpen }}" hint-placeholder-val="">
+                <div style="margin-top:8px;padding:14px;border:1px solid #E5E5E5;border-radius:12px;opacity:{{ campaignRewardOpacity }};"><div style="font-size:16px;color:#333333;">鴨血豆腐</div><div style="margin-top:4px;color:#DE052E;font-size:15px;font-weight:500;">贈品 x1</div></div>
+              </sc-if>
+            </div>
 
-            <div style="margin-top:22px;">
-              <div style="color:#3E3E3E;font-size:16px;font-weight:700;">注意事項</div>
-              <div style="margin-top:8px;font-size:14px;color:#5B5B5B;line-height:1.7;">
-                <div>1.持券人可至本券指定適用品牌門店抵用</div>
-                <div>2.本券可兌換券上所載之指定商品,恕不得自行要求更換其它商品</div>
-              </div>
+            <div style="margin-top:20px;">
+              <button onClick="{{ toggleCampaignNotes }}" style="width:100%;padding:0;border:none;background:none;display:flex;justify-content:space-between;align-items:center;font-family:inherit;font-size:17px;font-weight:700;color:#222222;cursor:pointer;"><span>注意事項</span><img src="{{ campaignNotesArrowIcon }}" width="20" height="20" alt="展開或收合"></button>
+              <sc-if value="{{ campaignNotesOpen }}" hint-placeholder-val=""><div style="margin-top:8px;font-size:13px;color:#5B5B5B;line-height:1.7;"><div>1.持券人可至本券指定適用品牌門店使用</div><div>2.本券可兌換券上所載之指定商品，恕不得自行要求更換其他商品</div></div></sc-if>
             </div>
           </sc-if>
           </sc-if>
@@ -518,6 +558,22 @@
         </div>
       </div>
     </div>
+  </sc-if>
+
+  <sc-if value="{{ showCodeLeaveModal }}" hint-placeholder-val="">
+    <div style="position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div onClick="{{ stopModal }}" style="width:100%;max-width:342px;background:#FFFFFF;border-radius:16px;padding:24px 20px 18px;box-shadow:0 8px 28px rgba(0,0,0,.18);font-family:'Noto Sans TC','Roboto',sans-serif;">
+        <div style="font-size:19px;font-weight:700;color:#222222;text-align:center;">尚未達成優惠條件，是否確認離開?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;">
+          <button onClick="{{ confirmLeaveCode }}" style="height:46px;border:1px solid #DE052E;border-radius:12px;background:#FFFFFF;color:#DE052E;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">離開</button>
+          <button onClick="{{ continueCodeOrder }}" style="height:46px;border:1px solid #DE052E;border-radius:12px;background:#DE052E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;">繼續加點</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ codeToast }}" hint-placeholder-val="">
+    <div style="position:fixed;left:50%;bottom:86px;z-index:120;transform:translateX(-50%);max-width:calc(100% - 40px);padding:10px 16px;border-radius:8px;background:rgba(34,34,34,.9);color:#FFFFFF;font-size:14px;white-space:nowrap;">{{ codeToast }}</div>
   </sc-if>
 
   <!-- 移除折扣品項確認 Popup -->
@@ -708,11 +764,13 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    itemsOpen: true, orderOpen: true, menuOpen: false, pay: 'online', invoice: 'mobile',
+    itemsOpen: true, orderOpen: true, menuOpen: false, pay: 'onsite', invoice: 'mobile',
+    showPaymentInfoModal: true, onlinePaymentAvailable: true, memberPhone: '0900000000',
     fields: { mobile: '', citizen: '', companyId: '', companyTitle: '', donate: '' },
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
-    showCodeModal: false, codeInput: 'XRFREE', codeQty: { pork: 0, bacon: 0, cheesepot: 1 }, codeInitialized: true,
+    showCodeModal: false, codeInput: 'tofu', codeQty: { pork: 0, bacon: 0, cheesepot: 1 }, codeInitialized: true,
+    codeInteracted: false, codeToast: '', showCodeLeaveModal: false, campaignProductsOpen: true, campaignRewardOpen: true, campaignNotesOpen: true,
     discountCartItems: [
       { id: 'discount-cart-1', key: 'cheesepot', name: '起司牛奶鍋', price: 250, selected: true, options: [
         { label: '肉好好 (+NT$ 20)', detail: '' },
@@ -741,7 +799,7 @@ class Component extends DCLogic {
   codeDiscount = 50;
   voucherValue = 100;
   codeItems = [
-    { key: 'pork', name: '豬肉', price: 30, desc: '精選豬肉片，適合搭配各式湯底。' },
+    { key: 'pork', name: '澳洲板腱牛', price: 180, desc: '精選澳洲板腱牛，肉質鮮嫩。' },
     { key: 'bacon', name: '大腸臭臭鍋', price: 200, desc: '經典大腸臭臭鍋套餐，可依喜好選擇主餐、肉品、副餐、加購品與飲料。' },
     { key: 'cheesepot', name: '起司牛奶鍋', price: 250, desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。' },
   ];
@@ -815,11 +873,14 @@ class Component extends DCLogic {
   specBoxStyle(sel) { return { width: '22px', height: '22px', borderRadius: '6px', border: '1.5px solid ' + (sel ? '#DE052E' : '#C8C9C9'), background: sel ? '#DE052E' : '#FFFFFF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }; }
   specPriceLabel(add) { if (add === undefined || add === null) return ''; return '+NT$' + add; }
 
-  // 清除因使用折扣碼而加入購物車的品項
+  // 清除因使用優惠碼而加入購物車的品項
   clearCodeCartItems() {
     this.setState(s => ({
-      codeQty: { pork: 0, bacon: 0, cheesepot: 0 },
-      discountCartItems: s.discountCartItems.map(item => ({ ...item, selected: false })),
+      codeQty: { pork: 0, bacon: 0, cheesepot: 1 },
+      discountCartItems: s.discountCartItems.filter(item => item.id === 'discount-cart-1' || item.id === 'discount-cart-2'),
+      cartAdded: {},
+      codeItemOptions: {},
+      codeApplied: false,
     }));
   }
 
@@ -876,6 +937,11 @@ class Component extends DCLogic {
       price: '$' + it.price,
       options: it.options && it.options.length ? it.options : [{ label: '單品', detail: '' }],
     }));
+    const campaignCartItems = this.state.discountCartItems.filter(row => row.id !== 'discount-cart-1' && row.id !== 'discount-cart-2' && (row.key === 'pork' || row.key === 'bacon'));
+    const campaignQualified = 125 + campaignCartItems.reduce((sum, row) => sum + row.price, 0) >= 500 && campaignCartItems.length >= 1;
+    if (this.state.codeApplied && this.state.codeInput.trim().toLowerCase() === 'tofu' && campaignQualified) {
+      items.push({ idx: items.length + 1, name: '鴨血豆腐', price: '$39', options: [] });
+    }
 
     const radio = (selected) => ({
       ring: selected ? '#DE052E' : '#C8C9C9',
@@ -894,8 +960,8 @@ class Component extends DCLogic {
       transition: 'left .2s', boxShadow: '0 1px 2px rgba(0,0,0,.2)',
     });
     // 折抵金額計算
-    const MEMBER_SUBTOTAL = this.state.discountCartItems.reduce((sum, it) => sum + it.price, 0);
-    const codeValid0 = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
+    const CART_SUBTOTAL = this.state.discountCartItems.reduce((sum, it) => sum + it.price, 0);
+    const codeValid0 = this.state.codeInput.trim().toLowerCase() === 'tofu';
     const codeSub = this.state.discountCartItems.filter(it => it.selected).reduce((sum, it) => sum + it.price, 0);
     const onlineEnabled = this.state.pay === 'online' || this.state.pay === 'funpay';
     const onsiteEnabled = this.state.pay === 'onsite';
@@ -903,7 +969,10 @@ class Component extends DCLogic {
     const pointsApplied = this.state.usePoints ? this.state.pointsApplied : 0; // 保留顯示用
     const pointsAmt = (onlineEnabled && this.state.usePoints) ? this.state.pointsApplied : 0; // 實際折抵
     const codeApplied = this.state.codeApplied && codeValid0;
-    const codeAmt = codeApplied ? Math.min(codeSub, 500) : 0;
+    const codeAmt = codeApplied ? 39 : 0;
+    // 優惠成立後，贈送品仍以原價列入餐點總計，再由優惠碼全額折抵。
+    const campaignGiftPrice = codeApplied ? 39 : 0;
+    const MEMBER_SUBTOTAL = CART_SUBTOTAL + campaignGiftPrice;
     const voucherApplied = this.state.voucherApplied && !!this.state.selectedVoucher;
     const voucherAmt = (onlineEnabled && voucherApplied) ? this.voucherValue : 0;
     const giftSel = this.state.selectedGifts || {};
@@ -924,10 +993,10 @@ class Component extends DCLogic {
       fontSize: '18px', fontWeight: '700',
       color: amt > 0 ? '#DE052E' : '#3E3E3E', flexShrink: 0,
     });
-    const discountLabel = (onsiteEnabled || !this.state.loggedIn) ? '使用折扣碼' : '使用折扣碼或優惠券';
+    const discountLabel = '使用優惠';
     const discountRowAmt = onsiteEnabled ? codeAmt : (codeAmt + voucherAmt);
     const discountSubLines = [];
-    if (codeApplied) discountSubLines.push({ label: '(折扣碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' }, cancel: true, onCancel: () => { this.clearCodeCartItems(); this.setState({ codeApplied: false }); } });
+    if (codeApplied) discountSubLines.push({ label: '(優惠碼:' + this.state.codeInput.trim().toUpperCase() + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' }, cancel: true, onCancel: () => { this.clearCodeCartItems(); this.setState({ codeApplied: false }); } });
     if (!onsiteEnabled && voucherApplied) { const v = this.vouchers.find(x => x.id === this.state.selectedVoucher); if (v) discountSubLines.push({ label: '(' + v.couponTitle + ')', amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } }); }
     const disabledRow = { ...pinkRow, opacity: 0.4, cursor: 'not-allowed' };
     const memberOffers = [
@@ -935,20 +1004,20 @@ class Component extends DCLogic {
         amtText: discountRowAmt > 0 ? '-' + discountRowAmt : '0', amtStyle: amtStyle(discountRowAmt),
         rowStyle: pinkRow,
         onToggle: () => this.setState({ showCodeModal: true, discountTab: 'code' }) },
-      { key: 'gift', label: '使用電子禮券', showP: false, note: '',
+      ...(onlineEnabled ? [{ key: 'gift', label: '使用電子禮券', showP: false, note: '',
         amtText: giftSelSum > 0 ? '-' + giftSelSum : '0', amtStyle: amtStyle(giftSelSum),
         subLines: giftVouchers.map(g => ({ label: g.label, amtText: '', amtStyle: { fontSize: '13px', color: '#9A9A9A' } })),
-        rowStyle: onlineEnabled ? pinkRow : disabledRow,
-        onToggle: onlineEnabled ? (() => this.setState({ showGiftModal: true })) : (() => {}) },
+        rowStyle: pinkRow,
+        onToggle: () => this.setState({ showGiftModal: true }) },
       { key: 'points', label: '使用瘋點數折抵', showP: true, note: '(使用優惠券/電子禮券/點數折抵僅限線上支付)', subLines: [],
         amtText: pointsApplied > 0 ? '-' + pointsApplied : '0', amtStyle: amtStyle(pointsApplied),
-        rowStyle: onlineEnabled ? pinkRow : disabledRow,
-        onToggle: onlineEnabled ? (() => this.setState({ showPointsModal: true, pointsInput: this.state.pointsApplied ? String(this.state.pointsApplied) : '' })) : (() => {}) },
+        rowStyle: pinkRow,
+        onToggle: () => this.setState({ showPointsModal: true, pointsInput: this.state.pointsApplied ? String(this.state.pointsApplied) : '' }) }] : []),
     ];
 
-    // 折扣碼 popup
-    const codeValid = this.state.codeInput.trim().toUpperCase() === 'XRFREE';
-    const codeTitle = (this.state.loggedIn && onlineEnabled) ? '折扣碼或優惠券' : (codeValid ? '折扣碼 ' + this.state.codeInput.trim().toUpperCase() : '折扣碼');
+    // 優惠碼 popup
+    const codeValid = this.state.codeInput.trim().toLowerCase() === 'tofu';
+    const codeTitle = '使用優惠';
     const selectedCodeCartItems = this.state.discountCartItems.filter(it => it.selected);
     const totalQty = selectedCodeCartItems.length;
     const pad2 = (n) => String(n).padStart(2, '0');
@@ -974,29 +1043,34 @@ class Component extends DCLogic {
       }),
       onRemove: () => this.setState({ showRemoveDiscountModal: true, removeDiscountId: it.id }),
     }));
+    const campaignItems = this.state.discountCartItems.filter(row => row.id !== 'discount-cart-1' && row.id !== 'discount-cart-2' && (row.key === 'pork' || row.key === 'bacon'));
+    const campaignSpend = 125 + campaignItems.reduce((sum, row) => sum + row.price, 0);
+    const campaignProductCount = campaignItems.length;
+    const campaignComplete = campaignSpend >= 500 && campaignProductCount >= 1;
+    const campaignRemaining = Math.max(0, 500 - campaignSpend);
     const availableCodeItemRows = this.codeItems
-      .filter(it => !this.state.discountCartItems.some(row => row.key === it.key))
+      .filter(it => (it.key === 'pork' || it.key === 'bacon') && !campaignItems.some(row => row.key === it.key))
       .map(it => {
-        const disabled = codeSubtotal >= 500 || codeSubtotal + it.price > 500;
+        const disabled = campaignComplete;
         return {
           ...it,
           plusStyle: {
-            width: '22px', height: '22px', border: 'none', borderRadius: '6px',
+            minWidth: '104px', height: '34px', padding: '0 10px', border: 'none', borderRadius: '8px',
             background: disabled ? '#9A9A9A' : '#DE052E', color: '#FFFFFF',
-            fontSize: '20px', lineHeight: '1', display: 'flex', alignItems: 'center',
+            fontFamily: 'inherit', fontSize: '14px', fontWeight: '500', lineHeight: '1', display: 'flex', alignItems: 'center',
             justifyContent: 'center', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.9 : 1,
           },
-          onPlus: disabled ? (() => {}) : (() => this.openSpecModal(it.key)),
+          onPlus: disabled ? (() => {}) : (() => { this.setState({ codeInteracted: true }); this.openSpecModal(it.key); }),
         };
       });
-    const codeConfirmValid = codeValid && totalQty >= 1;
+    const codeConfirmValid = codeValid && campaignComplete;
     const activeTab = (this.state.loggedIn && onlineEnabled) ? this.state.discountTab : 'code';
     const showCodeTab = activeTab === 'code';
     const showVoucherTab = this.state.loggedIn && onlineEnabled && activeTab === 'voucher';
     const showDiscountTabs = this.state.loggedIn && onlineEnabled;
     const tabDiscount = showVoucherTab
       ? (this.state.selectedVoucher ? this.voucherValue : 0)
-      : (codeConfirmValid ? codeDiscountAmt : 0);
+      : (codeConfirmValid ? 39 : 0);
     const codeDiscountText = '-$ ' + tabDiscount;
     const discountConfirmValid = showVoucherTab ? true : codeConfirmValid;
     const tabBtn = (active) => ({
@@ -1032,7 +1106,7 @@ class Component extends DCLogic {
         invoice: (m.key !== 'onsite' && s.invoice === 'paper') ? '' : s.invoice })) });
     const payMethods = [
       ...(this.state.loggedIn ? [{ key: 'funpay', label: '瘋pay' }] : []),
-      { key: 'online', label: '線上支付', hasIcons: true },
+      ...(this.state.onlinePaymentAvailable ? [{ key: 'online', label: '線上支付', hasIcons: true }] : []),
       { key: 'onsite', label: '現場付款', note: '公司用請現場付款，選擇紙本發票並輸入統一編號' },
     ].map(mkPay);
 
@@ -1088,6 +1162,15 @@ class Component extends DCLogic {
       orderChevronStyle: chevron(this.state.orderOpen),
       toggleItems: () => this.setState(s => ({ itemsOpen: !s.itemsOpen })),
       toggleOrder: () => this.setState(s => ({ orderOpen: !s.orderOpen })),
+      memberPhone: this.state.memberPhone,
+      onMemberPhoneChange: (e) => this.setState({ memberPhone: e.target.value.replace(/[^0-9+#*()-]/g, '') }),
+      showPaymentInfoModal: this.state.showPaymentInfoModal,
+      onlinePaymentAvailable: this.state.onlinePaymentAvailable,
+      selectInfoOnsite: () => this.setState({ pay: 'onsite', showPaymentInfoModal: false }),
+      selectInfoOnline: () => {
+        if (!this.state.onlinePaymentAvailable) return;
+        this.setState({ pay: 'online', showPaymentInfoModal: false });
+      },
       payMethods, invoiceMethods,
       showPayment: !zeroPayable, zeroPayable,
       ctaText: zeroPayable ? '確認結帳' : '前往付款',
@@ -1234,8 +1317,9 @@ class Component extends DCLogic {
               ],
               nextDiscountCartId: s.nextDiscountCartId + s.specQty,
               codeInitialized: true,
-              showSpecModal: false, specKey: null, specSel: {},
+              showSpecModal: false, specKey: null, specSel: {}, codeToast: specItem.name + ' 已加入購物車',
             }));
+            setTimeout(() => this.setState({ codeToast: '' }), 2000);
           },
         };
       })(),
@@ -1265,13 +1349,35 @@ class Component extends DCLogic {
       showCodeModal: this.state.showCodeModal,
       codeInput: this.state.codeInput, codeValid, codeTitle,
       codeCartRows, availableCodeItemRows, hasAvailableCodeItems: availableCodeItemRows.length > 0, codeDiscountText,
+      campaignSpend, campaignRemaining, campaignProductCount,
+      campaignProductsOpen: this.state.campaignProductsOpen,
+      campaignRewardOpen: this.state.campaignRewardOpen,
+      campaignNotesOpen: this.state.campaignNotesOpen,
+      campaignProductsArrowIcon: this.state.campaignProductsOpen ? 'assets/icons/Icon_dropdown-up.svg' : 'assets/icons/Icon_dropdown-down.svg',
+      campaignRewardArrowIcon: this.state.campaignRewardOpen ? 'assets/icons/Icon_dropdown-up.svg' : 'assets/icons/Icon_dropdown-down.svg',
+      campaignNotesArrowIcon: this.state.campaignNotesOpen ? 'assets/icons/Icon_dropdown-up.svg' : 'assets/icons/Icon_dropdown-down.svg',
+      campaignRewardOpacity: campaignComplete ? 1 : 0.4,
+      campaignProgressStyle: { height: '100%', width: Math.min(100, campaignSpend / 500 * 100) + '%', borderRadius: '99px', background: '#DE052E' },
+      toggleCampaignProducts: () => this.setState(s => ({ campaignProductsOpen: !s.campaignProductsOpen })),
+      toggleCampaignReward: () => this.setState(s => ({ campaignRewardOpen: !s.campaignRewardOpen })),
+      toggleCampaignNotes: () => this.setState(s => ({ campaignNotesOpen: !s.campaignNotesOpen })),
+      codeToast: this.state.codeToast,
       showCodeTab, showVoucherTab, showDiscountTabs,
       voucherTabStyle: tabBtn(showVoucherTab),
       codeTabStyle: tabBtn(showCodeTab),
       selectVoucherTab: () => this.setState({ discountTab: 'voucher' }),
       selectCodeTab: () => this.setState({ discountTab: 'code' }),
       onCodeInput: (e) => this.setState({ codeInput: e.target.value }),
-      closeCodeModal: () => this.setState({ showCodeModal: false }),
+      closeCodeModal: () => {
+        if (showCodeTab && codeValid && !campaignComplete) {
+          this.setState({ showCodeLeaveModal: true });
+          return;
+        }
+        this.setState({ showCodeModal: false, showCodeLeaveModal: false });
+      },
+      showCodeLeaveModal: this.state.showCodeLeaveModal,
+      confirmLeaveCode: () => this.setState({ showCodeModal: false, showCodeLeaveModal: false, codeInteracted: false, codeToast: '' }),
+      continueCodeOrder: () => this.setState({ showCodeLeaveModal: false }),
       codeInputStyle: {
         width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', fontSize: '16px',
         color: '#3E3E3E', padding: '14px 16px', border: '1px solid #C8C9C9',
@@ -1287,7 +1393,7 @@ class Component extends DCLogic {
       confirmCode: () => {
         if (!discountConfirmValid) return;
         if (showVoucherTab) { this.clearCodeCartItems(); this.setState({ voucherApplied: !!this.state.selectedVoucher, codeApplied: false, showCodeModal: false }); }
-        else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false });
+        else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false, codeInteracted: false, codeToast: '' });
       },
       voucherRows: this.vouchers.map(v => {
         const expired = !!v.expired;
