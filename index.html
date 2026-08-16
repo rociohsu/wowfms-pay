@@ -307,6 +307,10 @@
             </div>
           </div>
         </sc-for>
+        <div style="padding:16px;border-top:8px solid #F6F6F6;">
+          <label style="display:block;font-size:18px;font-weight:700;margin-bottom:10px;" for="meal-note">餐點備註</label>
+          <textarea id="meal-note" value="{{ mealNote }}" onChange="{{ onMealNoteInput }}" onInput="{{ onMealNoteInput }}" placeholder="請輸入餐點備註" maxlength="200" rows="3" style="width:100%;min-height:88px;box-sizing:border-box;border:1px solid #C8C9C9;border-radius:12px;padding:12px 14px;resize:vertical;outline:none;font-family:inherit;font-size:16px;line-height:1.5;color:#3E3E3E;background:#FFFFFF;"></textarea>
+        </div>
         <div style="height:16px;"></div>
       </div>
 
@@ -326,7 +330,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeCat: 0, lines: [], detail: null, qty: 1, sel: {}, expanded: {}, loggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), bound: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), searchOpen: false, menuOpen: false };
+  state = { activeCat: 0, lines: [], detail: null, qty: 1, sel: {}, expanded: {}, mealNote: '', loggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), bound: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), searchOpen: false, menuOpen: false };
 
   get menu() {
     return [
@@ -434,7 +438,7 @@ class Component extends DCLogic {
   }
 
   openDetail(ci, ii) {
-    this.setState({ detail: { ci, ii }, qty: 1, sel: {}, expanded: {} });
+    this.setState({ detail: { ci, ii }, qty: 1, sel: {}, expanded: {}, mealNote: '' });
   }
 
   // toggle a single-select option
@@ -518,6 +522,8 @@ class Component extends DCLogic {
       logoutAll: () => { try { localStorage.removeItem('lineMember'); localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, bound: false, menuOpen: false }); },
       qtyMinus: () => this.setState(s => ({ qty: Math.max(1, s.qty - 1) })),
       qtyPlus: () => this.setState(s => ({ qty: s.qty + 1 })),
+      mealNote: this.state.mealNote,
+      onMealNoteInput: (e) => this.setState({ mealNote: e.target.value }),
       closeDetail: () => this.setState({ detail: null }),
       onMenuScroll: (e) => {
         const top = e.target.scrollTop + 80;
@@ -631,7 +637,7 @@ class Component extends DCLogic {
     };
     rv.addToCart = () => {
       if (!canAdd) return;
-      this.setState(s => ({ lines: [...s.lines, { name: item.name, unit: unit / s.qty, qty: s.qty }], detail: null }));
+      this.setState(s => ({ lines: [...s.lines, { name: item.name, unit: unit / s.qty, qty: s.qty, note: s.mealNote.trim() }], detail: null }));
     };
 
     return rv;
