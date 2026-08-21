@@ -574,10 +574,6 @@
     </div>
   </sc-if>
 
-  <sc-if value="{{ codeToast }}" hint-placeholder-val="">
-    <div style="position:fixed;left:50%;bottom:86px;z-index:120;transform:translateX(-50%);max-width:calc(100% - 40px);padding:10px 16px;border-radius:8px;background:rgba(34,34,34,.9);color:#FFFFFF;font-size:14px;white-space:nowrap;">{{ codeToast }}</div>
-  </sc-if>
-
   <!-- 移除折扣品項確認 Popup -->
   <sc-if value="{{ showRemoveDiscountModal }}" hint-placeholder-val="">
     <div style="position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:24px;">
@@ -776,7 +772,7 @@ class Component extends DCLogic {
     loggedIn: (() => { try { return localStorage.getItem('funMember') === '1'; } catch (e) { return false; } })(), lineLoggedIn: (() => { try { return localStorage.getItem('lineMember') === '1'; } catch (e) { return false; } })(), usePoints: false, codeApplied: false, voucherApplied: false,
     showPointsModal: false, pointsInput: '', pointsApplied: 0,
     showCodeModal: false, codeInput: 'tofu', codeQty: { pork: 0, bacon: 0, cheesepot: 1 }, codeInitialized: true,
-    codeInteracted: false, codeToast: '', showCodeLeaveModal: false, campaignProductsOpen: true, campaignRewardOpen: true, campaignNotesOpen: true,
+    codeInteracted: false, showCodeLeaveModal: false, campaignProductsOpen: true, campaignRewardOpen: true, campaignNotesOpen: true,
     discountCartItems: [
       { id: 'discount-cart-1', key: 'cheesepot', name: '起司牛奶鍋', price: 250, selected: true, options: [
         { label: '肉好好 (+NT$ 20)', detail: '' },
@@ -899,7 +895,6 @@ class Component extends DCLogic {
       showCodeModal: false,
       showCodeLeaveModal: false,
       codeInteracted: false,
-      codeToast: '',
       codeApplied: false,
       codeQty: { pork: 0, bacon: 0, cheesepot: 1 },
       discountCartItems: s.discountCartItems.filter(item => item.id === 'discount-cart-1' || item.id === 'discount-cart-2'),
@@ -1357,9 +1352,8 @@ class Component extends DCLogic {
                 ...s.discountCartItems.filter(row => row.addedByCampaign),
                 ...Array.from({ length: s.specQty }, () => ({ price: specItem.price })),
               ].reduce((sum, row) => sum + row.price, 0)) >= 500 ? false : s.campaignProductsOpen,
-              showSpecModal: false, specKey: null, specSel: {}, specMealNote: '', codeToast: specItem.name + 'x' + s.specQty + ' 已加入購物車',
+              showSpecModal: false, specKey: null, specSel: {}, specMealNote: '',
             }));
-            setTimeout(() => this.setState({ codeToast: '' }), 2000);
           },
         };
       })(),
@@ -1413,7 +1407,6 @@ class Component extends DCLogic {
         this.setState({ codeInteracted: true });
         this.openSpecModal('tofu-reward');
       },
-      codeToast: this.state.codeToast,
       showCodeTab, showVoucherTab, showDiscountTabs,
       voucherTabStyle: tabBtn(showVoucherTab),
       codeTabStyle: tabBtn(showCodeTab),
@@ -1445,7 +1438,7 @@ class Component extends DCLogic {
       confirmCode: () => {
         if (!discountConfirmValid) return;
         if (showVoucherTab) { this.clearCodeCartItems(); this.setState({ voucherApplied: !!this.state.selectedVoucher, codeApplied: false, showCodeModal: false }); }
-        else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false, codeInteracted: false, codeToast: '' });
+        else this.setState({ codeApplied: true, voucherApplied: false, showCodeModal: false, codeInteracted: false });
       },
       voucherRows: this.vouchers.map(v => {
         const expired = !!v.expired;
