@@ -14,9 +14,27 @@
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   #home-root ::-webkit-scrollbar { display: none; }
+  #home-root .menu-card:disabled { cursor:not-allowed;opacity:1; }
   .h-scroll::-webkit-scrollbar { display: none; }
   .h-scroll { -ms-overflow-style: none; scrollbar-width: none; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .dining-bar { display:flex;align-items:center;gap:6px;padding:12px 16px;background:#F4F5F9;flex-wrap:wrap; }
+  .dining-action { display:flex;align-items:center;gap:3px;border:1px solid #DE052E;border-radius:5px;background:transparent;padding:4px 6px;color:#DE052E;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap; }
+  .dining-divider { height:12px;border-left:1px solid #888888;flex-shrink:0; }
+  .dining-overlay { position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .15s ease; }
+  .dining-dialog { position:relative;width:100%;max-height:100%;overflow-y:auto;background:#FFFFFF;border-radius:16px;padding:20px 16px 32px; }
+  .dining-title { margin:0 42px 26px 0;font-size:20px;font-weight:700;color:#222222; }
+  .dining-close { position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:8px;border:none;background:rgba(60,60,60,.55);color:#FFFFFF;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center; }
+  .service-options { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 4px 24px; }
+  .service-option { min-height:56px;border:1px solid #D9D9D9;border-radius:8px;background:#FFFFFF;color:#3E3E3E;font:inherit;font-size:16px;font-weight:700;cursor:pointer; }
+  .service-option[aria-pressed="true"] { border-color:#DE052E;color:#DE052E; }
+  .service-confirm { display:block;width:140px;max-width:100%;min-height:44px;margin:0 auto;border:0;border-radius:10px;background:#DE052E;color:#FFFFFF;font:inherit;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(222,5,46,.16); }
+  .service-confirm:disabled { background:#F0F0F0;color:#C8C9C9;cursor:not-allowed;box-shadow:none; }
+  .dining-cells { display:grid;grid-template-columns:.85fr 1.25fr 1.1fr;gap:8px;margin-bottom:10px; }
+  .dining-cell, .dining-times, .dining-next { background:#F6F6F6;border-radius:12px;padding:12px; }
+  .dining-cell > span, .dining-times > div > span, .dining-next > span { display:block;font-size:14px;line-height:1.5;color:#5B5B5B;margin-bottom:6px; }
+  .dining-cell strong, .dining-times strong, .dining-next strong { display:block;font-size:20px;line-height:1.5;font-weight:500;white-space:nowrap; }
+  .dining-times { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px; }
   @media (min-width: 480px) {
     #home-root { max-width: 390px !important; }
   }
@@ -62,9 +80,10 @@
 
   <!-- ===== Scrollable menu ===== -->
   <div id="menu-scroll" class="h-scroll" onScroll="{{ onMenuScroll }}" style="flex:1;overflow-y:auto;position:relative;">
-    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#F4F5F9;">
-      <div style="flex:1;font-size:13px;color:#333333;line-height:1.4;">立即取餐 預計 {{ etaMinutes }} 分鐘 <span style="color:#888888;">（現在）</span></div>
-      <button onClick="{{ changePickupTime }}" style="border:none;background:none;padding:0;color:#DE052E;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;">變更</button>
+    <div class="dining-bar">
+      <div style="flex:1;display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:13px;color:#333333;"><span>內用{{ diningTable }}</span><span class="dining-divider" aria-hidden="true"></span><span>{{ diningGuests }}</span></div>
+      <button class="dining-action" onClick="{{ openDiningLimits }}"><img src="assets/icons/Icon_clock_red.svg" width="16" height="16" alt="">用餐限制</button>
+      <button class="dining-action" onClick="{{ openService }}"><img src="assets/icons/Icon_service-bell_red.svg" width="18" height="16" alt="">服務鈴</button>
     </div>
 
     <div style="background:#FFFFFF;border-radius:16px;margin:12px 16px 0;overflow:hidden;">
@@ -99,14 +118,20 @@
         <div style="font-size:19px;font-weight:700;margin-bottom:12px;">{{ cat.name }}</div>
         <div style="display:flex;flex-direction:column;gap:12px;">
           <sc-for list="{{ cat.items }}" as="item" hint-placeholder-count="3">
-            <button onClick="{{ item.onOpen }}" style="width:100%;text-align:left;font-family:inherit;background:#FFFFFF;border:none;border-radius:12px;padding:14px;display:flex;gap:12px;align-items:stretch;cursor:pointer;">
+            <button class="menu-card" disabled="{{ item.limitReached }}" onClick="{{ item.onOpen }}" style="width:100%;text-align:left;font-family:inherit;background:#FFFFFF;border:none;border-radius:12px;padding:14px;display:flex;gap:12px;align-items:stretch;cursor:pointer;">
               <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
                 <div style="font-size:16px;font-weight:700;line-height:1.35;color:#3E3E3E;">{{ item.name }}</div>
                 <div style="font-size:13px;color:#9A9A9A;line-height:1.45;margin-top:4px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">{{ item.desc }}</div>
+                <div style="font-size:13px;color:#DE052E;line-height:1.6;margin-top:6px;">每次限點2份/人</div>
                 <div style="flex:1;"></div>
                 <div style="font-size:16px;font-weight:500;color:#3E3E3E;margin-top:10px;">{{ item.priceText }}</div>
               </div>
-              <img src="assets/menu.jpg" alt="{{ item.name }}" style="width:96px;height:96px;flex-shrink:0;border-radius:10px;object-fit:cover;display:block;">
+              <div style="position:relative;width:96px;height:96px;flex-shrink:0;border-radius:10px;overflow:hidden;">
+                <img src="assets/menu.jpg" alt="{{ item.name }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <sc-if value="{{ item.limitReached }}" hint-placeholder-val="">
+                  <div style="position:absolute;inset:0;background:rgba(0,0,0,.6);color:#FFFFFF;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px;font-weight:500;line-height:1.5;padding:8px;">已達本次<br>點餐上限</div>
+                </sc-if>
+              </div>
             </button>
           </sc-for>
         </div>
@@ -122,6 +147,41 @@
       <span style="display:flex;align-items:center;gap:8px;color:#FFFFFF;font-size:18px;font-weight:500;border:1.5px solid rgba(255,255,255,0.85);border-radius:12px;padding:7px 18px;height:36px;">購物車</span>
     </a>
   </div>
+
+  <sc-if value="{{ serviceOpen }}" hint-placeholder-val="">
+    <div class="dining-overlay" onClick="{{ closeDiningPopup }}" onKeyDown="{{ onDiningKeyDown }}">
+      <section class="dining-dialog" role="dialog" aria-modal="true" aria-labelledby="service-title" onClick="{{ stopDiningClick }}">
+        <h2 id="service-title" class="dining-title">服務項目</h2>
+        <button class="dining-close" aria-label="關閉服務項目" onClick="{{ closeDiningPopup }}" autofocus="">×</button>
+        <div class="service-options">
+          <sc-for list="{{ serviceOptions }}" as="service"><button class="service-option" aria-pressed="{{ service.selected }}" onClick="{{ service.onSelect }}">{{ service.name }}</button></sc-for>
+        </div>
+        <button class="service-confirm" disabled="{{ serviceDisabled }}" onClick="{{ submitService }}">確定</button>
+      </section>
+    </div>
+  </sc-if>
+  <sc-if value="{{ diningLimitsOpen }}" hint-placeholder-val="">
+    <div class="dining-overlay" onClick="{{ closeDiningPopup }}" onKeyDown="{{ onDiningKeyDown }}">
+      <section class="dining-dialog" role="dialog" aria-modal="true" aria-labelledby="dining-title" onClick="{{ stopDiningClick }}">
+        <h2 id="dining-title" class="dining-title" style="margin-bottom:16px;">用餐限制</h2>
+        <button class="dining-close" aria-label="關閉用餐限制" onClick="{{ closeDiningPopup }}" autofocus="">×</button>
+        <div class="dining-cells">
+          <div class="dining-cell"><span>桌號</span><strong>{{ diningTable }}</strong></div>
+          <div class="dining-cell"><span>方案</span><strong>999方案</strong></div>
+          <div class="dining-cell"><span>人數</span><strong>{{ diningGuests }}</strong></div>
+        </div>
+        <div class="dining-times">
+          <div><span>開桌時間</span><strong>10:00</strong></div>
+          <div><span>最後加點</span><strong>10:30</strong></div>
+          <div><span>結束時間</span><strong>11:00</strong></div>
+        </div>
+        <div class="dining-next"><span>下次可送單時間</span><strong>05:00</strong></div>
+      </section>
+    </div>
+  </sc-if>
+  <sc-if value="{{ serviceNotice }}" hint-placeholder-val="">
+    <div role="status" style="position:absolute;bottom:86px;left:16px;right:16px;z-index:65;background:#3E3E3E;color:#FFFFFF;border-radius:12px;padding:12px 16px;font-size:14px;">{{ serviceNotice }}</div>
+  </sc-if>
 
   <!-- ===== Member center ===== -->
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="">
@@ -212,6 +272,7 @@
 
         <div style="padding:18px 16px 8px;">
           <div style="font-size:24px;font-weight:700;">{{ detailName }}</div>
+          <div style="font-size:13px;color:#DE052E;line-height:1.6;margin-top:6px;">每次限點2份/人，本次用餐剩餘可點5份</div>
           <div style="font-size:14px;color:#5B5B5B;line-height:1.6;margin-top:8px;">{{ detailDesc }}</div>
           <div style="font-size:22px;font-weight:700;margin-top:12px;">{{ detailPriceText }}</div>
         </div>
@@ -318,7 +379,7 @@
       <div style="flex-shrink:0;display:flex;align-items:center;gap:14px;padding:12px 16px 16px;border-top:1px solid #F0F0F0;background:#FFFFFF;">
         <button onClick="{{ qtyMinus }}" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #C8C9C9;background:#FFFFFF;color:#9A9A9A;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
         <span style="font-size:18px;font-weight:500;min-width:16px;text-align:center;">{{ qty }}</span>
-        <button onClick="{{ qtyPlus }}" style="width:34px;height:34px;border-radius:50%;border:none;background:#DE052E;color:#FFFFFF;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+        <button onClick="{{ qtyPlus }}" aria-label="{{ qtyPlusLabel }}" style="{{ qtyPlusStyle }}">+</button>
         <span style="flex:1;font-size:17px;font-weight:700;color:#3E3E3E;padding-left:4px;">{{ addTotalText }}</span>
         <button onClick="{{ addToCart }}" style="{{ addBtnStyle }}">加入購物車</button>
       </div>
@@ -326,6 +387,16 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ quantityLimitOpen }}" hint-placeholder-val="">
+    <div class="dining-overlay" onClick="{{ closeQuantityLimit }}" onKeyDown="{{ onQuantityLimitKeyDown }}">
+      <section class="dining-dialog" role="alertdialog" aria-modal="true" aria-labelledby="quantity-limit-title" aria-describedby="quantity-limit-description" onClick="{{ stopDiningClick }}" style="padding-bottom:20px;">
+        <h2 id="quantity-limit-title" class="dining-title" style="font-size:18px;margin-bottom:20px;">份數已達上限</h2>
+        <button class="dining-close" aria-label="關閉份數上限提醒" onClick="{{ closeQuantityLimit }}">×</button>
+        <p id="quantity-limit-description" style="font-size:15px;line-height:1.6;margin:0 0 20px;color:#5B5B5B;">為了確保食材新鮮與出餐品質，每輪點餐份數有上限限制。</p>
+        <button class="service-confirm" style="width:100%;" onClick="{{ closeQuantityLimit }}" autofocus="">確認</button>
+      </section>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -336,7 +407,7 @@ class Component extends DCLogic {
     return [
       { name: '優惠套餐', items: [
         { name: '起司牛奶鍋', desc: '由香濃起司搭配牛奶組成濃郁美味，不管是搭海鮮還是肉品，每口都能感受到滿滿的幸福好滋味。', price: 250 },
-        { name: '雙人分享和牛鍋物套餐', desc: '精選和牛雙人份，附季節蔬菜盤與白飯', price: 680 },
+        { name: '雙人分享和牛鍋物套餐', desc: '精選和牛雙人份，附季節蔬菜盤與白飯', price: 680, limitReached: true },
       ]},
       { name: '精選主餐', items: [
         { name: '養生蔬食鍋', desc: '天然蔬果熬煮湯底，清爽無負擔', price: 220 },
@@ -438,6 +509,7 @@ class Component extends DCLogic {
   }
 
   openDetail(ci, ii) {
+    if (this.menu[ci].items[ii].limitReached) return;
     this.setState({ detail: { ci, ii }, qty: 1, sel: {}, expanded: {}, mealNote: '' });
   }
 
@@ -492,6 +564,7 @@ class Component extends DCLogic {
         tabStyle: { ...tabBase, color: active ? '#DE052E' : '#5B5B5B', fontWeight: active ? '700' : '400', borderBottom: active ? '3px solid #DE052E' : '3px solid transparent' },
         items: cat.items.map((it, ii) => ({
           name: it.name, desc: it.desc, priceText: '$' + it.price,
+          limitReached: !!it.limitReached,
           slotId: 'img-' + ci + '-' + ii,
           onOpen: () => this.openDetail(ci, ii),
         })),
@@ -504,7 +577,25 @@ class Component extends DCLogic {
     // ---- detail popup ----
     const d = this.state.detail;
     const rv = { categories, cartCount, cartTotal, detailOpen: !!d,
-      etaMinutes: 75, changePickupTime: () => {},
+      diningTable: 'A5桌', diningGuests: '4大1小',
+      serviceOpen: this.state.diningPopup === 'service',
+      diningLimitsOpen: this.state.diningPopup === 'limits',
+      openDiningLimits: () => this.setState({ diningPopup: 'limits', serviceNotice: '' }),
+      openService: () => this.setState({ diningPopup: 'service', selectedService: '', serviceNotice: '' }),
+      closeDiningPopup: () => this.setState({ diningPopup: null }),
+      stopDiningClick: (e) => e.stopPropagation(),
+      onDiningKeyDown: (e) => { if (e.key === 'Escape') this.setState({ diningPopup: null }); },
+      serviceOptions: ['清理桌面', '詢問菜單', '出餐延遲'].map(name => ({
+        name, selected: this.state.selectedService === name,
+        onSelect: () => this.setState({ selectedService: name }),
+      })),
+      serviceDisabled: !this.state.selectedService,
+      serviceNotice: this.state.serviceNotice || '',
+      submitService: () => {
+        if (this.state.diningPopup !== 'service' || !this.state.selectedService) return;
+        // Frontend demo only; connect the service API here before production.
+        this.setState({ diningPopup: null, serviceNotice: '已選擇「' + this.state.selectedService + '」' });
+      },
       searchOpen: this.state.searchOpen, searchClosed: !this.state.searchOpen,
       openSearch: () => this.setState({ searchOpen: true, menuOpen: false }),
       closeSearch: () => this.setState({ searchOpen: false }),
@@ -521,10 +612,15 @@ class Component extends DCLogic {
       showLogout: this.state.loggedIn || this.state.bound,
       logoutAll: () => { try { localStorage.removeItem('lineMember'); localStorage.removeItem('funMember'); } catch (e) {} this.setState({ loggedIn: false, bound: false, menuOpen: false }); },
       qtyMinus: () => this.setState(s => ({ qty: Math.max(1, s.qty - 1) })),
-      qtyPlus: () => this.setState(s => ({ qty: s.qty + 1 })),
+      qtyPlus: () => this.setState(s => s.qty >= 5 ? { quantityLimitOpen: true } : { qty: s.qty + 1 }),
+      qtyPlusLabel: this.state.qty >= 5 ? '已達5份上限，查看原因' : '增加份數',
+      qtyPlusStyle: { width: '34px', height: '34px', borderRadius: '50%', border: 'none', background: this.state.qty >= 5 ? '#C8C9C9' : '#DE052E', color: '#FFFFFF', fontSize: '22px', lineHeight: '1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      quantityLimitOpen: !!d && !!this.state.quantityLimitOpen,
+      closeQuantityLimit: () => this.setState({ quantityLimitOpen: false }),
+      onQuantityLimitKeyDown: (e) => { if (e.key === 'Escape') this.setState({ quantityLimitOpen: false }); },
       mealNote: this.state.mealNote,
       onMealNoteInput: (e) => this.setState({ mealNote: e.target.value }),
-      closeDetail: () => this.setState({ detail: null }),
+      closeDetail: () => this.setState({ detail: null, quantityLimitOpen: false }),
       onMenuScroll: (e) => {
         const top = e.target.scrollTop + 80;
         let idx = 0;

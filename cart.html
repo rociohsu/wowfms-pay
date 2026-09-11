@@ -20,6 +20,18 @@
     .sheet-modal { max-width: 390px !important; }
     .member-center-popup { max-width: 390px; margin-left: auto; margin-right: auto; }
   }
+  .dining-action { display:flex;align-items:center;gap:3px;border:1px solid #DE052E;border-radius:5px;background:transparent;padding:4px 6px;color:#DE052E;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap; }
+  .dining-divider { height:12px;border-left:1px solid #888888;flex-shrink:0; }
+  .dining-overlay { position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .15s ease; }
+  .dining-dialog { position:relative;width:100%;max-height:100%;overflow-y:auto;background:#FFFFFF;border-radius:16px;padding:20px 16px 32px; }
+  .dining-title { margin:0 42px 26px 0;font-size:20px;font-weight:700;color:#222222; }
+  .dining-close { position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:8px;border:none;background:rgba(60,60,60,.55);color:#FFFFFF;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center; }
+  .dining-cells { display:grid;grid-template-columns:.85fr 1.25fr 1.1fr;gap:8px;margin-bottom:10px; }
+  .dining-cell, .dining-times, .dining-next { background:#F6F6F6;border-radius:12px;padding:12px; }
+  .dining-cell > span, .dining-times > div > span, .dining-next > span { display:block;font-size:14px;line-height:1.5;color:#5B5B5B;margin-bottom:6px; }
+  .dining-cell strong, .dining-times strong, .dining-next strong { display:block;font-size:20px;line-height:1.5;font-weight:500;white-space:nowrap; }
+  .dining-times { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 </style>
 </helmet>
 
@@ -126,7 +138,10 @@
     <!-- store -->
     <div style="padding:16px 0 4px;">
       <div style="font-size:17px;font-weight:700;line-height:1.3;">石二鍋-中壢家樂福中山東店</div>
-      <div style="font-size:14px;color:#767678;margin-top:6px;">內用第 25桌 / 4人</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
+        <div style="flex:1;display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px;color:#767678;"><span>內用{{ diningTable }}</span><span class="dining-divider" aria-hidden="true"></span><span>{{ diningGuests }}</span></div>
+        <button class="dining-action" onClick="{{ openDiningLimits }}"><img src="assets/icons/Icon_clock_red.svg" width="16" height="16" alt="">用餐限制</button>
+      </div>
     </div>
 
     <!-- 已選餐點 header -->
@@ -146,6 +161,7 @@
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
           <button onClick="{{ item.onEditDetail }}" aria-label="編輯 {{ item.name }} 商品詳情" style="flex:1;min-width:0;border:none;background:none;padding:0;font-family:inherit;color:inherit;text-align:left;cursor:pointer;">
             <div style="font-size:16px;font-weight:700;">{{ item.name }}</div>
+            <div style="font-size:13px;color:#DE052E;line-height:1.6;margin-top:6px;">每次限點2份/人</div>
             <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
               <sc-for list="{{ item.options }}" as="opt" hint-placeholder-count="3">
                 <div style="display:flex;gap:7px;font-size:14px;color:#5B5B5B;line-height:1.5;">
@@ -227,6 +243,7 @@
           <img src="assets/menu.jpg" alt="{{ detailEditName }}" style="width:100%;height:230px;object-fit:cover;display:block;background:#F2C94C;">
           <div style="padding:18px 16px 8px;">
             <div style="font-size:24px;font-weight:700;">{{ detailEditName }}</div>
+            <div style="font-size:13px;color:#DE052E;line-height:1.6;margin-top:6px;">每次限點2份/人，本次用餐剩餘可點5份</div>
             <div style="font-size:14px;color:#5B5B5B;line-height:1.6;margin-top:8px;">{{ detailEditDesc }}</div>
             <div style="font-size:22px;font-weight:700;margin-top:12px;">{{ detailEditPrice }}</div>
           </div>
@@ -352,6 +369,25 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ diningLimitsOpen }}" hint-placeholder-val="">
+    <div class="dining-overlay" onClick="{{ closeDiningPopup }}" onKeyDown="{{ onDiningKeyDown }}">
+      <section class="dining-dialog" role="dialog" aria-modal="true" aria-labelledby="dining-title" onClick="{{ stopDiningClick }}">
+        <h2 id="dining-title" class="dining-title" style="margin-bottom:16px;">用餐限制</h2>
+        <button class="dining-close" aria-label="關閉用餐限制" onClick="{{ closeDiningPopup }}" autofocus="">×</button>
+        <div class="dining-cells">
+          <div class="dining-cell"><span>桌號</span><strong>{{ diningTable }}</strong></div>
+          <div class="dining-cell"><span>方案</span><strong>999方案</strong></div>
+          <div class="dining-cell"><span>人數</span><strong>{{ diningGuests }}</strong></div>
+        </div>
+        <div class="dining-times">
+          <div><span>開桌時間</span><strong>10:00</strong></div>
+          <div><span>最後加點</span><strong>10:30</strong></div>
+          <div><span>結束時間</span><strong>11:00</strong></div>
+        </div>
+        <div class="dining-next"><span>下次可送單時間</span><strong>05:00</strong></div>
+      </section>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -593,6 +629,12 @@ class Component extends DCLogic {
     const canSaveSpec = specValid.every(Boolean);
 
     return {
+      diningTable: 'A5桌', diningGuests: '4大1小',
+      diningLimitsOpen: !!this.state.diningLimitsOpen,
+      openDiningLimits: () => this.setState({ diningLimitsOpen: true }),
+      closeDiningPopup: () => this.setState({ diningLimitsOpen: false }),
+      stopDiningClick: (e) => e.stopPropagation(),
+      onDiningKeyDown: (e) => { if (e.key === 'Escape') this.setState({ diningLimitsOpen: false }); },
       menuOpen: this.state.menuOpen,
       legacyMenuOpen: false,
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
